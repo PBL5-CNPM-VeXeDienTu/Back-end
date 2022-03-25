@@ -1,0 +1,25 @@
+{
+  "development": {
+    "host": "37.59.55.185",
+    "username": "xLDGbPpnjm",
+    "password": "J6lA0PJDAt",
+    "port": 3306,
+    "database": "xLDGbPpnjm",
+    "dialect": "mysql"
+  },
+  "test": {
+    "username": "root",
+    "password": null,
+    "database": "awesome_dev_team",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  },
+  "production": {
+    "host": "37.59.55.185",
+    "username": "xLDGbPpnjm",
+    "password": "J6lA0PJDAt",
+    "port": 3306,
+    "database": "xLDGbPpnjm",
+    "dialect": "mysql"
+  }
+}
