@@ -2,7 +2,7 @@
 
 module.exports = {
   async up (queryInterface, Sequelize) {
-    await queryInterface.bulkInsert('package_types', [
+    await queryInterface.bulkInsert('Package_types', [
       {
         type_name: 'Week'
       },
@@ -19,6 +19,6 @@ module.exports = {
   },
 
   async down (queryInterface, Sequelize) {
-    await queryInterface.bulkDelete('package_types', null, {});
+    await queryInterface.bulkDelete('Package_types', null, {});
   }
 };

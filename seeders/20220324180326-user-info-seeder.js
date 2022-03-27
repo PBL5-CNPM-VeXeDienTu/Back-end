@@ -2,7 +2,7 @@
 
 module.exports = {
   async up (queryInterface, Sequelize) {
-    await queryInterface.bulkInsert('user_infos', [
+    await queryInterface.bulkInsert('User_infos', [
       {
         user_id: 1,
         avatar: 'public/images/user/avatars/default-avatar.png',
@@ -47,6 +47,6 @@ module.exports = {
   },
 
   async down (queryInterface, Sequelize) {
-    await queryInterface.bulkDelete('user_infos', null, {});
+    await queryInterface.bulkDelete('User_infos', null, {});
   }
 };
