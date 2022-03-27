@@ -1,7 +1,7 @@
 'use strict';
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Parking_prices', {
+    await queryInterface.createTable('ParkingPrices', {
       parking_lot_id: {
         allowNull: false,
         primaryKey: true,
@@ -29,6 +29,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Parking_prices');
+    await queryInterface.dropTable('ParkingPrices');
   }
 };
