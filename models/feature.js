@@ -14,12 +14,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Feature.init({
-    name: {
-      type: DataTypes.STRING,
-      validate: {
-        max: 100
-      }
-    }
+    name: DataTypes.STRING,
   }, {
     sequelize,
     modelName: 'Feature',

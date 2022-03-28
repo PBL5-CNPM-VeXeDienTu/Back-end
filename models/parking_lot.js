@@ -14,18 +14,8 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   ParkingLot.init({
-    name: {
-      type: DataTypes.STRING,
-      validate: {
-        max: 100
-      }
-    },
-    address: {
-      type: DataTypes.STRING,
-      validate: {
-        max: 100
-      }
-    },
+    name: DataTypes.STRING,
+    address: DataTypes.STRING,
     avatar: DataTypes.STRING,
     time_slot: DataTypes.STRING,
     capacity: DataTypes.INTEGER,

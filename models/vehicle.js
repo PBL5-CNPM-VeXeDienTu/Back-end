@@ -23,18 +23,8 @@ module.exports = (sequelize, DataTypes) => {
     vehicle_image: DataTypes.STRING,
     cavet_image_front: DataTypes.STRING,
     cavet_image_back: DataTypes.STRING,
-    type: {
-      type: DataTypes.STRING,
-      validate: {
-        max: 100
-      }
-    },
-    color: {
-      type: DataTypes.STRING,
-      validate: {
-        max: 100
-      }
-    },
+    type: DataTypes.STRING,
+    color: DataTypes.STRING,
     owner_id: DataTypes.INTEGER,
     verify_state: DataTypes.INTEGER,
     deleted_at: DataTypes.DATE

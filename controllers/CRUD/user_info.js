@@ -23,16 +23,6 @@ async function destroy(id){
     await models.UserInfo.destroy({where:{id:id}})
 }
 
-const example ={
-    user_id: 3,
-    avatar:"avatar",
-    birthday: new Date(2022, 3, 24),
-    address: "Huế",
-    phone_number: "12345678",
-    gender: false,
-}
-update(5,example)
-
 module.exports = {
     index: index,
     showById: showById,

@@ -20,12 +20,7 @@ module.exports = (sequelize, DataTypes) => {
     checkin_time: DataTypes.TIME,
     checkout_time: DataTypes.TIME,
     is_parking: DataTypes.BOOLEAN,
-    memo: {
-      type: DataTypes.TEXT,
-      validate: {
-        max: 500
-      }
-    },
+    memo: DataTypes.STRING,
     cost: DataTypes.FLOAT
   }, {
     sequelize,

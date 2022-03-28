@@ -15,12 +15,7 @@ module.exports = (sequelize, DataTypes) => {
   }
   Package.init({
     parking_lot_id: DataTypes.INTEGER,
-    name: {
-      type: DataTypes.STRING,
-      validate: {
-        max: 100
-      }
-    },
+    name: DataTypes.STRING,
     type_id: DataTypes.INTEGER,
     price: DataTypes.FLOAT
   }, {

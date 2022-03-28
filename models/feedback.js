@@ -17,12 +17,7 @@ module.exports = (sequelize, DataTypes) => {
     user_id: DataTypes.INTEGER,
     type_id: DataTypes.INTEGER,
     feature_id: DataTypes.INTEGER,
-    content: {
-      type: DataTypes.TEXT,
-      validate: {
-        max: 500
-      }
-    },
+    content: DataTypes.STRING,
     is_processed: DataTypes.BOOLEAN
   }, {
     sequelize,

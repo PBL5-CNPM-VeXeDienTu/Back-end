@@ -14,18 +14,8 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   VerifyState.init({
-    state: {
-      type: DataTypes.STRING,
-      validate: {
-        max: 100
-      }
-    },
-    note: {
-      type: DataTypes.TEXT,
-      validate: {
-        max: 500
-      }
-    }
+    state: DataTypes.STRING,
+    note: DataTypes.STRING,
   }, {
     sequelize,
     modelName: 'VerifyState',
