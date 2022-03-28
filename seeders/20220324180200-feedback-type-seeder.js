@@ -2,7 +2,7 @@
 
 module.exports = {
   async up (queryInterface, Sequelize) {
-    await queryInterface.bulkInsert('Feedback_types', [
+    await queryInterface.bulkInsert('FeedbackTypes', [
       {
         type_name: 'Câu hỏi (Để nhận được câu trả lời, hãy nhập địa chỉ email mà bạn muốn nhận câu trả lời)'
       },
@@ -16,6 +16,6 @@ module.exports = {
   },
 
   async down (queryInterface, Sequelize) {
-    await queryInterface.bulkDelete('Feedback_types', null, {});
+    await queryInterface.bulkDelete('FeedbackTypes', null, {});
   }
 };
