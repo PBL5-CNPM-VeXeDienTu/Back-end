@@ -47,6 +47,25 @@ async function register(request, respond) {
             transporter.sendMail(mailConfig(result.email, VERIFY_EMAIL), function(err, info){
                 console.log("Email sended successfully! Info: " + info.response);
             });
+
+            // Create new user info
+            const newUserInfo = {
+                user_id: result.id,
+                avatar: 'public/images/avatars/default-avatar.png',
+                birthday: '',
+                address: '',
+                phone_number: '',
+                gender: null,
+            }
+            models.UserInfo.create(newUserInfo);
+
+            // Create new wallet
+            const newWallet = {
+                user_id: result.id,
+                balance: 0
+            }
+            models.Wallet.create(newWallet);
+
             return respond.status(201).json({
                 message: "Create user successfully!"
             });
