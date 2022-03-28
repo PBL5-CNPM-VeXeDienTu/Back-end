@@ -23,12 +23,7 @@ module.exports = (sequelize, DataTypes) => {
         max: 100
       }
     },
-    phone_number: {
-      type: DataTypes.STRING,
-      validate: {
-        max: 20
-      }
-    },
+    phone_number: DataTypes.STRING,
     gender: DataTypes.BOOLEAN
   }, {
     sequelize,

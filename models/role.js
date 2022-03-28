@@ -14,12 +14,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Role.init({
-    name: {
-      type: DataTypes.STRING,
-      validate: {
-        max: 50
-      }
-    }
+    name: DataTypes.STRING,
   }, {
     sequelize,
     modelName: 'Role',

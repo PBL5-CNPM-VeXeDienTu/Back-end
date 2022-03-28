@@ -14,12 +14,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   TransactionType.init({
-    type_name: {
-      type: DataTypes.STRING,
-      validate: {
-        max: 100
-      }
-    }
+    type_name: DataTypes.STRING,
   }, {
     sequelize,
     modelName: 'TransactionType',

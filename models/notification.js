@@ -15,18 +15,8 @@ module.exports = (sequelize, DataTypes) => {
   }
   Notification.init({
     user_id: DataTypes.INTEGER,
-    title: {
-      type: DataTypes.STRING,
-      validate: {
-        max: 100
-      }
-    },
-    content: {
-      type: DataTypes.TEXT,
-      validate: {
-        max: 500
-      }
-    },
+    title: DataTypes.STRING,
+    content: DataTypes.STRING,
     is_read: DataTypes.BOOLEAN
   }, {
     sequelize,
