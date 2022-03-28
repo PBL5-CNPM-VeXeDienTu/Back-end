@@ -2,7 +2,7 @@
 
 module.exports = {
   async up (queryInterface, Sequelize) {
-    await queryInterface.bulkInsert('transaction_types', [
+    await queryInterface.bulkInsert('TransactionTypes', [
       {
         type_name: 'Nạp tiền vào ví'
       },
@@ -22,6 +22,6 @@ module.exports = {
   },
 
   async down (queryInterface, Sequelize) {
-    await queryInterface.bulkDelete('transaction_types', null, {});
+    await queryInterface.bulkDelete('TransactionTypes', null, {});
   }
 };

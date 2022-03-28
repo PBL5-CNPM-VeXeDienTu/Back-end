@@ -2,10 +2,10 @@
 
 module.exports = {
   async up (queryInterface, Sequelize) {
-    await queryInterface.bulkInsert('user_infos', [
+    await queryInterface.bulkInsert('UserInfos', [
       {
         user_id: 1,
-        avatar: 'public/images/user/avatars/default-avatar.png',
+        avatar: 'public/images/avatars/default-avatar.png',
         birthday: '2001/01/01',
         address: '',
         phone_number: '',
@@ -13,7 +13,7 @@ module.exports = {
       },
       {
         user_id: 2,
-        avatar: 'public/images/user/avatars/default-avatar.png',
+        avatar: 'public/images/avatars/default-avatar.png',
         birthday: '2001/01/01',
         address: '',
         phone_number: '',
@@ -21,7 +21,7 @@ module.exports = {
       },
       {
         user_id: 3,
-        avatar: 'public/images/user/avatars/default-avatar.png',
+        avatar: 'public/images/avatars/default-avatar.png',
         birthday: '2001/01/01',
         address: '',
         phone_number: '',
@@ -29,7 +29,7 @@ module.exports = {
       },
       {
         user_id: 4,
-        avatar: 'public/images/user/avatars/default-avatar.png',
+        avatar: 'public/images/avatars/default-avatar.png',
         birthday: '2001/01/01',
         address: '',
         phone_number: '',
@@ -37,7 +37,7 @@ module.exports = {
       },
       {
         user_id: 5,
-        avatar: 'public/images/user/avatars/default-avatar.png',
+        avatar: 'public/images/avatars/default-avatar.png',
         birthday: '2001/01/01',
         address: '',
         phone_number: '',
@@ -47,6 +47,6 @@ module.exports = {
   },
 
   async down (queryInterface, Sequelize) {
-    await queryInterface.bulkDelete('user_infos', null, {});
+    await queryInterface.bulkDelete('UserInfos', null, {});
   }
 };

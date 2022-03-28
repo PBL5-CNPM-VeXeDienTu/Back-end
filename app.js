@@ -1,9 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 
-const userRoute = require('./routes/users');
-const parkingLotRoute = require('./routes/parking_lots');
-const userPackageRoute = require('./routes/user_packages');
+const routes = require('./routes/index');
 
 const app = express();
 
@@ -19,5 +17,6 @@ app.use(express.json());
 
 app.use('/public', express.static('public'));
 
-module.exports = app
+app.use('/api/auth', routes.auth);
 
+module.exports = app

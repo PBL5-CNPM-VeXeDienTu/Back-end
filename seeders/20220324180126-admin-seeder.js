@@ -1,10 +1,10 @@
 'use strict';
 
-const hash_helper = require('../helpers/hashing_passwords/hash-helper');
+const hash_helper = require('../helpers/password-encrypter/hash-helper');
 
 module.exports = {
   async up (queryInterface, Sequelize) {
-    await queryInterface.bulkInsert('users', [
+    await queryInterface.bulkInsert('Users', [
       {
         name: 'Nguyễn Hoàng Phú',
         email: 'nguyenhoangphua1@gmail.com',
@@ -49,6 +49,6 @@ module.exports = {
   },
 
   async down (queryInterface, Sequelize) {
-    await queryInterface.bulkDelete('users', null, {});
+    await queryInterface.bulkDelete('Users', null, {});
   }
 };
