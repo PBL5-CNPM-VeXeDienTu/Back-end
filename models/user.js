@@ -25,14 +25,10 @@ module.exports = (sequelize, DataTypes) => {
     role: DataTypes.TINYINT,
     is_verified: DataTypes.BOOLEAN,
     qr_key: DataTypes.STRING,
-    deleted_at: DataTypes.DATE
+    deletedAt: DataTypes.DATE
   }, {
     sequelize,
     modelName: 'User',
   });
   return User;
 };
-
-const BASIC_USER_ROLE = 0;
-const PARKING_LOT_USER_ROLE = 1;
-const ADMIN_ROLE = 2;

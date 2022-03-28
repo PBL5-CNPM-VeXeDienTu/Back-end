@@ -16,7 +16,7 @@ module.exports = {
         allowNull: false,
         type: Sequelize.INTEGER
       },
-      expire_at: {
+      expireAt: {
         type: Sequelize.DATE
       },
       createdAt: {
