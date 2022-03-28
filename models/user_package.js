@@ -16,7 +16,7 @@ module.exports = (sequelize, DataTypes) => {
   UserPackage.init({
     user_id: DataTypes.INTEGER,
     package_id: DataTypes.INTEGER,
-    expire_at: DataTypes.DATE
+    expireAt: DataTypes.DATE
   }, {
     sequelize,
     modelName: 'UserPackage',

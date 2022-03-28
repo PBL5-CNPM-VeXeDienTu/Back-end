@@ -27,7 +27,7 @@ module.exports = (sequelize, DataTypes) => {
     color: DataTypes.STRING,
     owner_id: DataTypes.INTEGER,
     verify_state: DataTypes.INTEGER,
-    deleted_at: DataTypes.DATE
+    deletedAt: DataTypes.DATE
   }, {
     sequelize,
     modelName: 'Vehicle',

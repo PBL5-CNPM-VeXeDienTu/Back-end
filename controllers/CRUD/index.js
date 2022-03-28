@@ -7,7 +7,7 @@ const parkingPrice = require('./parking_price');
 const package = require('./package');
 const packageType  = require('./package_type ');
 const notification = require('./notification');
-const vehicel = require('./vehicel');
+const vehicle = require('./vehicle');
 const verifyState = require('./verify_state');
 const wallet = require('./wallet');
 const transaction = require('./transaction');
@@ -27,7 +27,7 @@ module.exports = {
     package: package,
     packageType: packageType,
     notification: notification,
-    vehicel: vehicel,
+    vehicle: vehicle,
     verifyState: verifyState,
     wallet: wallet,
     feedback: feedback,
