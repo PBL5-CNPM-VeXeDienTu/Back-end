@@ -1,26 +1,23 @@
 const models = require('../../models');
-const Validator = require('fastest-validator');
 
 async function index(){
-    const packageTypes = await models.PackageType.findAll();
-    return packageTypes
+    return await models.PackageType.findAll();
 }
 
 async function showById(id){
-    const packageType = await models.PackageType.findByPk(id)
-    return packageType
+    return await models.PackageType.findByPk(id);
 }
 
 async function create(newPackageType){
-    await models.PackageType.create(newPackageType)
+    await models.PackageType.create(newPackageType);
 }
 
 async function update(id,updatePackageType){
-    await models.PackageType.update(updatePackageType, {where: {id:id}})
+    await models.PackageType.update(updatePackageType, {where: {id:id}});
 }
 
 async function destroy(id){
-    await models.PackageType.destroy({where:{id:id}})
+    await models.PackageType.destroy({where:{id:id}});
 }
 
 module.exports = {

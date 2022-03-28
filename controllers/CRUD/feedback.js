@@ -1,26 +1,23 @@
 const models = require('../../models');
-const Validator = require('fastest-validator');
 
 async function index(){
-    const feedbacks = await models.Feedback.findAll();
-    return feedbacks
+    return await models.Feedback.findAll();
 }
 
 async function showById(id){
-    const feedback = await models.Feedback.findByPk(id)
-    return feedback
+    return await models.Feedback.findByPk(id);
 }
 
 async function create(newFeedback){
-    await models.Feedback.create(newFeedback)
+    await models.Feedback.create(newFeedback);
 }
 
 async function update(id,updateFeedback){
-    await models.Feedback.update(updateFeedback, {where: {id:id}})
+    await models.Feedback.update(updateFeedback, {where: {id:id}});
 }
 
 async function destroy(id){
-    await models.Feedback.destroy({where:{id:id}})
+    await models.Feedback.destroy({where:{id:id}});
 }
 
 module.exports = {
