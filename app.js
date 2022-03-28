@@ -1,6 +1,10 @@
 const express = require('express');
 const cors = require('cors');
 
+const userRoute = require('./routes/users');
+const parkingLotRoute = require('./routes/parking_lots');
+const userPackageRoute = require('./routes/user_packages');
+
 const app = express();
 
 app.use(cors({
@@ -16,3 +20,4 @@ app.use(express.json());
 app.use('/public', express.static('public'));
 
 module.exports = app
+
