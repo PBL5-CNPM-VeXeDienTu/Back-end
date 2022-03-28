@@ -2,9 +2,15 @@
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable('ParkingPrices', {
+      id: {
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+        type: Sequelize.INTEGER
+      },
       parking_lot_id: {
         allowNull: false,
-        primaryKey: true,
+        unique: true,
         type: Sequelize.INTEGER
       },
       bike: {
