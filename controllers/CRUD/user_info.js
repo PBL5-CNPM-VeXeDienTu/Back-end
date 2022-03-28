@@ -1,37 +1,24 @@
 const models = require('../../models');
-const Validator = require('fastest-validator');
 
 async function index(){
-    const userInfos = await models.UserInfo.findAll();
-    return userInfos
+    return await models.UserInfo.findAll();
 }
 
 async function showById(id){
-    const userInfo = await models.UserInfo.findByPk(id)
-    return userInfo
+    return await models.UserInfo.findByPk(id);
 }
 
 async function create(newUserInfo){
-    await models.UserInfo.create(newUserInfo)
+    await models.UserInfo.create(newUserInfo);
 }
 
 async function update(id,updateUserInfo){
-    await models.UserInfo.update(updateUserInfo, {where: {id:id}})
+    await models.UserInfo.update(updateUserInfo, {where: {id:id}});
 }
 
 async function destroy(id){
-    await models.UserInfo.destroy({where:{id:id}})
+    await models.UserInfo.destroy({where:{id:id}});
 }
-
-const example ={
-    user_id: 3,
-    avatar:"avatar",
-    birthday: new Date(2022, 3, 24),
-    address: "Huế",
-    phone_number: "12345678",
-    gender: false,
-}
-update(5,example)
 
 module.exports = {
     index: index,
