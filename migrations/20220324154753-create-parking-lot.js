@@ -37,7 +37,7 @@ module.exports = {
         allowNull: false,
         type: Sequelize.INTEGER
       },
-      verify_state: {
+      verify_state_id: {
         type: Sequelize.INTEGER
       },
       deletedAt: {

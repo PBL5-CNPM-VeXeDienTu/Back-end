@@ -2,15 +2,15 @@ const multer = require('multer');
 const path = require('path');
 
 const storage = multer.diskStorage({
-    destination: function(req, file, cb){
-        cb(null, "./uploads/images/users");
+    destination: function(request, file, cb){
+        cb(null, "./public/images/avatars/user");
     },
-    filename: function(req, file, cb){
-        cb(null, req.userData.userId + path.extname(file.originalname));
+    filename: function(request, file, cb){
+        cb(null, request.userData.userId + path.extname(file.originalname));
     }
 });
 
-const fileFilter = (req, file, cb) => {
+const fileFilter = (request, file, cb) => {
     if(file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
         cb(null, true);
     }
@@ -19,14 +19,12 @@ const fileFilter = (req, file, cb) => {
     }
 }
 
-const upload = multer ({
+const uploader = multer ({
     storage: storage,
     limits: {
         fileSize: 1024*1024*10,
     },
     fileFilter: fileFilter
-});
+}).single('user-avatar');
 
-module.exports = {
-    upload: upload
-}
+module.exports = uploader

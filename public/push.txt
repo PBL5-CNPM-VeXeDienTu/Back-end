@@ -1,1 +1,0 @@
-File này dùng để push thư mục này lên git hoy :>
