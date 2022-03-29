@@ -6,6 +6,17 @@ async function resetPassword(request, respond) {
         // Check if email exists
         const dbUser = (await models.User.findOne({where: {email: request.params.email}}))?.dataValues;
         if (dbUser) {
+            // Check if authentication key is valid
+            const dbAuthKey = (await models.AuthKey.findOne({where: {user_id: dbUser.id}}))?.dataValues;
+            if (request.params.authKey != dbAuthKey?.key) {
+                return respond.status(409).json({
+                    message: "Invalid authentication key!",
+                });
+            }
+
+            // If key is valid, delete old key and reset password
+            models.AuthKey.destroy({where: {id: dbAuthKey.id}});
+
             // Generate new random password
             const newPassword = (Math.random() + 1).toString(36).substring(3);
 
