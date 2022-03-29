@@ -1,5 +1,6 @@
 const userModel = require(process.cwd() + '/models/index').User;
-const getCurrentDateTime = require(process.cwd() + '/helpers/get-current-datetime/datetime');
+const getCurrentDateTime = require(process.cwd() +
+    '/helpers/get-current-datetime/datetime');
 
 async function index() {
     return userModel.findAll();
@@ -18,16 +19,16 @@ async function create(newUser) {
 }
 
 async function update(id, updateUser) {
-    userModel.update(updateUser, {where: {id:id}});
+    userModel.update(updateUser, { where: { id: id } });
 }
 
 async function destroy(id) {
     const now = getCurrentDateTime();
-    
+
     // Update deletedAt field of user
     const updateUser = {
-        deletedAt: now
-    }
+        deletedAt: now,
+    };
     update(id, updateUser);
 }
 
@@ -37,5 +38,5 @@ module.exports = {
     getUserByEmail: showByEmail,
     addNewUser: create,
     updateUserById: update,
-    softDeleteUserById: destroy
-}
+    softDeleteUserById: destroy,
+};
