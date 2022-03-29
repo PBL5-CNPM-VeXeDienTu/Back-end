@@ -125,6 +125,11 @@ const notificationSchema = {
     is_read: {type: "number", optional: true},
 }
 
+const authKeySchema = {
+    user_id: {type: "number", optional: true},
+    key: {type: "string", optional: true},
+}
+
 module.exports = {
     userSchema: userSchema,
     roleSchema: roleSchema,
@@ -144,4 +149,5 @@ module.exports = {
     feedbackTypeSchema: feedbackTypeSchema,
     featureSchema: featureSchema,
     notificationSchema: notificationSchema,
+    authKeySchema: authKeySchema
 }

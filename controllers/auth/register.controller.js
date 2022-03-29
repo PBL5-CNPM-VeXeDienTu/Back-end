@@ -2,6 +2,7 @@ const models = require(process.cwd() + '/models');
 const hashHelper = require(process.cwd() + '/helpers/password-encrypter/hash_helper');
 const validators = require(process.cwd() + '/helpers/validators/index');
 const { transporter, mailConfig } = require(process.cwd() + '/helpers/mailer/transporter');
+const uuid = require('uuid');
 
 // Mail options
 const VERIFY_EMAIL = 1;
@@ -43,11 +44,6 @@ async function register(request, respond) {
 
         // Add new user to database
         models.User.create(newUser).then(result => {
-            // Send email to verify user
-            transporter.sendMail(mailConfig(result.email, VERIFY_EMAIL), function(err, info){
-                console.log("Email sended successfully! Info: " + info.response);
-            });
-
             // Create new user info
             const newUserInfo = {
                 user_id: result.id,
@@ -65,6 +61,19 @@ async function register(request, respond) {
                 balance: 0
             }
             models.Wallet.create(newWallet);
+
+            // Send email to verify user
+            const authKey = uuid.v1();
+            transporter.sendMail(mailConfig(result.email, VERIFY_EMAIL, authKey), function(err, info){
+                console.log("Email sended successfully! Info: " + info.response);
+            });
+
+            // Save authKey
+            const newAuthKey = {
+                user_id: result.id, 
+                key: authKey
+            }
+            models.AuthKey.create(newAuthKey);
 
             return respond.status(201).json({
                 message: "Create user successfully!"

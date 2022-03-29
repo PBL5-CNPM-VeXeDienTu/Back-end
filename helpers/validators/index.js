@@ -23,6 +23,7 @@ const validateFeedback = (feedback) => validator.validate(feedback, schemas.feed
 const validateFeedbackType = (feedbackType) => validator.validate(feedbackType, schemas.feedbackTypeSchema);
 const validateFeature = (feature) => validator.validate(feature, schemas.featureSchema);
 const validateNotification = (notification) => validator.validate(notification, schemas.notificationSchema);
+const validateAuthKey = (authKey) => validator.validate(authKey, schemas.authKeySchema);
 
 module.exports = {
     validateUser: validateUser,
@@ -42,5 +43,6 @@ module.exports = {
     validateFeedback: validateFeedback,
     validateFeedbackType: validateFeedbackType,
     validateFeature: validateFeature,
-    validateNotification: validateNotification
+    validateNotification: validateNotification,
+    validateAuthKey: validateAuthKey
 }
