@@ -13,5 +13,5 @@ module.exports = {
     changePassword: changePassword,
     forgotPassword: forgotPassword,
     resetPassword: resetPassword,
-    getAuthenticatedUser: getAuthenticatedUser
-}
+    getAuthenticatedUser: getAuthenticatedUser,
+};

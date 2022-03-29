@@ -5,7 +5,7 @@ const parkingLot = require('./parking_lot');
 const parkingHistory = require('./parking_history');
 const parkingPrice = require('./parking_price');
 const package = require('./package');
-const packageType  = require('./package_type ');
+const packageType = require('./package_type ');
 const notification = require('./notification');
 const vehicle = require('./vehicle');
 const verifyState = require('./verify_state');
@@ -15,7 +15,6 @@ const transactionType = require('./transaction_type');
 const feature = require('./feature');
 const feedback = require('./feedback');
 const feedbackType = require('./feedback_type');
-
 
 module.exports = {
     user: user,
@@ -35,9 +34,4 @@ module.exports = {
     transaction: transaction,
     transactionType: transactionType,
     feature: feature,
-}
-
-
-
-
-
+};

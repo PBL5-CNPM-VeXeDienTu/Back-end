@@ -9,5 +9,5 @@ module.exports = {
     vehicleAvatarUploader: vehicleAvatarUploader,
     parkingLotAvatarUploader: parkingLotAvatarUploader,
     cavetImageBackUploader: cavetImageBackUploader,
-    cavetImageFrontUploader: cavetImageFrontUploader
-}
+    cavetImageFrontUploader: cavetImageFrontUploader,
+};
