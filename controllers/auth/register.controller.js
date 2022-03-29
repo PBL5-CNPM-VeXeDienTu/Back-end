@@ -1,5 +1,5 @@
 const models = require(process.cwd() + '/models');
-const hashHelper = require(process.cwd() + '/helpers/password-encrypter/hash-helper');
+const hashHelper = require(process.cwd() + '/helpers/password-encrypter/hash_helper');
 const validators = require(process.cwd() + '/helpers/validators/index');
 const { transporter, mailConfig } = require(process.cwd() + '/helpers/mailer/transporter');
 

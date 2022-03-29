@@ -22,7 +22,7 @@ module.exports = (sequelize, DataTypes) => {
     is_open: DataTypes.BOOLEAN,
     is_full: DataTypes.BOOLEAN,
     owner_id: DataTypes.INTEGER,
-    verify_state: DataTypes.INTEGER,
+    verify_state_id: DataTypes.INTEGER,
     deletedAt: DataTypes.DATE
   }, {
     sequelize,

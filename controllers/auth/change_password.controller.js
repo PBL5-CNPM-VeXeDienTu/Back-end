@@ -1,5 +1,5 @@
 const models = require(process.cwd() + '/models');
-const hashHelper = require(process.cwd() + '/helpers/password-encrypter/hash-helper');
+const hashHelper = require(process.cwd() + '/helpers/password-encrypter/hash_helper');
 
 async function changePassword(request, respond) {
     try {

@@ -1,6 +1,6 @@
 'use strict';
 
-const hash_helper = require('../helpers/password-encrypter/hash-helper');
+const hash_helper = require('../helpers/password-encrypter/hash_helper');
 
 module.exports = {
   async up (queryInterface, Sequelize) {

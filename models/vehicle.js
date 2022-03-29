@@ -26,7 +26,7 @@ module.exports = (sequelize, DataTypes) => {
     type: DataTypes.STRING,
     color: DataTypes.STRING,
     owner_id: DataTypes.INTEGER,
-    verify_state: DataTypes.INTEGER,
+    verify_state_id: DataTypes.INTEGER,
     deletedAt: DataTypes.DATE
   }, {
     sequelize,
