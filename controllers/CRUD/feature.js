@@ -1,29 +1,29 @@
-const models = require('../../models');
+const featureModel = require(process.cwd() + '/models/index').Feature;
 
-async function index() {
-    return await models.Feature.findAll();
+async function index(){
+    return featureModel.findAll();
 }
 
-async function showById(id) {
-    return await models.Feature.findByPk(id);
+async function showById(id){
+    return featureModel.findByPk(id);
 }
 
-async function create(newFeature) {
-    await models.Feature.create(newFeature);
+async function create(newFeature){
+    featureModel.create(newFeature);
 }
 
-async function update(id, updateFeature) {
-    await models.Feature.update(updateFeature, { where: { id: id } });
+async function update(id,updateFeature){
+    featureModel.update(updateFeature, {where: {id:id}});
 }
 
-async function destroy(id) {
-    await models.Feature.destroy({ where: { id: id } });
+async function destroy(id){
+    featureModel.destroy({where:{id:id}});
 }
 
 module.exports = {
     index: index,
-    showById: showById,
-    create: create,
-    update: update,
-    destroy: destroy,
-};
+    getFeatureById: showById,
+    addNewFeature: create,
+    updateFeatureById: update,
+    deleteFeatureById: destroy
+}

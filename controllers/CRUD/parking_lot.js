@@ -1,29 +1,41 @@
-const models = require('../../models');
+const parkingLotModel = require(process.cwd() + '/models/index').ParkingLot;
+const getCurrentDateTime = require(process.cwd() + '/helpers/get-current-datetime/datetime');
 
-async function index() {
-    return await models.ParkingLot.findAll();
+async function index(){
+    return parkingLotModel.findAll();
 }
 
-async function showById(id) {
-    return await models.ParkingLot.findByPk(id);
+async function showById(id){
+    return parkingLotModel.findByPk(id);
 }
 
-async function create(newParkingLot) {
-    await models.ParkingLot.create(newParkingLot);
+async function showByName(name) {
+    parkingLotModel.findOne(name);
 }
 
-async function update(id, updateParkingLot) {
-    await models.ParkingLot.update(_updateParkingLot, { where: { id: id } });
+async function create(newParkingLot){
+    parkingLotModel.create(newParkingLot);
 }
 
-async function destroy(id) {
-    await models.ParkingLot.destroy({ where: { id: id } });
+async function update(id,updateParkingLot){
+    parkingLotModel.update(_updateParkingLot, {where: {id:id}});
+}
+
+async function destroy(id){
+    const now = getCurrentDateTime();
+    
+    // Update deletedAt field of parking-lot
+    const updateParkingLot = {
+        deletedAt: now
+    }
+    update(id, updateParkingLot);
 }
 
 module.exports = {
     index: index,
-    showById: showById,
-    create: create,
-    update: update,
-    destroy: destroy,
-};
+    getParkingLotById: showById,
+    getParkingLotByName: showByName,
+    addNewParkingLot: create,
+    updateParkingLotById: update,
+    softDeleteParkingLotById: destroy
+}

@@ -11,24 +11,17 @@ module.exports = (sequelize, DataTypes) => {
             // define association here
         }
     }
-    UserInfo.init(
-        {
-            user_id: DataTypes.INTEGER,
-            avatar: DataTypes.STRING,
-            birthday: DataTypes.DATE,
-            address: {
-                type: DataTypes.STRING,
-                validate: {
-                    max: 100,
-                },
-            },
-            phone_number: DataTypes.STRING,
-            gender: DataTypes.BOOLEAN,
-        },
-        {
-            sequelize,
-            modelName: 'UserInfo',
-        },
-    );
+    UserInfo.init({
+        user_id: DataTypes.INTEGER,
+        avatar: DataTypes.STRING,
+        birthday: DataTypes.DATE,
+        phone_number: DataTypes.STRING,
+        address: DataTypes.DATE,
+        phone_number: DataTypes.STRING,
+        gender: DataTypes.BOOLEAN
+    }, {
+        sequelize,
+        modelName: 'UserInfo',
+    });
     return UserInfo;
 };

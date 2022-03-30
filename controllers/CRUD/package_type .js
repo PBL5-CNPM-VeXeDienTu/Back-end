@@ -1,29 +1,29 @@
-const models = require('../../models');
+const packageTypeModel = require(process.cwd() + '/models/index').PackageType;
 
-async function index() {
-    return await models.PackageType.findAll();
+async function index(){
+    return packageTypeMode.findAll();
 }
 
-async function showById(id) {
-    return await models.PackageType.findByPk(id);
+async function showById(id){
+    return packageTypeMode.findByPk(id);
 }
 
-async function create(newPackageType) {
-    await models.PackageType.create(newPackageType);
+async function create(newPackageType){
+    packageTypeMode.create(newPackageType);
 }
 
-async function update(id, updatePackageType) {
-    await models.PackageType.update(updatePackageType, { where: { id: id } });
+async function update(id,updatePackageType){
+    packageTypeMode.update(updatePackageType, {where: {id:id}});
 }
 
-async function destroy(id) {
-    await models.PackageType.destroy({ where: { id: id } });
+async function destroy(id){
+    packageTypeMode.destroy({where:{id:id}});
 }
 
 module.exports = {
     index: index,
-    showById: showById,
-    create: create,
-    update: update,
-    destroy: destroy,
-};
+    getPackageTypeById: showById,
+    addNewPackageType: create,
+    updatePackageTypeById: update,
+    deletePackageTypeById: destroy
+}
