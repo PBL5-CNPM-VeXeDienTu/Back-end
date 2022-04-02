@@ -90,3 +90,7 @@ yarn sequelize-cli db:seed:undo:all/ --seed name-of-seed-as-in-data
 5. Reset auto increment in MySQL:
 
     ALTER TABLE table_name AUTO_INCREMENT = value;
+
+6. Prettier format code:
+
+    npm run format-code

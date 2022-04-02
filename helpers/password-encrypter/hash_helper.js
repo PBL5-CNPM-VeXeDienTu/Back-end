@@ -11,5 +11,5 @@ function compare(password, hashed) {
 
 module.exports = {
     hash: hash,
-    compare: compare
-}
+    compare: compare,
+};

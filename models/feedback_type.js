@@ -1,28 +1,24 @@
 'use strict';
-const {
-  Model
-} = require('sequelize');
+const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class FeedbackType extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
-    static associate(models) {
-      // define association here
+    class FeedbackType extends Model {
+        /**
+         * Helper method for defining associations.
+         * This method is not a part of Sequelize lifecycle.
+         * The `models/index` file will call this method automatically.
+         */
+        static associate(models) {
+            // define association here
+        }
     }
-  }
-  FeedbackType.init({
-    type_name: {
-      type: DataTypes.STRING,
-      validate: {
-        max: 100
-      }
-    }
-  }, {
-    sequelize,
-    modelName: 'FeedbackType',
-  });
-  return FeedbackType;
+    FeedbackType.init(
+        {
+            type_name: DataTypes.STRING,
+        },
+        {
+            sequelize,
+            modelName: 'FeedbackType',
+        },
+    );
+    return FeedbackType;
 };
