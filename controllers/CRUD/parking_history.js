@@ -1,31 +1,29 @@
-const models = require('../../models');
+const parkingHistoryModel = require(process.cwd() + '/models/index').ParkingHistory;
 
-async function index() {
-    return await models.ParkingHistory.findAll();
+async function index(){
+    return parkingHistoryModel.findAll();
 }
 
-async function showById(id) {
-    return await models.ParkingHistory.findByPk(id);
+async function showById(id){
+    return parkingHistoryModel.findByPk(id);
 }
 
-async function create(newParkingHistory) {
-    await models.ParkingHistory.create(newParkingHistory);
+async function create(newParkingHistory){
+    parkingHistoryModel.create(newParkingHistory);
 }
 
-async function update(id, updateParkingHistory) {
-    await models.ParkingHistory.update(_updateParkingHistory, {
-        where: { id: id },
-    });
+async function update(id,updateParkingHistory){
+    parkingHistoryModel.update(_updateParkingHistory, {where: {id:id}});
 }
 
-async function destroy(id) {
-    await models.ParkingHistory.destroy({ where: { id: id } });
+async function destroy(id){
+    parkingHistoryModel.destroy({where:{id:id}});
 }
 
 module.exports = {
     index: index,
-    showById: showById,
-    create: create,
-    update: update,
-    destroy: destroy,
-};
+    getParkingHistoryById: showById,
+    addNewParkingHistory: create,
+    updateParkingHistoryById: update,
+    deleteParkingHistoryById: destroy
+}

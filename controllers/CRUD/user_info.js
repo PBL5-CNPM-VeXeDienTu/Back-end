@@ -1,29 +1,29 @@
-const models = require('../../models');
+const userInfoModel = require(process.cwd() + '/models/index').UserInfo;
 
-async function index() {
-    return await models.UserInfo.findAll();
+async function index(){
+    return userInfoModel.findAll();
 }
 
-async function showById(id) {
-    return await models.UserInfo.findByPk(id);
+async function showById(id){
+    return userInfoModel.findByPk(id);
 }
 
-async function create(newUserInfo) {
-    await models.UserInfo.create(newUserInfo);
+async function create(newUserInfo){
+    userInfoModel.create(newUserInfo);
 }
 
-async function update(id, updateUserInfo) {
-    await models.UserInfo.update(updateUserInfo, { where: { id: id } });
+async function update(id,updateUserInfo){
+    userInfoModel.update(updateUserInfo, {where: {id:id}});
 }
 
-async function destroy(id) {
-    await models.UserInfo.destroy({ where: { id: id } });
+async function destroy(id){
+    userInfoModel.destroy({where:{id:id}});
 }
 
 module.exports = {
     index: index,
-    showById: showById,
-    create: create,
-    update: update,
-    destroy: destroy,
-};
+    getUserInfoById: showById,
+    addNewUserInfo: create,
+    updateUserInfoById: update,
+    deleteUserInfoById: destroy
+}

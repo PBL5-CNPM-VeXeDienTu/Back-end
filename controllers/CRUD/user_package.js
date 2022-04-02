@@ -1,29 +1,29 @@
-const models = require('../../models');
+const userPackageModel = require(process.cwd() + '/models/index').UserPackage;
 
-async function index() {
-    return await models.UserPackage.findAll();
+async function index(){
+    return userPackageModel.findAll();
 }
 
-async function showById(id) {
-    return await models.UserPackage.findByPk(id);
+async function showById(id){
+    return userPackageModel.findByPk(id);
 }
 
-async function create(newUserPackage) {
-    await models.UserPackage.create(newUserPackage);
+async function create(newUserPackage){
+    userPackageModel.create(newUserPackage);
 }
 
-async function update(id, updateUserPackage) {
-    await models.UserPackage.update(_updateUserPackage, { where: { id: id } });
+async function update(id,updateUserPackage){
+    userPackageModel.update(_updateUserPackage, {where: {id:id}});
 }
 
-async function destroy(id) {
-    await models.UserPackage.destroy({ where: { id: id } });
+async function destroy(id){
+    userPackageModel.destroy({where:{id:id}});
 }
 
 module.exports = {
     index: index,
-    showById: showById,
-    create: create,
-    update: update,
-    destroy: destroy,
-};
+    getUserPackageById: showById,
+    addNewUserPackage: create,
+    updateUserPackageById: update,
+    deleteUserPackageById: destroy
+}
