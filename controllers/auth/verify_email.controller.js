@@ -1,33 +1,27 @@
-const models = require(process.cwd() + '/models');
+const { getAuthKeyByUserId, deleteAuthKeyById } = require('../CRUD/authkey');
+const { getUserByEmail, updateUserById } = require('../CRUD/user');
 
 async function verifyEmail(request, respond) {
     try {
-        const dbUser = (
-            await models.User.findOne({
-                where: { email: request.params.email },
-            })
-        )?.dataValues;
+        const dbUser = await getUserByEmail(request.params.email);
         if (dbUser) {
             // Check if authentication key is valid
-            const dbAuthKey = (
-                await models.AuthKey.findOne({ where: { user_id: dbUser.id } })
-            )?.dataValues;
+            const dbAuthKey = await getAuthKeyByUserId(dbUser.id);
             if (request.params.authKey != dbAuthKey?.key) {
                 return respond.status(409).json({
                     message: 'Invalid authentication key!',
                 });
             }
+
             // If key is valid, delete old key and confirm email
-            models.AuthKey.destroy({ where: { id: dbAuthKey.id } });
+            deleteAuthKeyById(dbAuthKey.id);
+
             if (!dbUser.is_verified) {
-                dbUser.is_verified = true;
-                models.User.update(dbUser, { where: { id: dbUser.id } }).then(
-                    (result) => {
-                        return respond.status(200).json({
-                            message: 'Email verified successfully!',
-                        });
-                    },
-                );
+                updateUserById({ is_verified: true }, dbUser.id).then(() => {
+                    return respond.status(200).json({
+                        message: 'Email verified successfully!',
+                    });
+                });
             } else {
                 return respond.status(401).json({
                     message: 'Email is already verified!',

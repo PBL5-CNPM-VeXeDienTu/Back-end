@@ -1,23 +1,23 @@
 const transactionModel = require(process.cwd() + '/models/index').Transaction;
 
-async function index(){
+async function index() {
     return transactionModel.findAll();
 }
 
-async function showById(id){
+async function showById(id) {
     return transactionModel.findByPk(id);
 }
 
-async function create(newTransaction){
-    transactionModel.create(newTransaction);
+async function create(newTransaction) {
+    return transactionModel.create(newTransaction);
 }
 
-async function update(id,updateTransaction){
-    transactionModel.update(_updateTransaction, {where: {id:id}});
+async function update(updateTransaction, id) {
+    return transactionModel.update(updateTransaction, { where: { id: id } });
 }
 
-async function destroy(id){
-    transactionModel.destroy({where:{id:id}});
+async function destroy(id) {
+    return transactionModel.destroy({ where: { id: id } });
 }
 
 module.exports = {
@@ -25,5 +25,5 @@ module.exports = {
     getTransactionById: showById,
     addNewTransaction: create,
     updateTransactionById: update,
-    deleteTransactionById: destroy
-}
+    deleteTransactionById: destroy,
+};

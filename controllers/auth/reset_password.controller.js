@@ -1,20 +1,16 @@
-const models = require(process.cwd() + '/models');
 const hashHelper = require(process.cwd() +
     '/helpers/password-encrypter/hash_helper');
+
+const { getAuthKeyByUserId, deleteAuthKeyById } = require('../CRUD/authkey');
+const { getUserByEmail, updateUserById } = require('../CRUD/user');
 
 async function resetPassword(request, respond) {
     try {
         // Check if email exists
-        const dbUser = (
-            await models.User.findOne({
-                where: { email: request.params.email },
-            })
-        )?.dataValues;
+        const dbUser = await getUserByEmail(request.params.email);
         if (dbUser) {
             // Check if authentication key is valid
-            const dbAuthKey = (
-                await models.AuthKey.findOne({ where: { user_id: dbUser.id } })
-            )?.dataValues;
+            const dbAuthKey = await getAuthKeyByUserId(dbUser.id);
             if (request.params.authKey != dbAuthKey?.key) {
                 return respond.status(409).json({
                     message: 'Invalid authentication key!',
@@ -22,7 +18,7 @@ async function resetPassword(request, respond) {
             }
 
             // If key is valid, delete old key and reset password
-            models.AuthKey.destroy({ where: { id: dbAuthKey.id } });
+            deleteAuthKeyById(dbAuthKey.id);
 
             // Generate new random password
             const newPassword = (Math.random() + 1).toString(36).substring(3);
@@ -31,9 +27,7 @@ async function resetPassword(request, respond) {
             const updateUser = {
                 password: hashHelper.hash(newPassword),
             };
-            models.User.update(updateUser, {
-                where: { email: dbUser.email },
-            }).then((result) => {
+            updateUserById(updateUser, dbUser.id).then(() => {
                 return respond.status(200).json({
                     message:
                         'Password reset successfully! You can login with new password now!',
