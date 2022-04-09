@@ -1,23 +1,23 @@
 const packageModel = require(process.cwd() + '/models/index').Package;
 
-async function index(){
+async function index() {
     return packageModel.findAll();
 }
 
-async function showById(id){
+async function showById(id) {
     return packageModel.findByPk(id);
 }
 
-async function create(newPackage){
-    packageModel.create(newPackage);
+async function create(newPackage) {
+    return packageModel.create(newPackage);
 }
 
-async function update(id,updatePackage){
-    packageModel.update(_updatePackage, {where: {id:id}});
+async function update(updatePackage, id) {
+    return packageModel.update(updatePackage, { where: { id: id } });
 }
 
-async function destroy(id){
-    packageModel.destroy({where:{id:id}});
+async function destroy(id) {
+    return packageModel.destroy({ where: { id: id } });
 }
 
 module.exports = {
@@ -25,5 +25,5 @@ module.exports = {
     getPackageById: showById,
     addNewPackage: create,
     updatePackageById: update,
-    deletePackageById: destroy
-}
+    deletePackageById: destroy,
+};

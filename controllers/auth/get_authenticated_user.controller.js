@@ -1,12 +1,12 @@
-const models = require(process.cwd() + '/models');
+const { getUserById } = require('../CRUD/user');
 
 async function getAuthenticatedUser(request, respond) {
     try {
         // Get user id from JsonWebToken
-        const id = request.userData.userId;
+        const userId = request.userData.userId;
 
         // Check if user exists
-        const dbUser = (await models.User.findByPk(id))?.dataValues;
+        const dbUser = await getUserById(userId);
         if (dbUser) {
             return respond.status(200).json(dbUser);
         } else {

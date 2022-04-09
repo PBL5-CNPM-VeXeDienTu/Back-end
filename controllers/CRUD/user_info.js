@@ -1,23 +1,23 @@
 const userInfoModel = require(process.cwd() + '/models/index').UserInfo;
 
-async function index(){
+async function index() {
     return userInfoModel.findAll();
 }
 
-async function showById(id){
+async function showById(id) {
     return userInfoModel.findByPk(id);
 }
 
-async function create(newUserInfo){
-    userInfoModel.create(newUserInfo);
+async function create(newUserInfo) {
+    return userInfoModel.create(newUserInfo);
 }
 
-async function update(id,updateUserInfo){
-    userInfoModel.update(updateUserInfo, {where: {id:id}});
+async function update(updateUserInfo, id) {
+    return userInfoModel.update(updateUserInfo, { where: { id: id } });
 }
 
-async function destroy(id){
-    userInfoModel.destroy({where:{id:id}});
+async function destroy(id) {
+    return userInfoModel.destroy({ where: { id: id } });
 }
 
 module.exports = {
@@ -25,5 +25,5 @@ module.exports = {
     getUserInfoById: showById,
     addNewUserInfo: create,
     updateUserInfoById: update,
-    deleteUserInfoById: destroy
-}
+    deleteUserInfoById: destroy,
+};

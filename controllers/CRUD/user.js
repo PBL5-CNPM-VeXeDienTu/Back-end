@@ -11,15 +11,15 @@ async function showById(id) {
 }
 
 async function showByEmail(email) {
-    userModel.findOne(email);
+    return userModel.findOne({ where: { email: email } });
 }
 
 async function create(newUser) {
-    userModel.create(newUser);
+    return userModel.create(newUser);
 }
 
-async function update(id, updateUser) {
-    userModel.update(updateUser, { where: { id: id } });
+async function update(updateUser, id) {
+    return userModel.update(updateUser, { where: { id: id } });
 }
 
 async function destroy(id) {
@@ -29,7 +29,7 @@ async function destroy(id) {
     const updateUser = {
         deletedAt: now,
     };
-    update(id, updateUser);
+    await update(updateUser, id);
 }
 
 module.exports = {
