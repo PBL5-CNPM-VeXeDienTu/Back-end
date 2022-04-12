@@ -1,12 +1,19 @@
 const multer = require('multer');
 const path = require('path');
 
+const fs = require('fs');
+const destination = process.cwd() + '/public/images/cavet/back';
+
+if (!fs.existsSync(destination)) {
+    fs.mkdirSync(destination, { recursive: true });
+}
+
 const storage = multer.diskStorage({
     destination: function (request, file, cb) {
-        cb(null, './public/images/cavet-images/front');
+        cb(null, destination);
     },
     filename: function (request, file, cb) {
-        cb(null, request.body.id + path.extname(file.originalname));
+        cb(null, request.params.id + path.extname(file.originalname));
     },
 });
 
@@ -24,6 +31,6 @@ const uploader = multer({
         fileSize: 1024 * 1024 * 10,
     },
     fileFilter: fileFilter,
-}).single('cavet-image-front');
+}).single('cavet-back');
 
 module.exports = uploader;

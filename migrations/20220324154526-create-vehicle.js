@@ -12,15 +12,15 @@ module.exports = {
                 allowNull: false,
                 type: Sequelize.STRING,
             },
-            vehicle_image: {
+            avatar: {
                 allowNull: false,
                 type: Sequelize.STRING,
             },
-            cavet_image_front: {
+            cavet_back: {
                 allowNull: false,
                 type: Sequelize.STRING,
             },
-            cavet_image_back: {
+            cavet_front: {
                 allowNull: false,
                 type: Sequelize.STRING,
             },
