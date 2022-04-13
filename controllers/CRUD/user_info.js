@@ -4,8 +4,8 @@ async function index() {
     return userInfoModel.findAll();
 }
 
-async function showById(id) {
-    return userInfoModel.findByPk(id);
+async function showByUserId(user_id) {
+    return userInfoModel.findOne({ where: { id: user_id } });
 }
 
 async function create(newUserInfo) {
@@ -22,7 +22,7 @@ async function destroy(id) {
 
 module.exports = {
     index: index,
-    getUserInfoById: showById,
+    getUserInfoByUserId: showByUserId,
     addNewUserInfo: create,
     updateUserInfoById: update,
     deleteUserInfoById: destroy,
