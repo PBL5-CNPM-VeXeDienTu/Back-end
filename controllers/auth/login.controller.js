@@ -16,6 +16,13 @@ async function login(request, respond) {
                 });
             }
 
+            // Check if user is deleted
+            if (dbUser.deletedAt != null) {
+                return respond.status(400).json({
+                    message: 'This user was deleted!',
+                });
+            }
+
             // Check if password is correct
             if (!hashHelper.compare(request.body.password, dbUser.password)) {
                 return respond.status(400).json({
