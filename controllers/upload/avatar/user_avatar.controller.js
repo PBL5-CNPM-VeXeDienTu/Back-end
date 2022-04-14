@@ -1,0 +1,43 @@
+const path = require('path');
+
+const { getUserInfoById, updateUserInfoById } = require('../../CRUD/user_info');
+
+async function uploadSingle(request, respond) {
+    try {
+        if (request.file) {
+            const userId = request.userData.userId;
+
+            // Check if user exists
+            const dbUser = await getUserInfoById(userId);
+            if (dbUser) {
+                // Update user avatar in database
+                const extName = path.extname(request.file.originalname);
+                const imageUrl = `public/images/avatars/user/${userId}${extName}`;
+                const updateUser = {
+                    avatar: imageUrl,
+                };
+                updateUserInfoById(updateUser, dbUser.id).then(() => {
+                    return respond.status(200).json({
+                        message: "Upload user's avatar successfully!",
+                        url: imageUrl,
+                    });
+                });
+            } else {
+                return respond.status(404).json({
+                    message: 'User not found!',
+                });
+            }
+        } else {
+            return respond.status(400).json({
+                message: 'Image file not found!',
+            });
+        }
+    } catch (error) {
+        return respond.status(500).json({
+            message: 'Something went wrong!',
+            error: error,
+        });
+    }
+}
+
+module.exports = uploadSingle;

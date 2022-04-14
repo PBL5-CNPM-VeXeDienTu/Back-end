@@ -54,7 +54,7 @@ async function register(request, respond) {
             // Create new user info
             const newUserInfo = {
                 user_id: result.id,
-                avatar: 'public/images/avatars/default-avatar.png',
+                avatar: 'public/images/avatars/user/default-avatar.png',
             };
             addNewUserInfo(newUserInfo);
 
