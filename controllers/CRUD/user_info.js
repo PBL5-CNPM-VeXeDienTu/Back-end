@@ -12,18 +12,18 @@ async function create(newUserInfo) {
     return userInfoModel.create(newUserInfo)
 }
 
-async function update(updateUserInfo, id) {
-    return userInfoModel.update(updateUserInfo, { where: { id: id } })
+async function update(updateUserInfo, user_id) {
+    return userInfoModel.update(updateUserInfo, { where: { id: user_id } })
 }
 
-async function destroy(id) {
-    return userInfoModel.destroy({ where: { id: id } })
+async function destroy(user_id) {
+    return userInfoModel.destroy({ where: { id: user_id } })
 }
 
 module.exports = {
     index: index,
     getUserInfoByUserId: showByUserId,
     addNewUserInfo: create,
-    updateUserInfoById: update,
-    deleteUserInfoById: destroy,
+    updateUserInfoByUserId: update,
+    deleteUserInfoByUserId: destroy,
 }

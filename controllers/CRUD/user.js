@@ -32,6 +32,16 @@ async function destroy(id) {
     await update(updateUser, id)
 }
 
+async function checkValidAccount(id) {
+    const dbUser = await showById(id)
+    return {
+        is_valid: dbUser.is_verified && dbUser.deletedAt == null,
+        message: !dbUser.is_verified
+            ? 'This email is not verified yet!'
+            : 'This user was deleted!',
+    }
+}
+
 module.exports = {
     index: index,
     getUserById: showById,
@@ -39,4 +49,5 @@ module.exports = {
     addNewUser: create,
     updateUserById: update,
     softDeleteUserById: destroy,
+    checkValidAccount: checkValidAccount,
 }
