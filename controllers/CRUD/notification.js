@@ -1,23 +1,23 @@
-const notificationModel = require(process.cwd() + '/models/index').Notification;
+const notificationModel = require(process.cwd() + '/models/index').Notification
 
-async function index(){
+async function index() {
     return notificationModel.findAll()
 }
 
-async function showById(id){
-    return notificationModel.findByPk(id);
+async function showById(id) {
+    return notificationModel.findByPk(id)
 }
 
-async function create(newNotification){
-    notificationModel.create(newNotification);
+async function create(newNotification) {
+    return notificationModel.create(newNotification)
 }
 
-async function update(id,updateNotification){
-    notificationModel.update(_updateNotification, {where: {id:id}});
+async function update(updateNotification, id) {
+    return notificationModel.update(updateNotification, { where: { id: id } })
 }
 
-async function destroy(id){
-    notificationModel.destroy({where:{id:id}});
+async function destroy(id) {
+    return notificationModel.destroy({ where: { id: id } })
 }
 
 module.exports = {
@@ -25,5 +25,5 @@ module.exports = {
     getNotificationById: showById,
     addNewNotification: create,
     updateNotificationById: update,
-    deleteNotificationById: destroy
+    deleteNotificationById: destroy,
 }

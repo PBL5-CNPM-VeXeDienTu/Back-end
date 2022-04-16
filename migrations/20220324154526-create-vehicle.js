@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 module.exports = {
     async up(queryInterface, Sequelize) {
         await queryInterface.createTable('Vehicles', {
@@ -12,15 +12,15 @@ module.exports = {
                 allowNull: false,
                 type: Sequelize.STRING,
             },
-            vehicle_image: {
+            avatar: {
                 allowNull: false,
                 type: Sequelize.STRING,
             },
-            cavet_image_front: {
+            cavet_back: {
                 allowNull: false,
                 type: Sequelize.STRING,
             },
-            cavet_image_back: {
+            cavet_front: {
                 allowNull: false,
                 type: Sequelize.STRING,
             },
@@ -50,9 +50,9 @@ module.exports = {
                 type: Sequelize.DATE,
                 defaultValue: Sequelize.fn('NOW'),
             },
-        });
+        })
     },
     async down(queryInterface, Sequelize) {
-        await queryInterface.dropTable('Vehicles');
+        await queryInterface.dropTable('Vehicles')
     },
-};
+}

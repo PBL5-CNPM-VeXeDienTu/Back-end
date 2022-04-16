@@ -1,9 +1,9 @@
 function getCurrentDateTime() {
-    const date = new Date();
+    const date = new Date()
     return new Date(date.getTime() - date.getTimezoneOffset() * 60000)
         .toISOString()
         .replace(/T/, ' ')
-        .replace(/\..+/, '');
+        .replace(/\..+/, '')
 }
 
-module.exports = getCurrentDateTime;
+module.exports = getCurrentDateTime

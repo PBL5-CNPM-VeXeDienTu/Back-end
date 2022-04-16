@@ -1,23 +1,23 @@
-const userPackageModel = require(process.cwd() + '/models/index').UserPackage;
+const userPackageModel = require(process.cwd() + '/models/index').UserPackage
 
-async function index(){
-    return userPackageModel.findAll();
+async function index() {
+    return userPackageModel.findAll()
 }
 
-async function showById(id){
-    return userPackageModel.findByPk(id);
+async function showById(id) {
+    return userPackageModel.findByPk(id)
 }
 
-async function create(newUserPackage){
-    userPackageModel.create(newUserPackage);
+async function create(newUserPackage) {
+    return userPackageModel.create(newUserPackage)
 }
 
-async function update(id,updateUserPackage){
-    userPackageModel.update(_updateUserPackage, {where: {id:id}});
+async function update(updateUserPackage, id) {
+    return userPackageModel.update(updateUserPackage, { where: { id: id } })
 }
 
-async function destroy(id){
-    userPackageModel.destroy({where:{id:id}});
+async function destroy(id) {
+    return userPackageModel.destroy({ where: { id: id } })
 }
 
 module.exports = {
@@ -25,5 +25,5 @@ module.exports = {
     getUserPackageById: showById,
     addNewUserPackage: create,
     updateUserPackageById: update,
-    deleteUserPackageById: destroy
+    deleteUserPackageById: destroy,
 }

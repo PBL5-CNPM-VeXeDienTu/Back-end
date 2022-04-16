@@ -1,29 +1,29 @@
-const authKeyModel = require(process.cwd() + '/models/index').AuthKey;
+const authKeyModel = require(process.cwd() + '/models/index').AuthKey
 
-async function index(){
-    return authKeyModel.findAll();
+async function index() {
+    return authKeyModel.findAll()
 }
 
-async function showById(id){
-    return authKeyModel.findByPk(id);
+async function showByUserId(user_id) {
+    return authKeyModel.findOne({ where: { user_id: user_id } })
 }
 
-async function create(newAuthKey){
-    authKeyModel.create(newAuthKey);
+async function create(newAuthKey) {
+    return authKeyModel.create(newAuthKey)
 }
 
-async function update(id,updateAuthKey){
-    authKeyModel.update(_updateAuthKey, {where: {id:id}});
+async function update(updateAuthKey, id) {
+    return authKeyModel.update(updateAuthKey, { where: { id: id } })
 }
 
-async function destroy(id){
-    authKeyModel.destroy({where:{id:id}});
+async function destroy(id) {
+    return authKeyModel.destroy({ where: { id: id } })
 }
 
 module.exports = {
     index: index,
-    getAuthKeyById: showById,
+    getAuthKeyByUserId: showByUserId,
     addNewAuthKey: create,
     updateAuthKeyById: update,
-    deleteAuthKeyById: destroy
+    deleteAuthKeyById: destroy,
 }

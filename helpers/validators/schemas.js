@@ -6,11 +6,11 @@ const userSchema = {
     is_verified: { type: 'number', optional: true },
     qr_key: { type: 'string', optional: true },
     deleted_at: { type: 'string', optional: true },
-};
+}
 
 const roleSchema = {
     name: { type: 'string', optional: true },
-};
+}
 
 const userInfoSchema = {
     user_id: { type: 'number', optional: true },
@@ -19,23 +19,23 @@ const userInfoSchema = {
     address: { type: 'string', optional: true },
     phone_number: { type: 'string', optional: true },
     gender: { type: 'number', optional: true },
-};
+}
 
 const walletSchema = {
     user_id: { type: 'number', optional: true },
     balance: { type: 'number', optional: true },
-};
+}
 
 const transactionSchema = {
     wallet_id: { type: 'number', optional: true },
     type_id: { type: 'number', optional: true },
     reference_id: { type: 'number', optional: true },
     amount: { type: 'number', optional: true },
-};
+}
 
 const transactionTypeSchema = {
     type_name: { type: 'string', optional: true },
-};
+}
 
 const vehicleSchema = {
     license_plate: { type: 'string', optional: true },
@@ -47,7 +47,7 @@ const vehicleSchema = {
     owner_id: { type: 'number', optional: true },
     verify_state: { type: 'number', optional: true },
     deleted_at: { type: 'string', optional: true },
-};
+}
 
 const parkingLotSchema = {
     name: { type: 'string', optional: true },
@@ -60,7 +60,7 @@ const parkingLotSchema = {
     owner_id: { type: 'number', optional: true },
     verify_state: { type: 'number', optional: true },
     deleted_at: { type: 'string', optional: true },
-};
+}
 
 const parkingHistorySchema = {
     user_id: { type: 'number', optional: true },
@@ -71,36 +71,36 @@ const parkingHistorySchema = {
     is_parking: { type: 'number', optional: true },
     memo: { type: 'string', optional: true },
     cost: { type: 'string', optional: true },
-};
+}
 
 const verifyStateSchema = {
     state: { type: 'string', optional: true },
     note: { type: 'string', optional: true },
-};
+}
 
 const parkingPriceSchema = {
     parking_lot_id: { type: 'number', optional: true },
     bike: { type: 'number', optional: true },
     motobike: { type: 'number', optional: true },
     car: { type: 'number', optional: true },
-};
+}
 
 const packageSchema = {
     parking_lot_id: { type: 'number', optional: true },
     name: { type: 'string', optional: true },
     type_id: { type: 'number', optional: true },
     price: { type: 'number', optional: true },
-};
+}
 
 const packageTypeSchema = {
     type_name: { type: 'string', optional: true },
-};
+}
 
 const userPackageSchema = {
     user_id: { type: 'number', optional: true },
     package_id: { type: 'number', optional: true },
     expire_at: { type: 'string', optional: true },
-};
+}
 
 const feedbackSchema = {
     user_id: { type: 'number', optional: true },
@@ -108,27 +108,27 @@ const feedbackSchema = {
     feature_id: { type: 'number', optional: true },
     content: { type: 'string', optional: true },
     is_processed: { type: 'number', optional: true },
-};
+}
 
 const feedbackTypeSchema = {
     type_name: { type: 'string', optional: true },
-};
+}
 
 const featureSchema = {
     name: { type: 'string', optional: true },
-};
+}
 
 const notificationSchema = {
     user_id: { type: 'number', optional: true },
     title: { type: 'string', optional: true },
     content: { type: 'string', optional: true },
     is_read: { type: 'number', optional: true },
-};
+}
 
 const authKeySchema = {
     user_id: { type: 'number', optional: true },
     key: { type: 'string', optional: true },
-};
+}
 
 module.exports = {
     userSchema: userSchema,
@@ -150,4 +150,4 @@ module.exports = {
     featureSchema: featureSchema,
     notificationSchema: notificationSchema,
     authKeySchema: authKeySchema,
-};
+}

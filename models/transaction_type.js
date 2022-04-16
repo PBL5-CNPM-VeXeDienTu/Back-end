@@ -1,5 +1,5 @@
-'use strict';
-const { Model } = require('sequelize');
+'use strict'
+const { Model } = require('sequelize')
 module.exports = (sequelize, DataTypes) => {
     class TransactionType extends Model {
         /**
@@ -19,6 +19,6 @@ module.exports = (sequelize, DataTypes) => {
             sequelize,
             modelName: 'TransactionType',
         },
-    );
-    return TransactionType;
-};
+    )
+    return TransactionType
+}
