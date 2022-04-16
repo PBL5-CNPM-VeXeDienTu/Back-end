@@ -18,5 +18,6 @@ app.use('/public', express.static('public'))
 
 app.use('/api/auth', routes.auth)
 app.use('/api/upload', routes.upload)
+app.use('/api/user', routes.user)
 
 module.exports = app
