@@ -1,5 +1,5 @@
-'use strict';
-const { Model } = require('sequelize');
+'use strict'
+const { Model } = require('sequelize')
 module.exports = (sequelize, DataTypes) => {
     class VerifyState extends Model {
         /**
@@ -20,10 +20,10 @@ module.exports = (sequelize, DataTypes) => {
             sequelize,
             modelName: 'VerifyState',
         },
-    );
-    return VerifyState;
-};
+    )
+    return VerifyState
+}
 
-const PROCESSING = 'Đang xử lý';
-const VALID = 'Hợp lệ';
-const INVALID = 'Không hợp lệ';
+const PROCESSING = 'Đang xử lý'
+const VALID = 'Hợp lệ'
+const INVALID = 'Không hợp lệ'

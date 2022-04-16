@@ -1,4 +1,4 @@
-const nodemailer = require('nodemailer');
+const nodemailer = require('nodemailer')
 
 const transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -6,21 +6,21 @@ const transporter = nodemailer.createTransport({
         user: process.env.GMAIL_USER,
         pass: process.env.GMAIL_PASS,
     },
-});
+})
 
 // Options
-const VERIFY_EMAIL = 1;
-const RESET_PASSWORD = 2;
+const VERIFY_EMAIL = 1
+const RESET_PASSWORD = 2
 
 const createSubject = (option) => {
     if (option == VERIFY_EMAIL) {
-        return 'Confirm register for email:';
+        return 'Confirm register for email:'
     }
 
     if (option == RESET_PASSWORD) {
-        return 'Reset password for account:';
+        return 'Reset password for account:'
     }
-};
+}
 
 const createContent = (email, option, authKey) => {
     if (option == VERIFY_EMAIL) {
@@ -36,7 +36,7 @@ const createContent = (email, option, authKey) => {
             <br>
             <p>Thank you,</p>
             <p>--- VeXeDienTuBKDN - AwesomeDevTeam ---</p>
-            `;
+            `
     }
 
     if (option == RESET_PASSWORD) {
@@ -52,9 +52,9 @@ const createContent = (email, option, authKey) => {
             <br>
             <p>Thank you,</p>
             <p>--- VeXeDienTuBKDN - AwesomeDevTeam ---</p>
-            `;
+            `
     }
-};
+}
 
 const mailConfig = (email, option, authKey) => {
     return {
@@ -62,10 +62,10 @@ const mailConfig = (email, option, authKey) => {
         to: email,
         subject: `${createSubject(option)} ${email}`,
         html: createContent(email, option, authKey),
-    };
-};
+    }
+}
 
 module.exports = {
     transporter: transporter,
     mailConfig: mailConfig,
-};
+}

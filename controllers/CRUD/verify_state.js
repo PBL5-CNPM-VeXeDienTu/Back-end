@@ -1,23 +1,23 @@
-const verifyStateModel = require(process.cwd() + '/models/index').VerifyState;
+const verifyStateModel = require(process.cwd() + '/models/index').VerifyState
 
 async function index() {
-    return verifyStateModel.findAll();
+    return verifyStateModel.findAll()
 }
 
 async function showById(id) {
-    return verifyStateModel.findByPk(id);
+    return verifyStateModel.findByPk(id)
 }
 
 async function create(newVerifyState) {
-    return verifyStateModel.create(newVerifyState);
+    return verifyStateModel.create(newVerifyState)
 }
 
 async function update(updateVerifyState, id) {
-    return verifyStateModel.update(updateVerifyState, { where: { id: id } });
+    return verifyStateModel.update(updateVerifyState, { where: { id: id } })
 }
 
 async function destroy(id) {
-    return verifyStateModel.destroy({ where: { id: id } });
+    return verifyStateModel.destroy({ where: { id: id } })
 }
 
 module.exports = {
@@ -26,4 +26,4 @@ module.exports = {
     addNewVerifyState: create,
     updateVerifyStateById: update,
     deleteVerifyStateById: destroy,
-};
+}

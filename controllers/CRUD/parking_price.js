@@ -1,23 +1,23 @@
-const parkingPriceModel = require(process.cwd() + '/models/index').ParkingPrice;
+const parkingPriceModel = require(process.cwd() + '/models/index').ParkingPrice
 
 async function index() {
-    return parkingPriceModel.findAll();
+    return parkingPriceModel.findAll()
 }
 
 async function showById(id) {
-    return parkingPriceModel.findByPk(id);
+    return parkingPriceModel.findByPk(id)
 }
 
 async function create(newParkingPrice) {
-    return parkingPriceModel.create(newParkingPrice);
+    return parkingPriceModel.create(newParkingPrice)
 }
 
 async function update(updateParkingPrice, id) {
-    return parkingPriceModel.update(updateParkingPrice, { where: { id: id } });
+    return parkingPriceModel.update(updateParkingPrice, { where: { id: id } })
 }
 
 async function destroy(id) {
-    return parkingPriceModel.destroy({ where: { id: id } });
+    return parkingPriceModel.destroy({ where: { id: id } })
 }
 
 module.exports = {
@@ -26,4 +26,4 @@ module.exports = {
     addNewParkingPrice: create,
     updateParkingPriceById: update,
     deleteParkingPriceById: destroy,
-};
+}

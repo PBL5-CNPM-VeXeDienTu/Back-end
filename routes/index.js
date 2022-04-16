@@ -1,7 +1,7 @@
-const auth = require('./auth');
-const upload = require('./upload');
+const auth = require('./auth')
+const upload = require('./upload')
 
 module.exports = {
     auth: auth,
     upload: upload,
-};
+}

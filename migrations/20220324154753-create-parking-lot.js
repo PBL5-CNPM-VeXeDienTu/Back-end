@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 module.exports = {
     async up(queryInterface, Sequelize) {
         await queryInterface.createTable('ParkingLots', {
@@ -53,9 +53,9 @@ module.exports = {
                 type: Sequelize.DATE,
                 defaultValue: Sequelize.fn('NOW'),
             },
-        });
+        })
     },
     async down(queryInterface, Sequelize) {
-        await queryInterface.dropTable('ParkingLots');
+        await queryInterface.dropTable('ParkingLots')
     },
-};
+}
