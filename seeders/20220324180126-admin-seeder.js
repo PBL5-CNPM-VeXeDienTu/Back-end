@@ -1,6 +1,6 @@
-'use strict';
+'use strict'
 
-const hash_helper = require('../helpers/password-encrypter/hash_helper');
+const hash_helper = require('../helpers/password-encrypter/hash_helper')
 
 module.exports = {
     async up(queryInterface, Sequelize) {
@@ -49,10 +49,10 @@ module.exports = {
                 },
             ],
             {},
-        );
+        )
     },
 
     async down(queryInterface, Sequelize) {
-        await queryInterface.bulkDelete('Users', null, {});
+        await queryInterface.bulkDelete('Users', null, {})
     },
-};
+}

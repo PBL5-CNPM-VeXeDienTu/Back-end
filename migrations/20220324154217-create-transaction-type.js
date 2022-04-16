@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 module.exports = {
     async up(queryInterface, Sequelize) {
         await queryInterface.createTable('TransactionTypes', {
@@ -21,9 +21,9 @@ module.exports = {
                 type: Sequelize.DATE,
                 defaultValue: Sequelize.fn('NOW'),
             },
-        });
+        })
     },
     async down(queryInterface, Sequelize) {
-        await queryInterface.dropTable('TransactionTypes');
+        await queryInterface.dropTable('TransactionTypes')
     },
-};
+}

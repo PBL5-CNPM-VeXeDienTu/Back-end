@@ -1,23 +1,23 @@
-const walletModel = require(process.cwd() + '/models/index').Wallet;
+const walletModel = require(process.cwd() + '/models/index').Wallet
 
 async function index() {
-    return walletModel.findAll();
+    return walletModel.findAll()
 }
 
 async function showById(id) {
-    return walletModel.findByPk(id);
+    return walletModel.findByPk(id)
 }
 
 async function create(newWallet) {
-    return walletModel.create(newWallet);
+    return walletModel.create(newWallet)
 }
 
 async function update(updateWallet, id) {
-    return walletModel.update(updateWallet, { where: { id: id } });
+    return walletModel.update(updateWallet, { where: { id: id } })
 }
 
 async function destroy(id) {
-    return walletModel.destroy({ where: { id: id } });
+    return walletModel.destroy({ where: { id: id } })
 }
 
 module.exports = {
@@ -26,4 +26,4 @@ module.exports = {
     addNewWallet: create,
     updateWalletById: update,
     deleteWalletById: destroy,
-};
+}
