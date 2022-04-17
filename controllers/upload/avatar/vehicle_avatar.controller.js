@@ -2,6 +2,8 @@ const path = require('path')
 
 const { getVehicleById, updateVehicleById } = require('../../CRUD/vehicle')
 
+const ADMIN_ROLE = 2
+
 async function uploadSingle(request, respond) {
     try {
         if (request.file) {
@@ -10,12 +12,16 @@ async function uploadSingle(request, respond) {
             // Check if vehicle exists
             const dbVehicle = await getVehicleById(vehicleId)
             if (dbVehicle) {
-                // Check if user own vehicle
+                // Check if user is admin or not
+                const userRole = request.userData.role
                 const userId = request.userData.userId
-                if (userId != dbVehicle.owner_id) {
-                    return respond.status(400).json({
-                        message: 'User is not the owner of this vehicle!',
-                    })
+                if (userRole != ADMIN_ROLE) {
+                    // Check if user own vehicle
+                    if (userId != dbVehicle.owner_id) {
+                        return respond.status(400).json({
+                            message: 'User is not the owner of this vehicle!',
+                        })
+                    }
                 }
 
                 // Update vehicle avatar in database
