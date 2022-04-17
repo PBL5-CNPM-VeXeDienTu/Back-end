@@ -1,4 +1,3 @@
-
 const ADMIN_ROLE = 2
 
 async function checkRoleUpload(request, respond, next) {
@@ -13,10 +12,8 @@ async function checkRoleUpload(request, respond, next) {
                 return respond.status(400).json({
                     message: 'Invalid role!',
                 })
-            }
-            else next()
-        }
-        else next()
+            } else next()
+        } else next()
     } catch (error) {
         return respond.status(401).json({
             message: 'Something went wrong!',
@@ -28,4 +25,3 @@ async function checkRoleUpload(request, respond, next) {
 module.exports = {
     checkRoleUpload: checkRoleUpload,
 }
-

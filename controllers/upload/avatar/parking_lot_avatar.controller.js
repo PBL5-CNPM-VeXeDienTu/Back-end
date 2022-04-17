@@ -22,7 +22,8 @@ async function uploadSingle(request, respond) {
                     if (userId != dbParkingLot.owner_id) {
                         // Check if user own parking-lot
                         return respond.status(400).json({
-                            message: 'User is not the owner of this parking lot!',
+                            message:
+                                'User is not the owner of this parking lot!',
                         })
                     }
                 }

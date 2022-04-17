@@ -1,6 +1,9 @@
 const path = require('path')
 
-const { getUserInfoByUserId, updateUserInfoByUserId } = require('../../CRUD/user_info')
+const {
+    getUserInfoByUserId,
+    updateUserInfoByUserId,
+} = require('../../CRUD/user_info')
 
 async function uploadSingle(request, respond) {
     try {
