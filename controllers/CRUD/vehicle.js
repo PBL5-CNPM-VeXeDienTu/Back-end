@@ -1,5 +1,6 @@
 const vehicleModel = require(process.cwd() + '/models/index').Vehicle
-const { getCurrentDateTime } = require(process.cwd() + '/helpers/datetime')
+const getCurrentDateTime = require(process.cwd() +
+    '/helpers/get-current-datetime/datetime')
 
 async function index() {
     return vehicleModel.findAll()

@@ -1,5 +1,6 @@
 const userModel = require(process.cwd() + '/models/index').User
-const { getCurrentDateTime } = require(process.cwd() + '/helpers/datetime')
+const getCurrentDateTime = require(process.cwd() +
+    '/helpers/get-current-datetime/datetime')
 
 async function index(columns, startIndex, limit) {
     return userModel.findAll({

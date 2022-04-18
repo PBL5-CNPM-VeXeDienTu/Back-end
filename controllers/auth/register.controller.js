@@ -1,6 +1,6 @@
 const hashHelper = require(process.cwd() +
     '/helpers/password-encrypter/hash_helper')
-const validators = require(process.cwd() + '/helpers/validators')
+const validators = require(process.cwd() + '/helpers/validators/index')
 const { transporter, mailConfig } = require(process.cwd() +
     '/helpers/mailer/transporter')
 const uuid = require('uuid')

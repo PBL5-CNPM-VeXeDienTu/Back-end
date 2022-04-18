@@ -1,5 +1,4 @@
-const validators = require(process.cwd() + '/helpers/validators')
-const { toLocaleString } = require(process.cwd() + '/helpers/datetime')
+const validators = require(process.cwd() + '/helpers/validators/index')
 
 const {
     getUserInfoByUserId,
@@ -67,7 +66,7 @@ async function showById(request, respond) {
                 role: dbUser.role,
                 is_verified: dbUser.is_verified,
                 avatar: dbUserInfo.avatar,
-                birthday: toLocaleString(dbUserInfo.birthday),
+                birthday: dbUserInfo.birthday,
                 address: dbUserInfo.address,
                 phone_number: dbUserInfo.phone_number,
                 gender: dbUserInfo.gender,

@@ -1,5 +1,3 @@
-const { toLocaleString } = require(process.cwd() + '/helpers/datetime')
-
 const { getUserById } = require('../CRUD/user')
 const { getUserInfoByUserId } = require('../CRUD/user_info')
 
@@ -20,18 +18,15 @@ async function getAuthenticatedUser(request, respond) {
             }
 
             return respond.status(200).json({
-                id: dbUser.id,
                 name: dbUser.name,
                 email: dbUser.email,
                 role: dbUser.role,
                 is_verified: dbUser.is_verified,
                 avatar: dbUserInfo.avatar,
-                birthday: toLocaleString(dbUserInfo.birthday),
+                birthday: dbUserInfo.birthday,
                 address: dbUserInfo.address,
                 phone_number: dbUserInfo.phone_number,
                 gender: dbUserInfo.gender,
-                createdAt: dbUser.createdAt,
-                updatedAt: dbUser.updatedAt,
             })
         } else {
             return respond.status(404).json({

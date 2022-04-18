@@ -6,11 +6,4 @@ function getCurrentDateTime() {
         .replace(/\..+/, '')
 }
 
-function toLocaleString(datetime) {
-    return new Date(datetime).toLocaleString()
-}
-
-module.exports = {
-    getCurrentDateTime: getCurrentDateTime,
-    toLocaleString: toLocaleString,
-}
+module.exports = getCurrentDateTime

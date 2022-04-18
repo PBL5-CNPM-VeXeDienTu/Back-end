@@ -5,11 +5,7 @@
         "password": "J6lA0PJDAt",
         "port": 3306,
         "database": "xLDGbPpnjm",
-        "dialect": "mysql",
-        "dialectOptions": {
-            "useUTC": false
-        },
-        "timezone": "+07:00"
+        "dialect": "mysql"
     },
     "test": {
         "username": "root",
@@ -24,10 +20,6 @@
         "password": "J6lA0PJDAt",
         "port": 3306,
         "database": "xLDGbPpnjm",
-        "dialect": "mysql",
-        "dialectOptions": {
-            "useUTC": false
-        },
-        "timezone": "+07:00"
+        "dialect": "mysql"
     }
 }
