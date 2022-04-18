@@ -1,6 +1,5 @@
 const parkingLotModel = require(process.cwd() + '/models/index').ParkingLot
-const getCurrentDateTime = require(process.cwd() +
-    '/helpers/get-current-datetime/datetime')
+const { getCurrentDateTime } = require(process.cwd() + '/helpers/datetime')
 
 async function index() {
     return parkingLotModel.findAll()
