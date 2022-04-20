@@ -7,7 +7,11 @@ function getCurrentDateTime() {
 }
 
 function toLocaleString(datetime) {
-    return new Date(datetime).toLocaleString()
+    const date = new Date(datetime)
+    return new Date(date.getTime() - date.getTimezoneOffset() * 60000)
+        .toISOString()
+        .replace(/T/, ' ')
+        .replace(/\..+/, '')
 }
 
 module.exports = {

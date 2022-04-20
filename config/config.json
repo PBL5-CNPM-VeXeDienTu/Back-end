@@ -6,9 +6,6 @@
         "port": 3306,
         "database": "xLDGbPpnjm",
         "dialect": "mysql",
-        "dialectOptions": {
-            "useUTC": false
-        },
         "timezone": "+07:00"
     },
     "test": {
@@ -25,9 +22,6 @@
         "port": 3306,
         "database": "xLDGbPpnjm",
         "dialect": "mysql",
-        "dialectOptions": {
-            "useUTC": false
-        },
         "timezone": "+07:00"
     }
 }
