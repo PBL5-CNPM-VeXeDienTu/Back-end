@@ -13,17 +13,13 @@ module.exports = (sequelize, DataTypes) => {
     }
     Vehicle.init(
         {
-            license_plate: {
-                type: DataTypes.STRING,
-                validate: {
-                    max: 20,
-                },
-            },
+            license_plate: DataTypes.STRING,
             avatar: DataTypes.STRING,
             cavet_back: DataTypes.STRING,
             cavet_front: DataTypes.STRING,
             type: DataTypes.STRING,
             color: DataTypes.STRING,
+            detail: DataTypes.TEXT,
             owner_id: DataTypes.INTEGER,
             verify_state_id: DataTypes.INTEGER,
             deletedAt: DataTypes.DATE,

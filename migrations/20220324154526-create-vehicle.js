@@ -30,6 +30,9 @@ module.exports = {
             color: {
                 type: Sequelize.STRING,
             },
+            detail: {
+                type: Sequelize.TEXT,
+            },
             owner_id: {
                 allowNull: false,
                 type: Sequelize.INTEGER,
