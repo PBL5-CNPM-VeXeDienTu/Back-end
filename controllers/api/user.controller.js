@@ -1,7 +1,91 @@
-const validators = require(process.cwd() + '/helpers/validators/index')
+const validators = require(process.cwd() + '/helpers/validators')
+const { toLocaleString } = require(process.cwd() + '/helpers/datetime')
 
-const { updateUserInfoByUserId } = require('../CRUD/user_info')
-const { getUserById, updateUserById } = require('../CRUD/user')
+const {
+    getUserInfoByUserId,
+    updateUserInfoByUserId,
+} = require('../CRUD/user_info')
+const {
+    getListUsers,
+    getUserById,
+    updateUserById,
+    softDeleteUserById,
+} = require('../CRUD/user')
+const { softDeleteVehicleByOwnerId } = require('../CRUD/vehicle')
+const { softDeleteParkingLotByOwnerId } = require('../CRUD/parking_lot')
+
+const BASIC_USER_ROLE = 0
+const PARKING_LOT_USER_ROLE = 1
+const ADMIN_ROLE = 2
+
+async function index(request, respond) {
+    try {
+        const page = Number.parseInt(request.query.page)
+        const limit = Number.parseInt(request.query.limit)
+
+        if (
+            Number.isNaN(page) ||
+            page < 1 ||
+            Number.isNaN(limit) ||
+            limit < 0
+        ) {
+            return respond.status(400).json({
+                message: 'Invalid query parameters!',
+            })
+        }
+
+        const startIndex = (page - 1) * limit
+
+        // Select all columns except password and qr_key
+        const columns = {
+            exclude: ['password', 'qr_key'],
+        }
+        const queryResult = await getListUsers(columns, startIndex, limit)
+
+        return respond.status(200).json(queryResult)
+    } catch (error) {
+        return respond.status(500).json({
+            message: 'Something went wrong!',
+            error: error,
+        })
+    }
+}
+
+async function showById(request, respond) {
+    try {
+        const userId = request.params.id
+
+        // Check if user exists
+        const dbUser = await getUserById(userId)
+        if (dbUser) {
+            // Get user's info
+            const dbUserInfo = await getUserInfoByUserId(dbUser.id)
+
+            return respond.status(200).json({
+                name: dbUser.name,
+                email: dbUser.email,
+                role: dbUser.role,
+                is_verified: dbUser.is_verified,
+                avatar: dbUserInfo.avatar,
+                birthday: toLocaleString(dbUserInfo.birthday),
+                address: dbUserInfo.address,
+                phone_number: dbUserInfo.phone_number,
+                gender: dbUserInfo.gender,
+                deletedAt: dbUser.deletedAt,
+                createdAt: dbUser.createdAt,
+            })
+        } else {
+            return respond.status(404).json({
+                message: 'User not found!',
+            })
+        }
+    } catch (error) {
+        return respond.status(500).json({
+            message: 'Something went wrong!',
+            error: error,
+        })
+    }
+}
 
 async function update(request, respond) {
     try {
@@ -53,6 +137,41 @@ async function update(request, respond) {
     }
 }
 
+async function deleteById(request, respond) {
+    try {
+        const userId = request.params.id
+
+        // Check if user exists
+        const dbUser = await getUserById(userId)
+        if (dbUser) {
+            // Soft delete user
+            softDeleteUserById(dbUser.id)
+
+            // Check user role, soft delete vehicle/parking-lot this user own
+            if (dbUser.role === BASIC_USER_ROLE)
+                softDeleteVehicleByOwnerId(dbUser.id)
+            if (dbUser.role === PARKING_LOT_USER_ROLE)
+                softDeleteParkingLotByOwnerId(dbUser.id)
+
+            return respond.status(200).json({
+                message: 'Delete user successfully!',
+            })
+        } else {
+            return respond.status(404).json({
+                message: 'User not found!',
+            })
+        }
+    } catch (error) {
+        return respond.status(500).json({
+            message: 'Something went wrong!',
+            error: error,
+        })
+    }
+}
+
 module.exports = {
+    index: index,
+    showById: showById,
     update: update,
+    deleteById: deleteById,
 }

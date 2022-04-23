@@ -1,6 +1,5 @@
 const vehicleModel = require(process.cwd() + '/models/index').Vehicle
-const getCurrentDateTime = require(process.cwd() +
-    '/helpers/get-current-datetime/datetime')
+const { getCurrentDateTime } = require(process.cwd() + '/helpers/datetime')
 
 async function index() {
     return vehicleModel.findAll()
@@ -22,6 +21,16 @@ async function update(updateVehicle, id) {
     return vehicleModel.update(updateVehicle, { where: { id: id } })
 }
 
+async function destroyByOwnerId(owner_id) {
+    const now = getCurrentDateTime()
+
+    // Update deletedAt field of vehicle
+    const updateVehicle = {
+        deletedAt: now,
+    }
+    return vehicleModel.update(updateVehicle, { where: { owner_id: owner_id } })
+}
+
 async function destroy(id) {
     const now = getCurrentDateTime()
 
@@ -38,5 +47,6 @@ module.exports = {
     getVehicleByUserId: showByUserId,
     addNewVehicle: create,
     updateVehicleById: update,
+    softDeleteVehicleByOwnerId: destroyByOwnerId,
     softDeleteVehicleById: destroy,
 }

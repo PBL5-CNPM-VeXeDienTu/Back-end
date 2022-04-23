@@ -1,5 +1,6 @@
 const express = require('express')
 const checkAuthMiddleware = require('../middleware/check-auth')
+const checkRoleMiddleware = require('../middleware/check-role')
 
 const uploadHelpers = require('../helpers/uploaders')
 const uploadControllers = require('../controllers/upload')
@@ -7,8 +8,9 @@ const uploadControllers = require('../controllers/upload')
 const router = express.Router()
 
 router.post(
-    '/avatar/user',
+    '/avatar/user/:id',
     checkAuthMiddleware.checkAuth,
+    checkRoleMiddleware.checkRoleUpload,
     uploadHelpers.userAvatarUploader,
     uploadControllers.userAvatarController,
 )

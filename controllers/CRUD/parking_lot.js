@@ -1,6 +1,5 @@
 const parkingLotModel = require(process.cwd() + '/models/index').ParkingLot
-const getCurrentDateTime = require(process.cwd() +
-    '/helpers/get-current-datetime/datetime')
+const { getCurrentDateTime } = require(process.cwd() + '/helpers/datetime')
 
 async function index() {
     return parkingLotModel.findAll()
@@ -22,6 +21,18 @@ async function update(updateParkingLot, id) {
     return parkingLotModel.update(updateParkingLot, { where: { id: id } })
 }
 
+async function destroyByOwnerId(owner_id) {
+    const now = getCurrentDateTime()
+
+    // Update deletedAt field of vehicle
+    const updateParkingLot = {
+        deletedAt: now,
+    }
+    return parkingLotModel.update(updateParkingLot, {
+        where: { owner_id: owner_id },
+    })
+}
+
 async function destroy(id) {
     const now = getCurrentDateTime()
 
@@ -38,5 +49,6 @@ module.exports = {
     getParkingLotByName: showByName,
     addNewParkingLot: create,
     updateParkingLotById: update,
+    softDeleteParkingLotByOwnerId: destroyByOwnerId,
     softDeleteParkingLotById: destroy,
 }

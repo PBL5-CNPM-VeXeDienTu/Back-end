@@ -1,14 +1,17 @@
 const path = require('path')
 
-const { getUserInfoById, updateUserInfoById } = require('../../CRUD/user_info')
+const {
+    getUserInfoByUserId,
+    updateUserInfoByUserId,
+} = require('../../CRUD/user_info')
 
 async function uploadSingle(request, respond) {
     try {
         if (request.file) {
-            const userId = request.userData.userId
+            const userId = request.params.id
 
             // Check if user exists
-            const dbUser = await getUserInfoById(userId)
+            const dbUser = await getUserInfoByUserId(userId)
             if (dbUser) {
                 // Update user avatar in database
                 const extName = path.extname(request.file.originalname)
@@ -16,7 +19,7 @@ async function uploadSingle(request, respond) {
                 const updateUser = {
                     avatar: imageUrl,
                 }
-                updateUserInfoById(updateUser, dbUser.id).then(() => {
+                updateUserInfoByUserId(updateUser, dbUser.id).then(() => {
                     return respond.status(200).json({
                         message: "Upload user's avatar successfully!",
                         url: imageUrl,
