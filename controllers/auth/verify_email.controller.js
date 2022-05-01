@@ -14,7 +14,7 @@ async function verifyEmail(request, respond) {
                     })
                 }
             }
-
+            
             // If key is valid, delete old key and confirm email
             deleteAuthKeyById(dbAuthKey.id)
 
