@@ -60,7 +60,7 @@ module.exports = {
 
     async down(queryInterface, Sequelize) {
         await queryInterface.bulkDelete('UserInfos', null, {
-            [Op.or]: [{ role: 0 }, { role: 1 }],
+            [Op.or]: [{ role: 1 }, { role: 2 }],
         })
     },
 }
