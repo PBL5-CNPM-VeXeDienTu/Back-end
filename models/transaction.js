@@ -5,7 +5,9 @@ module.exports = (sequelize, DataTypes) => {
     class Transaction extends Model {
         static associate(models) {
             Transaction.belongsTo(models.Wallet, { foreignKey: 'wallet_id' })
-            Transaction.belongsTo(models.TransactionType, { foreignKey: 'type_id' })
+            Transaction.belongsTo(models.TransactionType, {
+                foreignKey: 'type_id',
+            })
         }
     }
     Transaction.init(
@@ -16,22 +18,22 @@ module.exports = (sequelize, DataTypes) => {
             amount: DataTypes.FLOAT,
             createdAt: {
                 type: DataTypes.DATE,
-                get: function() {
+                get: function () {
                     if (this.getDataValue('createdAt')) {
                         return toLocaleString(this.getDataValue('createdAt'))
                     }
                     return null
-                }
+                },
             },
             updatedAt: {
                 type: DataTypes.DATE,
-                get: function() {
+                get: function () {
                     if (this.getDataValue('updatedAt')) {
                         return toLocaleString(this.getDataValue('updatedAt'))
                     }
                     return null
-                }
-            }
+                },
+            },
         },
         {
             sequelize,

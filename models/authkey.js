@@ -13,22 +13,22 @@ module.exports = (sequelize, DataTypes) => {
             key: DataTypes.STRING,
             createdAt: {
                 type: DataTypes.DATE,
-                get: function() {
+                get: function () {
                     if (this.getDataValue('createdAt')) {
                         return toLocaleString(this.getDataValue('createdAt'))
                     }
                     return null
-                }
+                },
             },
             updatedAt: {
                 type: DataTypes.DATE,
-                get: function() {
+                get: function () {
                     if (this.getDataValue('updatedAt')) {
                         return toLocaleString(this.getDataValue('updatedAt'))
                     }
                     return null
-                }
-            }
+                },
+            },
         },
         {
             sequelize,

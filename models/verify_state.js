@@ -4,8 +4,12 @@ const { toLocaleString } = require(process.cwd() + '/helpers/datetime')
 module.exports = (sequelize, DataTypes) => {
     class VerifyState extends Model {
         static associate(models) {
-            VerifyState.hasOne(models.Vehicle, { foreignKey: 'verify_state_id' })
-            VerifyState.hasOne(models.ParkingLot, { foreignKey: 'verify_state_id' })
+            VerifyState.hasOne(models.Vehicle, {
+                foreignKey: 'verify_state_id',
+            })
+            VerifyState.hasOne(models.ParkingLot, {
+                foreignKey: 'verify_state_id',
+            })
         }
     }
     VerifyState.init(
@@ -14,22 +18,22 @@ module.exports = (sequelize, DataTypes) => {
             note: DataTypes.STRING,
             createdAt: {
                 type: DataTypes.DATE,
-                get: function() {
+                get: function () {
                     if (this.getDataValue('createdAt')) {
                         return toLocaleString(this.getDataValue('createdAt'))
                     }
                     return null
-                }
+                },
             },
             updatedAt: {
                 type: DataTypes.DATE,
-                get: function() {
+                get: function () {
                     if (this.getDataValue('updatedAt')) {
                         return toLocaleString(this.getDataValue('updatedAt'))
                     }
                     return null
-                }
-            }
+                },
+            },
         },
         {
             sequelize,

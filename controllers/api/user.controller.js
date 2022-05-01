@@ -1,8 +1,6 @@
 const validators = require(process.cwd() + '/helpers/validators')
 
-const {
-    updateUserInfoByUserId,
-} = require('../CRUD/user_info')
+const { updateUserInfoByUserId } = require('../CRUD/user_info')
 const {
     getListUsers,
     getUserById,

@@ -31,31 +31,31 @@ module.exports = (sequelize, DataTypes) => {
             qr_key: DataTypes.STRING,
             deletedAt: {
                 type: DataTypes.DATE,
-                get: function() {
+                get: function () {
                     if (this.getDataValue('deletedAt')) {
                         return toLocaleString(this.getDataValue('deletedAt'))
                     }
                     return null
-                }
+                },
             },
             createdAt: {
                 type: DataTypes.DATE,
-                get: function() {
+                get: function () {
                     if (this.getDataValue('createdAt')) {
                         return toLocaleString(this.getDataValue('createdAt'))
                     }
                     return null
-                }
+                },
             },
             updatedAt: {
                 type: DataTypes.DATE,
-                get: function() {
+                get: function () {
                     if (this.getDataValue('updatedAt')) {
                         return toLocaleString(this.getDataValue('updatedAt'))
                     }
                     return null
-                }
-            }
+                },
+            },
         },
         {
             sequelize,

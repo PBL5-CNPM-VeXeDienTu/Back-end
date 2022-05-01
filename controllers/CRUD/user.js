@@ -4,7 +4,7 @@ const { getCurrentDateTime } = require(process.cwd() + '/helpers/datetime')
 const include = [
     {
         model: models.Role,
-        attributes: ['name']
+        attributes: ['name'],
     },
     {
         model: models.UserInfo,
@@ -28,7 +28,7 @@ async function index(columns, startIndex, limit) {
         order: [
             ['id', 'ASC'],
             ['name', 'ASC'],
-        ]
+        ],
     })
 }
 

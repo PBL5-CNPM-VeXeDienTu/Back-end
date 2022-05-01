@@ -13,34 +13,34 @@ module.exports = (sequelize, DataTypes) => {
             avatar: DataTypes.STRING,
             birthday: {
                 type: DataTypes.DATE,
-                get: function() {
+                get: function () {
                     if (this.getDataValue('birthday')) {
                         return toLocaleString(this.getDataValue('birthday'))
                     }
                     return null
-                }
+                },
             },
             address: DataTypes.STRING,
             phone_number: DataTypes.STRING,
             gender: DataTypes.BOOLEAN,
             createdAt: {
                 type: DataTypes.DATE,
-                get: function() {
+                get: function () {
                     if (this.getDataValue('createdAt')) {
                         return toLocaleString(this.getDataValue('createdAt'))
                     }
                     return null
-                }
+                },
             },
             updatedAt: {
                 type: DataTypes.DATE,
-                get: function() {
+                get: function () {
                     if (this.getDataValue('updatedAt')) {
                         return toLocaleString(this.getDataValue('updatedAt'))
                     }
                     return null
-                }
-            }
+                },
+            },
         },
         {
             sequelize,
