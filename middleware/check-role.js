@@ -1,4 +1,4 @@
-const ADMIN_ROLE = 2
+const ADMIN_ROLE = 3
 
 async function checkRoleUpload(request, respond, next) {
     try {

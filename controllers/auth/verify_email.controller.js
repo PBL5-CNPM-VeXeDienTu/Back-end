@@ -1,4 +1,4 @@
-const { getAuthKeyByUserId, deleteAuthKeyById } = require('../CRUD/authkey')
+const { deleteAuthKeyById } = require('../CRUD/authkey')
 const { getUserByEmail, updateUserById } = require('../CRUD/user')
 
 async function verifyEmail(request, respond) {
@@ -6,11 +6,13 @@ async function verifyEmail(request, respond) {
         const dbUser = await getUserByEmail(request.params.email)
         if (dbUser) {
             // Check if authentication key is valid
-            const dbAuthKey = await getAuthKeyByUserId(dbUser.id)
-            if (request.params.authKey != dbAuthKey?.key) {
-                return respond.status(409).json({
-                    message: 'Invalid authentication key!',
-                })
+            const dbAuthKey = dbUser.AuthKey
+            if (dbAuthKey) {
+                if (request.params.authKey != dbAuthKey.key) {
+                    return respond.status(409).json({
+                        message: 'Invalid authentication key!',
+                    })
+                }
             }
 
             // If key is valid, delete old key and confirm email

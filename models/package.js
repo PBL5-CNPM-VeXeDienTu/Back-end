@@ -1,14 +1,14 @@
 'use strict'
 const { Model } = require('sequelize')
+const { toLocaleString } = require(process.cwd() + '/helpers/datetime')
 module.exports = (sequelize, DataTypes) => {
     class Package extends Model {
-        /**
-         * Helper method for defining associations.
-         * This method is not a part of Sequelize lifecycle.
-         * The `models/index` file will call this method automatically.
-         */
         static associate(models) {
-            // define association here
+            Package.belongsTo(models.ParkingLot, {
+                foreignKey: 'parking_lot_id',
+            })
+            Package.belongsTo(models.PackageType, { foreignKey: 'type_id' })
+            Package.hasMany(models.UserPackage, { foreignKey: 'package_id' })
         }
     }
     Package.init(
@@ -17,6 +17,24 @@ module.exports = (sequelize, DataTypes) => {
             name: DataTypes.STRING,
             type_id: DataTypes.INTEGER,
             price: DataTypes.FLOAT,
+            createdAt: {
+                type: DataTypes.DATE,
+                get: function () {
+                    if (this.getDataValue('createdAt')) {
+                        return toLocaleString(this.getDataValue('createdAt'))
+                    }
+                    return null
+                },
+            },
+            updatedAt: {
+                type: DataTypes.DATE,
+                get: function () {
+                    if (this.getDataValue('updatedAt')) {
+                        return toLocaleString(this.getDataValue('updatedAt'))
+                    }
+                    return null
+                },
+            },
         },
         {
             sequelize,
