@@ -19,5 +19,6 @@ app.use('/public', express.static('public'))
 app.use('/api/auth', routes.auth)
 app.use('/api/upload', routes.upload)
 app.use('/api/users', routes.user)
+app.use('/api/vehicles', routes.vehicle)
 
 module.exports = app

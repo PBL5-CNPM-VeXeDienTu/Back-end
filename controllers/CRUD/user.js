@@ -5,10 +5,12 @@ const include = [
     {
         model: models.Role,
         attributes: ['name'],
+        required: true,
     },
     {
         model: models.UserInfo,
         attributes: { exclude: ['id', 'user_id', 'createdAt'] },
+        required: true,
     },
     {
         model: models.Wallet,
@@ -19,14 +21,16 @@ const include = [
     },
 ]
 
-async function index(columns, startIndex, limit) {
+async function index(startIndex, limit) {
     return models.User.findAll({
         include: include,
-        attributes: columns,
+        attributes: {
+            exclude: ['password', 'qr_key'],
+        },
         offset: startIndex,
         limit: limit,
         order: [
-            ['id', 'ASC'],
+            ['id', 'DESC'],
             ['name', 'ASC'],
         ],
     })
@@ -37,7 +41,7 @@ async function showById(id) {
 }
 
 async function showByEmail(email) {
-    return models.User.findOne({ where: { email: email }, include: include })
+    return models.User.findOne({ include: include, where: { email: email } })
 }
 
 async function create(newUser) {

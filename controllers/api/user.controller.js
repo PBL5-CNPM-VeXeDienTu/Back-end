@@ -12,7 +12,6 @@ const { softDeleteParkingLotByOwnerId } = require('../CRUD/parking_lot')
 
 const BASIC_USER_ROLE = 1
 const PARKING_LOT_USER_ROLE = 2
-const ADMIN_ROLE = 3
 
 async function index(request, respond) {
     try {
@@ -32,11 +31,7 @@ async function index(request, respond) {
 
         const startIndex = (page - 1) * limit
 
-        // Select all columns except password and qr_key
-        const columns = {
-            exclude: ['password', 'qr_key'],
-        }
-        const queryResult = await getListUsers(columns, startIndex, limit)
+        const queryResult = await getListUsers(startIndex, limit)
 
         return respond.status(200).json(queryResult)
     } catch (error) {
@@ -68,7 +63,7 @@ async function showById(request, respond) {
     }
 }
 
-async function update(request, respond) {
+async function updateById(request, respond) {
     try {
         const userId = request.params.id
 
@@ -118,7 +113,7 @@ async function update(request, respond) {
     }
 }
 
-async function deleteById(request, respond) {
+async function softDeleteById(request, respond) {
     try {
         const userId = request.params.id
 
@@ -153,6 +148,6 @@ async function deleteById(request, respond) {
 module.exports = {
     index: index,
     showById: showById,
-    update: update,
-    deleteById: deleteById,
+    updateById: updateById,
+    softDeleteById: softDeleteById,
 }

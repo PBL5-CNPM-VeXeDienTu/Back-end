@@ -1,28 +1,8 @@
+const { checkUserOwnVehicle } = require('../controllers/CRUD/vehicle')
+
 const ADMIN_ROLE = 3
 
-async function checkRoleUpload(request, respond, next) {
-    try {
-        const userId = request.params.id
-        const requestRole = request.userData.role
-        const requestUserId = request.userData.userId
-
-        // Check if request user is admin or not
-        if (requestRole != ADMIN_ROLE) {
-            if (requestUserId != userId) {
-                return respond.status(400).json({
-                    message: 'Invalid role!',
-                })
-            } else next()
-        } else next()
-    } catch (error) {
-        return respond.status(401).json({
-            message: 'Something went wrong!',
-            error: error,
-        })
-    }
-}
-
-async function checkRoleAdmin(request, respond, next) {
+async function checkAccountOwner(request, respond, next) {
     try {
         const userId = request.params.id
         const requestRole = request.userData.role
@@ -51,7 +31,30 @@ async function checkRoleAdmin(request, respond, next) {
     }
 }
 
+async function checkVehicleOwner(request, respond, next) {
+    try {
+        const vehicleId = request.params.id
+        const requestRole = request.userData.role
+        const requestUserId = request.userData.userId
+
+        // Check if request user is admin or not
+        if (requestRole != ADMIN_ROLE) {
+            const isOwner = await checkUserOwnVehicle(vehicleId, requestUserId)
+            if (!isOwner) {
+                return respond.status(400).json({
+                    message: 'User is not the owner of this vehicle!',
+                })
+            } else next()
+        } else next()
+    } catch (error) {
+        return respond.status(401).json({
+            message: 'Something went wrong!',
+            error: error,
+        })
+    }
+}
+
 module.exports = {
-    checkRoleUpload: checkRoleUpload,
-    checkRoleAdmin: checkRoleAdmin,
+    checkAccountOwner: checkAccountOwner,
+    checkVehicleOwner: checkVehicleOwner,
 }
