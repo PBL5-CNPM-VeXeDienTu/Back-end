@@ -1,28 +1,55 @@
-const userModel = require(process.cwd() + '/models/index').User
+const models = require(process.cwd() + '/models/index')
 const { getCurrentDateTime } = require(process.cwd() + '/helpers/datetime')
 
-async function index(columns, startIndex, limit) {
-    return userModel.findAll({
-        attributes: columns,
+const include = [
+    {
+        model: models.Role,
+        attributes: ['name'],
+        required: true,
+    },
+    {
+        model: models.UserInfo,
+        attributes: { exclude: ['id', 'user_id', 'createdAt'] },
+        required: true,
+    },
+    {
+        model: models.Wallet,
+        attributes: { exclude: ['id', 'createdAt'] },
+    },
+    {
+        model: models.AuthKey,
+    },
+]
+
+async function index(startIndex, limit) {
+    return models.User.findAll({
+        include: include,
+        attributes: {
+            exclude: ['password', 'qr_key'],
+        },
         offset: startIndex,
         limit: limit,
+        order: [
+            ['id', 'DESC'],
+            ['name', 'ASC'],
+        ],
     })
 }
 
 async function showById(id) {
-    return userModel.findByPk(id)
+    return models.User.findByPk(id, { include: include })
 }
 
 async function showByEmail(email) {
-    return userModel.findOne({ where: { email: email } })
+    return models.User.findOne({ include: include, where: { email: email } })
 }
 
 async function create(newUser) {
-    return userModel.create(newUser)
+    return models.User.create(newUser)
 }
 
 async function update(updateUser, id) {
-    return userModel.update(updateUser, { where: { id: id } })
+    return models.User.update(updateUser, { where: { id: id } })
 }
 
 async function destroy(id) {
@@ -35,8 +62,8 @@ async function destroy(id) {
     await update(updateUser, id)
 }
 
-async function checkValidAccount(id) {
-    const dbUser = await showById(id)
+async function checkValid(id) {
+    const dbUser = await models.User.findOne({ where: { id: id } })
     return {
         is_valid: dbUser.is_verified && dbUser.deletedAt == null,
         message: !dbUser.is_verified
@@ -52,5 +79,5 @@ module.exports = {
     addNewUser: create,
     updateUserById: update,
     softDeleteUserById: destroy,
-    checkValidAccount: checkValidAccount,
+    checkValidAccount: checkValid,
 }

@@ -1,6 +1,7 @@
 const { transporter, mailConfig } = require(process.cwd() +
     '/helpers/mailer/transporter')
 const uuid = require('uuid')
+const models = require(process.cwd() + '/models')
 
 const {
     getAuthKeyByUserId,
@@ -36,7 +37,7 @@ async function forgotPassword(request, respond) {
             )
 
             // Save authKey, replace old key if already exist
-            const oldKey = await getAuthKeyByUserId(dbUser.id)
+            const oldKey = dbUser.AuthKey?.key
             if (oldKey) updateAuthKeyById({ key: authKey }, oldKey.id)
             else addNewAuthKey({ user_id: dbUser.id, key: authKey })
 

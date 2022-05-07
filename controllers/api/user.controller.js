@@ -1,10 +1,6 @@
 const validators = require(process.cwd() + '/helpers/validators')
-const { toLocaleString } = require(process.cwd() + '/helpers/datetime')
 
-const {
-    getUserInfoByUserId,
-    updateUserInfoByUserId,
-} = require('../CRUD/user_info')
+const { updateUserInfoByUserId } = require('../CRUD/user_info')
 const {
     getListUsers,
     getUserById,
@@ -14,9 +10,8 @@ const {
 const { softDeleteVehicleByOwnerId } = require('../CRUD/vehicle')
 const { softDeleteParkingLotByOwnerId } = require('../CRUD/parking_lot')
 
-const BASIC_USER_ROLE = 0
-const PARKING_LOT_USER_ROLE = 1
-const ADMIN_ROLE = 2
+const BASIC_USER_ROLE = 1
+const PARKING_LOT_USER_ROLE = 2
 
 async function index(request, respond) {
     try {
@@ -36,11 +31,7 @@ async function index(request, respond) {
 
         const startIndex = (page - 1) * limit
 
-        // Select all columns except password and qr_key
-        const columns = {
-            exclude: ['password', 'qr_key'],
-        }
-        const queryResult = await getListUsers(columns, startIndex, limit)
+        const queryResult = await getListUsers(startIndex, limit)
 
         return respond.status(200).json(queryResult)
     } catch (error) {
@@ -58,22 +49,7 @@ async function showById(request, respond) {
         // Check if user exists
         const dbUser = await getUserById(userId)
         if (dbUser) {
-            // Get user's info
-            const dbUserInfo = await getUserInfoByUserId(dbUser.id)
-
-            return respond.status(200).json({
-                name: dbUser.name,
-                email: dbUser.email,
-                role: dbUser.role,
-                is_verified: dbUser.is_verified,
-                avatar: dbUserInfo.avatar,
-                birthday: toLocaleString(dbUserInfo.birthday),
-                address: dbUserInfo.address,
-                phone_number: dbUserInfo.phone_number,
-                gender: dbUserInfo.gender,
-                deletedAt: dbUser.deletedAt,
-                createdAt: dbUser.createdAt,
-            })
+            return respond.status(200).json(dbUser)
         } else {
             return respond.status(404).json({
                 message: 'User not found!',
@@ -87,14 +63,14 @@ async function showById(request, respond) {
     }
 }
 
-async function update(request, respond) {
+async function updateById(request, respond) {
     try {
         const userId = request.params.id
 
         // Check if user exists
         const dbUser = await getUserById(userId)
         if (dbUser) {
-            // Update user'name and user's infos
+            // Update user's name and user's infos
             const updateUser = {
                 name: request.body.name,
             }
@@ -137,7 +113,7 @@ async function update(request, respond) {
     }
 }
 
-async function deleteById(request, respond) {
+async function softDeleteById(request, respond) {
     try {
         const userId = request.params.id
 
@@ -172,6 +148,6 @@ async function deleteById(request, respond) {
 module.exports = {
     index: index,
     showById: showById,
-    update: update,
-    deleteById: deleteById,
+    updateById: updateById,
+    softDeleteById: softDeleteById,
 }
