@@ -172,7 +172,7 @@ async function softDeleteById(request, respond) {
         const vehicleId = request.params.id
 
         // Check if vehicle exists
-        const dbVehicle = await getUserById(vehicleId)
+        const dbVehicle = await getVehicleById(vehicleId)
         if (dbVehicle) {
             // Soft delete vehicle
             softDeleteVehicleById(vehicleId.id)

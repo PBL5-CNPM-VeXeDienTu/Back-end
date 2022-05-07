@@ -1,40 +1,40 @@
 const express = require('express')
 const checkAuthMiddleware = require('../middleware/check-auth')
 const checkOwnerMiddleware = require('../middleware/check-owner')
-const vehicleApiController = require('../controllers/api/vehicle.controller')
+const parkingLotApiController = require('../controllers/api/parking_lot.controller')
 
 const router = express.Router()
 
 router.get(
     '/',
     checkAuthMiddleware.checkAuth,
-    checkOwnerMiddleware.checkVehicleOwner,
-    vehicleApiController.index,
+    checkOwnerMiddleware.checkParkingLotOwner,
+    parkingLotApiController.index,
 )
 router.get(
     '/get-by-owner/:id',
     checkAuthMiddleware.checkAuth,
     checkOwnerMiddleware.checkAccountOwner,
-    vehicleApiController.indexByOwnerId,
+    parkingLotApiController.indexByOwnerId,
 )
 router.get(
     '/:id',
     checkAuthMiddleware.checkAuth,
-    checkOwnerMiddleware.checkVehicleOwner,
-    vehicleApiController.showById,
+    checkOwnerMiddleware.checkParkingLotOwner,
+    parkingLotApiController.showById,
 )
-router.post('/', checkAuthMiddleware.checkAuth, vehicleApiController.create)
+router.post('/', checkAuthMiddleware.checkAuth, parkingLotApiController.create)
 router.patch(
     '/:id',
     checkAuthMiddleware.checkAuth,
-    checkOwnerMiddleware.checkVehicleOwner,
-    vehicleApiController.updateById,
+    checkOwnerMiddleware.checkParkingLotOwner,
+    parkingLotApiController.updateById,
 )
 router.delete(
     '/:id',
     checkAuthMiddleware.checkAuth,
-    checkOwnerMiddleware.checkVehicleOwner,
-    vehicleApiController.softDeleteById,
+    checkOwnerMiddleware.checkParkingLotOwner,
+    parkingLotApiController.softDeleteById,
 )
 
 module.exports = router
