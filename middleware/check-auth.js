@@ -8,7 +8,7 @@ async function checkAuth(request, respond, next) {
         const decodedToken = jwt.verify(token, process.env.JWT_SECRET)
         request.userData = decodedToken
 
-        // Check if user email is verified or not
+        // Check if user email is valid (verified and not deleted) or not
         const result = await checkValidAccount(decodedToken.userId)
         if (!result.is_valid) {
             return respond.status(400).json({

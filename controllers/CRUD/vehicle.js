@@ -1,24 +1,67 @@
-const vehicleModel = require(process.cwd() + '/models/index').Vehicle
+const models = require(process.cwd() + '/models/index')
 const { getCurrentDateTime } = require(process.cwd() + '/helpers/datetime')
 
-async function index() {
-    return vehicleModel.findAll()
+const include = [
+    {
+        model: models.User,
+        attributes: ['email', 'name', 'deletedAt', 'createdAt'],
+        include: [
+            {
+                model: models.Role,
+                attributes: ['name'],
+            },
+        ],
+        as: 'Owner',
+        required: true,
+    },
+    {
+        model: models.VerifyState,
+        required: true,
+    },
+]
+
+async function index(startIndex, limit) {
+    return models.Vehicle.findAll({
+        include: include,
+        offset: startIndex,
+        limit: limit,
+        order: [
+            ['id', 'DESC'],
+            ['license_plate', 'ASC'],
+        ],
+    })
+}
+
+async function indexByOwnerId(owner_id) {
+    return models.Vehicle.findAll({
+        include: include,
+        order: [
+            ['id', 'DESC'],
+            ['license_plate', 'ASC'],
+        ],
+        where: { owner_id: owner_id },
+    })
 }
 
 async function showById(id) {
-    return vehicleModel.findByPk(id)
+    return models.Vehicle.findByPk(id, {
+        include: include,
+    })
 }
 
-async function showByUserId(owner_id) {
-    return vehicleModel.findOne(owner_id)
+async function showByLicensePlate(license_plate) {
+    return models.Vehicle.findOne({
+        include: include,
+        where: { license_plate: license_plate },
+    })
 }
 
 async function create(newVehicle) {
-    return vehicleModel.create(newVehicle)
+    return models.Vehicle.create(newVehicle)
 }
 
 async function update(updateVehicle, id) {
-    return vehicleModel.update(updateVehicle, { where: { id: id } })
+    return models.Vehicle.update(updateVehicle, { where: { id: id } })
 }
 
 async function destroyByOwnerId(owner_id) {
@@ -28,7 +71,9 @@ async function destroyByOwnerId(owner_id) {
     const updateVehicle = {
         deletedAt: now,
     }
-    return vehicleModel.update(updateVehicle, { where: { owner_id: owner_id } })
+    return models.Vehicle.update(updateVehicle, {
+        where: { owner_id: owner_id },
+    })
 }
 
 async function destroy(id) {
@@ -41,12 +86,20 @@ async function destroy(id) {
     await update(updateVehicle, id)
 }
 
+async function checkOwner(vehicleId, userId) {
+    return !!models.Vehicle.findOne({
+        where: { id: vehicleId, owner_id: userId },
+    })
+}
+
 module.exports = {
-    index: index,
+    getListVehicles: index,
+    getListVehiclesByOwnerId: indexByOwnerId,
     getVehicleById: showById,
-    getVehicleByUserId: showByUserId,
+    getVehicleByLicensePlate: showByLicensePlate,
     addNewVehicle: create,
     updateVehicleById: update,
-    softDeleteVehicleByOwnerId: destroyByOwnerId,
     softDeleteVehicleById: destroy,
+    softDeleteVehicleByOwnerId: destroyByOwnerId,
+    checkUserOwnVehicle: checkOwner,
 }
