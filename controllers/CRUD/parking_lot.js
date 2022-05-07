@@ -1,24 +1,67 @@
-const parkingLotModel = require(process.cwd() + '/models/index').ParkingLot
+const models = require(process.cwd() + '/models/index')
 const { getCurrentDateTime } = require(process.cwd() + '/helpers/datetime')
 
-async function index() {
-    return parkingLotModel.findAll()
+const include = [
+    {
+        model: models.User,
+        attributes: ['email', 'name', 'deletedAt', 'createdAt'],
+        include: [
+            {
+                model: models.Role,
+                attributes: ['name'],
+            },
+        ],
+        as: 'Owner',
+        required: true,
+    },
+    {
+        model: models.VerifyState,
+        required: true,
+    },
+]
+
+async function index(startIndex, limit) {
+    return models.ParkingLot.findAll({
+        include: include,
+        offset: startIndex,
+        limit: limit,
+        order: [
+            ['id', 'DESC'],
+            ['name', 'ASC'],
+        ],
+    })
+}
+
+async function indexByOwnerId(owner_id) {
+    return models.ParkingLot.findAll({
+        include: include,
+        order: [
+            ['id', 'DESC'],
+            ['name', 'ASC'],
+        ],
+        where: { owner_id: owner_id },
+    })
 }
 
 async function showById(id) {
-    return parkingLotModel.findByPk(id)
+    return models.ParkingLot.findByPk(id, {
+        include: include,
+    })
 }
 
 async function showByName(name) {
-    return parkingLotModel.findOne(name)
+    return models.ParkingLot.findOne({
+        include: include,
+        where: { name: name },
+    })
 }
 
 async function create(newParkingLot) {
-    return parkingLotModel.create(newParkingLot)
+    return models.ParkingLot.create(newParkingLot)
 }
 
 async function update(updateParkingLot, id) {
-    return parkingLotModel.update(updateParkingLot, { where: { id: id } })
+    return models.ParkingLot.update(updateParkingLot, { where: { id: id } })
 }
 
 async function destroyByOwnerId(owner_id) {
@@ -28,7 +71,7 @@ async function destroyByOwnerId(owner_id) {
     const updateParkingLot = {
         deletedAt: now,
     }
-    return parkingLotModel.update(updateParkingLot, {
+    return models.ParkingLot.update(updateParkingLot, {
         where: { owner_id: owner_id },
     })
 }
@@ -43,12 +86,20 @@ async function destroy(id) {
     await update(updateParkingLot, id)
 }
 
+async function checkOwner(vehicleId, userId) {
+    return !!models.ParkingLot.findOne({
+        where: { id: vehicleId, owner_id: userId },
+    })
+}
+
 module.exports = {
-    index: index,
+    getListParkingLots: index,
+    getListParkingLotsByOwnerId: indexByOwnerId,
     getParkingLotById: showById,
     getParkingLotByName: showByName,
     addNewParkingLot: create,
     updateParkingLotById: update,
-    softDeleteParkingLotByOwnerId: destroyByOwnerId,
     softDeleteParkingLotById: destroy,
+    softDeleteParkingLotByOwnerId: destroyByOwnerId,
+    checkUserOwnParkingLot: checkOwner,
 }

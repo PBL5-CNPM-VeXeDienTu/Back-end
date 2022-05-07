@@ -1,4 +1,4 @@
-const { checkUserOwnVehicle } = require('../controllers/CRUD/vehicle')
+const { checkUserOwnParkingLot } = require('../controllers/CRUD/parking_lot')
 
 const ADMIN_ROLE = 3
 
@@ -54,7 +54,34 @@ async function checkVehicleOwner(request, respond, next) {
     }
 }
 
+async function checkParkingLotOwner(request, respond, next) {
+    try {
+        const parkingLotId = request.params.id
+        const requestRole = request.userData.role
+        const requestUserId = request.userData.userId
+
+        // Check if request user is admin or not
+        if (requestRole != ADMIN_ROLE) {
+            const isOwner = await checkUserOwnParkingLot(
+                parkingLotId,
+                requestUserId,
+            )
+            if (!isOwner) {
+                return respond.status(400).json({
+                    message: 'User is not the owner of this parking lot!',
+                })
+            } else next()
+        } else next()
+    } catch (error) {
+        return respond.status(401).json({
+            message: 'Something went wrong!',
+            error: error,
+        })
+    }
+}
+
 module.exports = {
     checkAccountOwner: checkAccountOwner,
     checkVehicleOwner: checkVehicleOwner,
+    checkParkingLotOwner: checkParkingLotOwner,
 }
