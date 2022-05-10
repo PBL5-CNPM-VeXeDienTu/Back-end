@@ -27,6 +27,9 @@ module.exports = {
                 defaultValue: false,
                 type: Sequelize.BOOLEAN,
             },
+            response: {
+                type: Sequelize.TEXT,
+            },
             createdAt: {
                 allowNull: false,
                 type: Sequelize.DATE,

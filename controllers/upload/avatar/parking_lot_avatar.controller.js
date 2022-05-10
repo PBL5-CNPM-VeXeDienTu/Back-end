@@ -7,7 +7,7 @@ const {
 
 const ADMIN_ROLE = 2
 
-async function uploadSingle(request, respond) {
+async function uploadSingle(request, response) {
     try {
         if (request.file) {
             const parkingLotId = request.params.id
@@ -21,7 +21,7 @@ async function uploadSingle(request, respond) {
                 if (userRole != ADMIN_ROLE) {
                     if (userId != dbParkingLot.owner_id) {
                         // Check if user own parking-lot
-                        return respond.status(400).json({
+                        return response.status(400).json({
                             message:
                                 'User is not the owner of this parking lot!',
                         })
@@ -36,7 +36,7 @@ async function uploadSingle(request, respond) {
                 }
                 updateParkingLotById(updateParkingLot, dbParkingLot.id).then(
                     () => {
-                        return respond.status(200).json({
+                        return response.status(200).json({
                             message:
                                 "Upload parking lot's avatar successfully!",
                             url: imageUrl,
@@ -44,17 +44,17 @@ async function uploadSingle(request, respond) {
                     },
                 )
             } else {
-                return respond.status(404).json({
+                return response.status(404).json({
                     message: 'Parking lot not found!',
                 })
             }
         } else {
-            return respond.status(400).json({
+            return response.status(400).json({
                 message: 'Image file not found!',
             })
         }
     } catch (error) {
-        return respond.status(500).json({
+        return response.status(500).json({
             message: 'Something went wrong!',
             error: error,
         })

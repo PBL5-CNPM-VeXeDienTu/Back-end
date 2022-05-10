@@ -4,7 +4,7 @@ const { getVehicleById, updateVehicleById } = require('../../CRUD/vehicle')
 
 const ADMIN_ROLE = 2
 
-async function uploadSingle(request, respond) {
+async function uploadSingle(request, response) {
     try {
         if (request.file) {
             const vehicleId = request.params.id
@@ -18,7 +18,7 @@ async function uploadSingle(request, respond) {
                 if (userRole != ADMIN_ROLE) {
                     // Check if user own vehicle
                     if (userId != dbVehicle.owner_id) {
-                        return respond.status(400).json({
+                        return response.status(400).json({
                             message: 'User is not the owner of this vehicle!',
                         })
                     }
@@ -31,24 +31,24 @@ async function uploadSingle(request, respond) {
                     cavet_image_front: imageUrl,
                 }
                 updateVehicleById(updateVehicle, dbVehicle.id).then(() => {
-                    return respond.status(200).json({
+                    return response.status(200).json({
                         message:
                             "Upload vehicle's cavet image (front) successfully!",
                         url: imageUrl,
                     })
                 })
             } else {
-                return respond.status(404).json({
+                return response.status(404).json({
                     message: 'Vehicle not found!',
                 })
             }
         } else {
-            return respond.status(400).json({
+            return response.status(400).json({
                 message: 'Image file not found!',
             })
         }
     } catch (error) {
-        return respond.status(500).json({
+        return response.status(500).json({
             message: 'Something went wrong!',
             error: error,
         })

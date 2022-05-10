@@ -12,13 +12,13 @@ const { getUserByEmail } = require('../CRUD/user')
 
 const RESET_PASSWORD = 2
 
-async function forgotPassword(request, respond) {
+async function forgotPassword(request, response) {
     try {
         const dbUser = await getUserByEmail(request.body.email)
         if (dbUser) {
             // Check if email is verified
             if (!dbUser.is_verified) {
-                return respond.status(409).json({
+                return response.status(409).json({
                     message: 'Email is not verified!',
                 })
             }
@@ -41,16 +41,16 @@ async function forgotPassword(request, respond) {
             if (oldKey) updateAuthKeyById({ key: authKey }, oldKey.id)
             else addNewAuthKey({ user_id: dbUser.id, key: authKey })
 
-            return respond.status(201).json({
+            return response.status(201).json({
                 message: 'Reset password email sended!',
             })
         } else {
-            return respond.status(404).json({
+            return response.status(404).json({
                 message: 'Email not found!',
             })
         }
     } catch (error) {
-        return respond.status(500).json({
+        return response.status(500).json({
             message: 'Something went wrong!',
             error: error,
         })

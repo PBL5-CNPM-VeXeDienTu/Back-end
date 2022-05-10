@@ -4,7 +4,7 @@ const hashHelper = require(process.cwd() +
 const { getAuthKeyByUserId, deleteAuthKeyById } = require('../CRUD/authkey')
 const { getUserByEmail, updateUserById } = require('../CRUD/user')
 
-async function resetPassword(request, respond) {
+async function resetPassword(request, response) {
     try {
         // Check if email exists
         const dbUser = await getUserByEmail(request.params.email)
@@ -12,7 +12,7 @@ async function resetPassword(request, respond) {
             // Check if authentication key is valid
             const dbAuthKey = await getAuthKeyByUserId(dbUser.id)
             if (request.params.authKey != dbAuthKey?.key) {
-                return respond.status(409).json({
+                return response.status(409).json({
                     message: 'Invalid authentication key!',
                 })
             }
@@ -28,19 +28,19 @@ async function resetPassword(request, respond) {
                 password: hashHelper.hash(newPassword),
             }
             updateUserById(updateUser, dbUser.id).then(() => {
-                return respond.status(200).json({
+                return response.status(200).json({
                     message:
                         'Password reset successfully! You can login with new password now!',
                     newPassword: newPassword,
                 })
             })
         } else {
-            return respond.status(404).json({
+            return response.status(404).json({
                 message: 'Email not found!',
             })
         }
     } catch (error) {
-        return respond.status(500).json({
+        return response.status(500).json({
             message: 'Something went wrong!',
             error: error,
         })
