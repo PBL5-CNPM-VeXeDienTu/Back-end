@@ -1,7 +1,7 @@
 const { deleteAuthKeyById } = require('../CRUD/authkey')
 const { getUserByEmail, updateUserById } = require('../CRUD/user')
 
-async function verifyEmail(request, respond) {
+async function verifyEmail(request, response) {
     try {
         const dbUser = await getUserByEmail(request.params.email)
         if (dbUser) {
@@ -9,7 +9,7 @@ async function verifyEmail(request, respond) {
             const dbAuthKey = dbUser.AuthKey
             if (dbAuthKey) {
                 if (request.params.authKey != dbAuthKey.key) {
-                    return respond.status(409).json({
+                    return response.status(409).json({
                         message: 'Invalid authentication key!',
                     })
                 }
@@ -20,23 +20,23 @@ async function verifyEmail(request, respond) {
 
             if (!dbUser.is_verified) {
                 updateUserById({ is_verified: true }, dbUser.id).then(() => {
-                    return respond.status(200).json({
+                    return response.status(200).json({
                         message: 'Email verified successfully!',
                     })
                 })
             } else {
-                return respond.status(401).json({
+                return response.status(401).json({
                     message: 'Email is already verified!',
                     error: error,
                 })
             }
         } else {
-            return respond.status(404).json({
+            return response.status(404).json({
                 message: 'Email not found!',
             })
         }
     } catch (error) {
-        return respond.status(500).json({
+        return response.status(500).json({
             message: 'Something went wrong!',
             error: error,
         })

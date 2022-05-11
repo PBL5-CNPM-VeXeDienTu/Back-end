@@ -14,12 +14,12 @@ const { addNewAuthKey } = require('../CRUD/authkey')
 // Mail options
 const VERIFY_EMAIL = 1
 
-async function register(request, respond) {
+async function register(request, response) {
     try {
         // Check if email already registered
         const dbUser = await getUserByEmail(request.body.email)
         if (dbUser) {
-            return respond.status(409).json({
+            return response.status(409).json({
                 message: 'Email already exists!',
             })
         }
@@ -27,7 +27,7 @@ async function register(request, respond) {
         // Check if role is valid
         const dbRole = await getRoleById(request.body.role)
         if (!dbRole) {
-            return respond.status(409).json({
+            return response.status(409).json({
                 message: 'Invalid role!',
             })
         }
@@ -43,7 +43,7 @@ async function register(request, respond) {
         // Validate new user's data
         const validateResponse = validators.validateUser(newUser)
         if (validateResponse !== true) {
-            return respond.status(400).json({
+            return response.status(400).json({
                 message: 'Validation failed!',
                 errors: validateResponse,
             })
@@ -85,12 +85,12 @@ async function register(request, respond) {
             }
             addNewAuthKey(newAuthKey)
 
-            return respond.status(201).json({
+            return response.status(201).json({
                 message: 'Create user successfully!',
             })
         })
     } catch (error) {
-        return respond.status(500).json({
+        return response.status(500).json({
             message: 'Something went wrong!',
             error: error,
         })

@@ -3,7 +3,7 @@ const hashHelper = require(process.cwd() +
 
 const { getUserById, updateUserById } = require('../CRUD/user')
 
-async function changePassword(request, respond) {
+async function changePassword(request, response) {
     try {
         const userId = request.userData.userId
 
@@ -13,7 +13,7 @@ async function changePassword(request, respond) {
             // Check if current password is correct
             const currentPassword = request.body.currentPassword
             if (!hashHelper.compare(currentPassword, dbUser.password)) {
-                return respond.status(400).json({
+                return response.status(400).json({
                     message: 'Wrong password!',
                 })
             }
@@ -26,17 +26,17 @@ async function changePassword(request, respond) {
                 password: hashHelper.hash(newPassword),
             }
             updateUserById(updateUser, dbUser.id).then(() => {
-                return respond.status(200).json({
+                return response.status(200).json({
                     message: 'Password change successfully!',
                 })
             })
         } else {
-            return respond.status(404).json({
+            return response.status(404).json({
                 message: 'User not found!',
             })
         }
     } catch (error) {
-        return respond.status(500).json({
+        return response.status(500).json({
             message: 'Something went wrong!',
             error: error,
         })
