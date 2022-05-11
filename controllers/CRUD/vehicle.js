@@ -15,6 +15,11 @@ const include = [
         required: true,
     },
     {
+        model: models.VehicleType,
+        attributes: ['type_name'],
+        required: true,
+    },
+    {
         model: models.VerifyState,
         required: true,
     },

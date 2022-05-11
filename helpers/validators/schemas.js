@@ -42,11 +42,16 @@ const vehicleSchema = {
     vehicle_image: { type: 'string', optional: true },
     cavet_image_front: { type: 'string', optional: true },
     cavet_image_back: { type: 'string', optional: true },
-    type: { type: 'string', optional: true },
+    type_id: { type: 'number', optional: true },
+    brand: { type: 'string', optional: true },
     color: { type: 'string', optional: true },
     owner_id: { type: 'number', optional: true },
     verify_state: { type: 'number', optional: true },
     deleted_at: { type: 'string', optional: true },
+}
+
+const vehicleTypeSchema = {
+    type_name: { type: 'string', optional: true },
 }
 
 const parkingLotSchema = {
@@ -80,15 +85,15 @@ const verifyStateSchema = {
 
 const parkingPriceSchema = {
     parking_lot_id: { type: 'number', optional: true },
-    bike: { type: 'number', optional: true },
-    motobike: { type: 'number', optional: true },
-    car: { type: 'number', optional: true },
+    vehicle_type_id: { type: 'number', optional: true },
+    price: { type: 'number', optional: true },
 }
 
 const packageSchema = {
     parking_lot_id: { type: 'number', optional: true },
     name: { type: 'string', optional: true },
     type_id: { type: 'number', optional: true },
+    vehicle_type_id: { type: 'number', optional: true },
     price: { type: 'number', optional: true },
 }
 
@@ -138,6 +143,7 @@ module.exports = {
     transactionSchema: transactionSchema,
     transactionTypeSchema: transactionTypeSchema,
     vehicleSchema: vehicleSchema,
+    vehicleTypeSchema: vehicleTypeSchema,
     parkingLotSchema: parkingLotSchema,
     parkingHistorySchema: parkingHistorySchema,
     verifyStateSchema: verifyStateSchema,

@@ -17,6 +17,8 @@ const validateTransactionType = (transactionType) =>
     validator.validate(transactionType, schemas.userTransactionType)
 const validateVehicle = (vehicle) =>
     validator.validate(vehicle, schemas.vehicleSchema)
+const validateVehicleType = (vehicleType) =>
+    validator.validate(vehicleType, schemas.vehicleTypeSchema)
 const validateParkingLot = (parkingLot) =>
     validator.validate(parkingLot, schemas.parkingLotSchema)
 const validateParkingHistory = (parkingHistory) =>
@@ -50,6 +52,7 @@ module.exports = {
     validateTransaction: validateTransaction,
     validateTransactionType: validateTransactionType,
     validateVehicle: validateVehicle,
+    validateVehicleType: validateVehicleType,
     validateParkingLot: validateParkingLot,
     validateParkingHistory: validateParkingHistory,
     validateVerifyState: validateVerifyState,
