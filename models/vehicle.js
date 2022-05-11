@@ -8,6 +8,7 @@ module.exports = (sequelize, DataTypes) => {
                 foreignKey: 'owner_id',
                 as: 'Owner',
             })
+            Vehicle.belongsTo(models.VehicleType, { foreignKey: 'type_id' })
             Vehicle.hasMany(models.ParkingHistory, { foreignKey: 'vehicle_id' })
             Vehicle.belongsTo(models.VerifyState, {
                 foreignKey: 'verify_state_id',
@@ -20,7 +21,8 @@ module.exports = (sequelize, DataTypes) => {
             avatar: DataTypes.STRING,
             cavet_back: DataTypes.STRING,
             cavet_front: DataTypes.STRING,
-            type: DataTypes.STRING,
+            type_id: DataTypes.INTEGER,
+            brand: DataTypes.STRING,
             color: DataTypes.STRING,
             detail: DataTypes.TEXT,
             owner_id: DataTypes.INTEGER,

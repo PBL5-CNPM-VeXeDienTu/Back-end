@@ -7,14 +7,16 @@ module.exports = (sequelize, DataTypes) => {
             ParkingPrice.belongsTo(models.ParkingLot, {
                 foreignKey: 'parking_lot_id',
             })
+            ParkingPrice.belongsTo(models.VehicleType, {
+                foreignKey: 'vehicle_type_id',
+            })
         }
     }
     ParkingPrice.init(
         {
             parking_lot_id: DataTypes.INTEGER,
-            bike: DataTypes.FLOAT,
-            motobike: DataTypes.FLOAT,
-            car: DataTypes.FLOAT,
+            vehicle_type_id: DataTypes.INTEGER,
+            price: DataTypes.FLOAT,
             createdAt: {
                 type: DataTypes.DATE,
                 get: function () {

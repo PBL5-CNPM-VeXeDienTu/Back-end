@@ -6,13 +6,13 @@ module.exports = {
             'VehicleTypes',
             [
                 {
-                    type_name: 'Car',
+                    type_name: 'Electric bicycle',
                 },
                 {
                     type_name: 'Motobike',
                 },
                 {
-                    type_name: 'Electric bicycle',
+                    type_name: 'Car',
                 },
             ],
             {},

@@ -24,7 +24,11 @@ module.exports = {
                 allowNull: false,
                 type: Sequelize.STRING,
             },
-            type: {
+            type_id: {
+                allowNull: false,
+                type: Sequelize.INTEGER,
+            },
+            brand: {
                 type: Sequelize.STRING,
             },
             color: {

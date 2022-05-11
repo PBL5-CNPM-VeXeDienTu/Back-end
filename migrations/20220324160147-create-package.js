@@ -19,6 +19,10 @@ module.exports = {
                 allowNull: false,
                 type: Sequelize.INTEGER,
             },
+            vehicle_type_id: {
+                allowNull: false,
+                type: Sequelize.INTEGER,
+            },
             price: {
                 type: Sequelize.FLOAT,
             },
