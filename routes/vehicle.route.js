@@ -8,7 +8,7 @@ const router = express.Router()
 router.get(
     '/',
     checkAuthMiddleware.checkAuth,
-    checkOwnerMiddleware.checkVehicleOwner,
+    checkOwnerMiddleware.checkRoleAdmin,
     vehicleApiController.index,
 )
 router.get(

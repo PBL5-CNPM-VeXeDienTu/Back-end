@@ -60,7 +60,7 @@ async function showById(request, response) {
     try {
         const vehicleId = request.params.id
 
-        const dbVehicle = getVehicleById(vehicleId)
+        const dbVehicle = await getVehicleById(vehicleId)
 
         return response.status(200).json(dbVehicle)
     } catch (error) {
@@ -153,7 +153,11 @@ async function updateById(request, response) {
             }
 
             // Update vehicle's data
-            updateVehicleById(updateVehicle, dbVehicle.id)
+            updateVehicleById(updateVehicle, dbVehicle.id).then((_) => {
+                return response.status(201).json({
+                    message: 'Update vehicle successfully!',
+                })
+            })
         } else {
             return response.status(404).json({
                 message: 'Vehicle not found!',
