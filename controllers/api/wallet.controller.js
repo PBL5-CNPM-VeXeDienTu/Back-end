@@ -78,7 +78,7 @@ async function rechargeById(request, response) {
             // Check if serial is correct
             if (serial !== defaultSerial) {
                 return response.status(400).json({
-                    message: 'Invalid card\'s serial!',
+                    message: "Invalid card's serial!",
                 })
             }
 

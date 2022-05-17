@@ -119,8 +119,9 @@ async function create(request, response) {
 
 async function updateById(request, response) {
     try {
-        // Check if vehicle exists
         const parkingLotId = request.params.id
+
+        // Check if vehicle exists
         const dbParkingLot = await getParkingLotById(parkingLotId)
         if (dbParkingLot) {
             const updateParkingLot = {
@@ -143,11 +144,13 @@ async function updateById(request, response) {
             }
 
             // Update vehicle's data
-            updateParkingLotById(updateParkingLot, dbParkingLot.id).then((_) => {
-                return response.status(201).json({
-                    message: 'Update parking lot successfully!',
-                })
-            })
+            updateParkingLotById(updateParkingLot, dbParkingLot.id).then(
+                (_) => {
+                    return response.status(201).json({
+                        message: 'Update parking lot successfully!',
+                    })
+                },
+            )
         } else {
             return response.status(404).json({
                 message: 'Parking lot not found!',
