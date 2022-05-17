@@ -5,9 +5,10 @@ What is this pull request information?
 
 ## PR type
 What types of changes does this PR introduce? (Enter X to choose)
+-   [ ] Built UI
+-   [ ] Built API
 -   [ ] Feature
--   [ ] Bug fix
--   [ ] Refactor
+-   [ ] Fix bug
 -   [ ] Other (please specify):
 
 ## Result image/gif
