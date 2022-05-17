@@ -3,7 +3,14 @@ const models = require(process.cwd() + '/models/index')
 const include = [
     {
         model: models.User,
-        attributes: ['email', 'name', 'role', 'is_verified', 'deletedAt', 'createdAt'],
+        attributes: [
+            'email',
+            'name',
+            'role',
+            'is_verified',
+            'deletedAt',
+            'createdAt',
+        ],
         include: [
             {
                 model: models.Role,
@@ -32,9 +39,7 @@ async function index(startIndex, limit) {
         },
         offset: startIndex,
         limit: limit,
-        order: [
-            ['user_id', 'DESC'],
-        ],
+        order: [['user_id', 'DESC']],
     })
 }
 

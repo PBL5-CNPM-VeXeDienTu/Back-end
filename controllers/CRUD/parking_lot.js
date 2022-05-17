@@ -4,7 +4,7 @@ const { getCurrentDateTime } = require(process.cwd() + '/helpers/datetime')
 const include = [
     {
         model: models.User,
-        attributes: ['email', 'name', 'deletedAt', 'createdAt'],
+        attributes: { exclude: ['password', 'qr_key', 'updatedAt'] },
         include: [
             {
                 model: models.Role,
