@@ -133,8 +133,9 @@ async function create(request, response) {
 
 async function updateById(request, response) {
     try {
-        // Check if vehicle exists
         const vehicleId = request.params.id
+        
+        // Check if vehicle exists
         const dbVehicle = await getVehicleById(vehicleId)
         if (dbVehicle) {
             const updateVehicle = {
