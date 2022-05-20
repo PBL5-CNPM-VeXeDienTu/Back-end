@@ -24,5 +24,6 @@ app.use('/api/vehicles', routes.vehicle)
 app.use('/api/parking-lots', routes.parkingLot)
 app.use('/api/parking-prices', routes.parkingPrice)
 app.use('/api/packages', routes.package)
+app.use('/api/parking-histories', routes.parkingHistory)
 
 module.exports = app
