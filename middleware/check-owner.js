@@ -135,6 +135,32 @@ async function checkParkingPriceOwner(request, response, next) {
     }
 }
 
+async function checkUserPackageOwner(request, response, next) {
+    try {
+        const userPackageOwnerId = request.params.id
+        const requestRole = request.userData.role
+        const requestUserId = request.userData.userId
+
+        // Check if request user is admin or not
+        if (requestRole != ADMIN_ROLE) {
+            const isOwner = await checkUserOwnUserPackage(
+                userPackageOwnerId,
+                requestUserId,
+            )
+            if (!isOwner) {
+                return response.status(400).json({
+                    message: 'User is not the owner of this parking price!',
+                })
+            } else next()
+        } else next()
+    } catch (error) {
+        return response.status(401).json({
+            message: 'Something went wrong!',
+            error: error,
+        })
+    }
+}
+
 async function checkFeedbackOwner(request, response, next) {
     try {
         const feedbackId = request.params.id
@@ -167,5 +193,6 @@ module.exports = {
     checkVehicleOwner: checkVehicleOwner,
     checkParkingLotOwner: checkParkingLotOwner,
     checkParkingPriceOwner: checkParkingPriceOwner,
+    checkUserPackageOwner: checkUserPackageOwner,
     checkFeedbackOwner: checkFeedbackOwner,
 }

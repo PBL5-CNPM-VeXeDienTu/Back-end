@@ -7,6 +7,7 @@ const parkingLot = require('./parking_lot.route')
 const parkingPrice = require('./parking_price.route')
 const package = require('./package.route')
 const parkingHistory = require('./parking_history.route')
+const userPackage = require('./user_package.route')
 const feedback = require('./feedback.route')
 
 module.exports = {
@@ -19,5 +20,6 @@ module.exports = {
     parkingPrice: parkingPrice,
     package: package,
     parkingHistory: parkingHistory,
+    userPackage: userPackage,
     feedback: feedback,
 }
