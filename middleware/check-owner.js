@@ -4,6 +4,7 @@ const { checkUserOwnVehicle } = require('../controllers/CRUD/vehicle')
 const {
     checkUserOwnParkingPrice,
 } = require('../controllers/CRUD/parking_price')
+const { checkUserOwnFeedback } = require('../controllers/CRUD/feedback')
 
 const ADMIN_ROLE = 3
 
@@ -134,10 +135,37 @@ async function checkParkingPriceOwner(request, response, next) {
     }
 }
 
+async function checkFeedbackOwner(request, response, next) {
+    try {
+        const feedbackId = request.params.id
+        const requestRole = request.userData.role
+        const requestUserId = request.userData.userId
+
+        // Check if request user is admin or not
+        if (requestRole != ADMIN_ROLE) {
+            const isOwner = await checkUserOwnFeedback(
+                feedbackId,
+                requestUserId,
+            )
+            if (!isOwner) {
+                return response.status(400).json({
+                    message: 'User is not the owner of this feedback!',
+                })
+            } else next()
+        } else next()
+    } catch (error) {
+        return response.status(401).json({
+            message: 'Something went wrong!',
+            error: error,
+        })
+    }
+}
+
 module.exports = {
     checkAccountOwner: checkAccountOwner,
     checkWalletOwner: checkWalletOwner,
     checkVehicleOwner: checkVehicleOwner,
     checkParkingLotOwner: checkParkingLotOwner,
     checkParkingPriceOwner: checkParkingPriceOwner,
+    checkFeedbackOwner: checkFeedbackOwner,
 }

@@ -7,6 +7,7 @@ const parkingLot = require('./parking_lot.route')
 const parkingPrice = require('./parking_price.route')
 const package = require('./package.route')
 const parkingHistory = require('./parking_history.route')
+const feedback = require('./feedback.route')
 
 module.exports = {
     auth: auth,
@@ -18,4 +19,5 @@ module.exports = {
     parkingPrice: parkingPrice,
     package: package,
     parkingHistory: parkingHistory,
+    feedback: feedback,
 }

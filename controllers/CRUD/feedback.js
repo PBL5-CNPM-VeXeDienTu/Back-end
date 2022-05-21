@@ -1,29 +1,74 @@
-const feedbackModel = require(process.cwd() + '/models/index').Feedback
+const models = require(process.cwd() + '/models/index')
 
-async function index() {
-    return feedbackModel.findAll()
+const include = [
+    {
+        model: models.User,
+        attributes: [
+            'email',
+            'name',
+            'role',
+            'is_verified',
+            'deletedAt',
+            'createdAt',
+        ],
+        include: [
+            {
+                model: models.Role,
+                attributes: ['name'],
+            },
+        ],
+        required: true,
+    },
+    {
+        model: models.FeedbackType,
+        attributes: ['type_name'],
+        require: true,
+    },
+    {
+        model: models.Feature,
+        attributes: ['name'],
+        require: true,
+    },
+]
+
+async function index(startIndex, limit) {
+    return models.Feedback.findAll({
+        include: include,
+        offset: startIndex,
+        limit: limit,
+        order: [['id', 'DESC']],
+    })
 }
 
 async function showById(id) {
-    return feedbackModel.findByPk(id)
+    return models.Feedback.findByPk(id, {
+        include: include,
+    })
 }
 
 async function create(newFeedback) {
-    return feedbackModel.create(newFeedback)
+    return models.Feedback.create(newFeedback)
 }
 
 async function update(updateFeedback, id) {
-    return feedbackModel.update(updateFeedback, { where: { id: id } })
+    return models.Feedback.update(updateFeedback, { where: { id: id } })
 }
 
 async function destroy(id) {
-    return feedbackModel.destroy({ where: { id: id } })
+    return models.Feedback.destroy({ where: { id: id } })
+}
+
+async function checkOwner(feedbackId, userId) {
+    return !!(await models.Feedback.findOne({
+        where: { id: feedbackId, user_id: userId },
+    }))
 }
 
 module.exports = {
-    index: index,
+    getListFeedbacks: index,
     getFeedbackById: showById,
     addNewFeedback: create,
     updateFeedbackById: update,
     deleteFeedbackById: destroy,
+    checkUserOwnFeedback: checkOwner,
 }
