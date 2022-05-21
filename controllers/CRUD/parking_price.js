@@ -1,10 +1,8 @@
 const models = require(process.cwd() + '/models/index')
-const { getCurrentDateTime } = require(process.cwd() + '/helpers/datetime')
 
 const include = [
     {
         model: models.ParkingLot,
-        attributes: { exclude: ['id'] },
         include: [
             {
                 model: models.User,

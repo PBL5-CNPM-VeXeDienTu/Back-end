@@ -1,19 +1,71 @@
-const packageModel = require(process.cwd() + '/models/index').Package
+const models = require(process.cwd() + '/models/index')
 
-async function index() {
-    return packageModel.findAll()
+const include = [
+    {
+        model: models.ParkingLot,
+        include: [
+            {
+                model: models.User,
+                attributes: { exclude: ['password', 'qr_key', 'updatedAt'] },
+                include: [
+                    {
+                        model: models.Role,
+                        attributes: ['name'],
+                    },
+                ],
+                as: 'Owner',
+                required: true,
+            },
+        ],
+        required: true,
+    },
+    {
+        model: models.PackageType,
+        attributes: ['type_name'],
+        required: true,
+    },
+    {
+        model: models.VehicleType,
+        attributes: ['type_name'],
+        required: true,
+    },
+]
+
+async function index(startIndex, limit) {
+    return models.Package.findAll({
+        include: include,
+        offset: startIndex,
+        limit: limit,
+        order: [
+            ['id', 'DESC'],
+            ['name', 'ASC'],
+        ],
+    })
 }
 
 async function showById(id) {
-    return packageModel.findByPk(id)
+    return models.Package.findByPk(id, {
+        include: include,
+    })
+}
+
+async function showByParkingLotId(parkingLotId) {
+    return models.Package.findAll({
+        include: include,
+        order: [
+            ['id', 'DESC'],
+            ['price', 'DESC'],
+        ],
+        where: { parking_lot_id: parkingLotId },
+    })
 }
 
 async function create(newPackage) {
-    return packageModel.create(newPackage)
+    return models.Package.create(newPackage)
 }
 
 async function update(updatePackage, id) {
-    return packageModel.update(updatePackage, { where: { id: id } })
+    return models.Package.update(updatePackage, { where: { id: id } })
 }
 
 async function destroy(id) {
@@ -21,8 +73,9 @@ async function destroy(id) {
 }
 
 module.exports = {
-    index: index,
+    getListPackages: index,
     getPackageById: showById,
+    getPackageByParkingLotId: showByParkingLotId,
     addNewPackage: create,
     updatePackageById: update,
     deletePackageById: destroy,
