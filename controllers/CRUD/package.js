@@ -69,7 +69,7 @@ async function update(updatePackage, id) {
 }
 
 async function destroy(id) {
-    return packageModel.destroy({ where: { id: id } })
+    return models.Package.destroy({ where: { id: id } })
 }
 
 module.exports = {

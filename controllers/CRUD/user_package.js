@@ -1,29 +1,92 @@
-const userPackageModel = require(process.cwd() + '/models/index').UserPackage
+const models = require(process.cwd() + '/models/index')
 
-async function index() {
-    return userPackageModel.findAll()
+const include = [
+    {
+        model: models.User,
+        attributes: { exclude: ['password', 'qr_key', 'updatedAt'] },
+        include: [
+            {
+                model: models.Role,
+                attributes: ['name'],
+            },
+        ],
+        as: 'Owner',
+        required: true,
+    },
+    {
+        model: models.Package,
+        attributes: { exclude: ['createdAt', 'updateAt'] },
+        require: true,
+    },
+    {
+        model: models.PackageType,
+        attributes: ['type_name'],
+        required: true,
+    },
+    {
+        model: models.VehicleType,
+        attributes: ['type_name'],
+        required: true,
+    },
+]
+
+async function index(startIndex, limit) {
+    return models.UserPackage.findAll({
+        include: include,
+        offset: startIndex,
+        limit: limit,
+        order: [
+            ['id', 'DESC'],
+            ['name', 'ASC'],
+        ],
+    })
 }
 
 async function showById(id) {
-    return userPackageModel.findByPk(id)
+    return models.UserPackage.findByPk(id, {
+        include: include,
+    })
+}
+
+async function showByOwnerId(parkingLotId) {
+    return models.UserPackage.findAll({
+        include: include,
+        order: [
+            ['id', 'DESC'],
+            ['price', 'DESC'],
+        ],
+        where: { parking_lot_id: parkingLotId },
+    })
 }
 
 async function create(newUserPackage) {
-    return userPackageModel.create(newUserPackage)
+    return models.UserPackage.create(newUserPackage)
 }
 
 async function update(updateUserPackage, id) {
-    return userPackageModel.update(updateUserPackage, { where: { id: id } })
+    return models.UserPackage.update(updateUserPackage, { where: { id: id } })
 }
 
 async function destroy(id) {
-    return userPackageModel.destroy({ where: { id: id } })
+    return models.UserPackage.destroy({ where: { id: id } })
+}
+
+async function checkOwner(userPackageId, userId) {
+    return !!(await models.UserPackage.findOne({
+        include: include,
+        where: {
+            id: userPackageId,
+            user_id: userId,
+        },
+    }))
 }
 
 module.exports = {
-    index: index,
+    getListUserPackages: index,
     getUserPackageById: showById,
+    getUserPackageByOwnerId: showByOwnerId,
     addNewUserPackage: create,
     updateUserPackageById: update,
     deleteUserPackageById: destroy,
+    checkUserOwnUserPackage: checkOwner,
 }
