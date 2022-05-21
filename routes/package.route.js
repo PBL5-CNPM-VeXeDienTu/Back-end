@@ -5,21 +5,13 @@ const packageApiController = require('../controllers/api/package.controller')
 
 const router = express.Router()
 
-router.get(
-    '/',
-    checkAuthMiddleware.checkAuth,
-    packageApiController.index,
-)
+router.get('/', checkAuthMiddleware.checkAuth, packageApiController.index)
 router.get(
     '/get-by-parking-lot/:id',
     checkAuthMiddleware.checkAuth,
     packageApiController.indexByParkingLotId,
 )
-router.get(
-    '/:id',
-    checkAuthMiddleware.checkAuth,
-    packageApiController.showById
-)
+router.get('/:id', checkAuthMiddleware.checkAuth, packageApiController.showById)
 router.post(
     '/',
     checkAuthMiddleware.checkAuth,

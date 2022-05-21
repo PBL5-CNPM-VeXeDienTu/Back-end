@@ -1,6 +1,7 @@
 const express = require('express')
 const checkAuthMiddleware = require('../middleware/check-auth')
 const checkOwnerMiddleware = require('../middleware/check-owner')
+const checkRoleMiddleware = require('../middleware/check-role')
 const parkingHistoryApiController = require('../controllers/api/parking_history.controller')
 
 const router = express.Router()
@@ -8,7 +9,6 @@ const router = express.Router()
 router.get(
     '/',
     checkAuthMiddleware.checkAuth,
-    checkOwnerMiddleware.checkRoleAdmin,
     parkingHistoryApiController.index,
 )
 router.get(
@@ -25,13 +25,13 @@ router.get(
 router.patch(
     '/:id',
     checkAuthMiddleware.checkAuth,
-    checkOwnerMiddleware.checkRoleAdmin,
+    checkRoleMiddleware.checkRoleAdmin,
     parkingHistoryApiController.updateById,
 )
 router.delete(
     '/:id',
     checkAuthMiddleware.checkAuth,
-    checkOwnerMiddleware.checkRoleAdmin,
+    checkRoleMiddleware.checkRoleAdmin,
     parkingHistoryApiController.deleteById,
 )
 

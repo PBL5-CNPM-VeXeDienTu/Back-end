@@ -1,26 +1,11 @@
 const { checkUserOwnWallet } = require('../controllers/CRUD/wallet')
 const { checkUserOwnParkingLot } = require('../controllers/CRUD/parking_lot')
 const { checkUserOwnVehicle } = require('../controllers/CRUD/vehicle')
+const {
+    checkUserOwnParkingPrice,
+} = require('../controllers/CRUD/parking_price')
 
 const ADMIN_ROLE = 3
-
-async function checkRoleAdmin(request, response, next) {
-    try {
-        const requestRole = request.userData.role
-
-        // Check if request user is admin or not
-        if (requestRole != ADMIN_ROLE) {
-            return response.status(400).json({
-                message: 'Invalid role!',
-            })
-        } else next()
-    } catch (error) {
-        return response.status(401).json({
-            message: 'Something went wrong!',
-            error: error,
-        })
-    }
-}
 
 async function checkAccountOwner(request, response, next) {
     try {
@@ -123,10 +108,36 @@ async function checkParkingLotOwner(request, response, next) {
     }
 }
 
+async function checkParkingPriceOwner(request, response, next) {
+    try {
+        const parkingPriceId = request.params.id
+        const requestRole = request.userData.role
+        const requestUserId = request.userData.userId
+
+        // Check if request user is admin or not
+        if (requestRole != ADMIN_ROLE) {
+            const isOwner = await checkUserOwnParkingPrice(
+                parkingPriceId,
+                requestUserId,
+            )
+            if (!isOwner) {
+                return response.status(400).json({
+                    message: 'User is not the owner of this parking price!',
+                })
+            } else next()
+        } else next()
+    } catch (error) {
+        return response.status(401).json({
+            message: 'Something went wrong!',
+            error: error,
+        })
+    }
+}
+
 module.exports = {
-    checkRoleAdmin: checkRoleAdmin,
     checkAccountOwner: checkAccountOwner,
     checkWalletOwner: checkWalletOwner,
     checkVehicleOwner: checkVehicleOwner,
     checkParkingLotOwner: checkParkingLotOwner,
+    checkParkingPriceOwner: checkParkingPriceOwner,
 }

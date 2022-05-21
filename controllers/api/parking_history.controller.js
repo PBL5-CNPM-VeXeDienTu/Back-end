@@ -102,7 +102,8 @@ async function updateById(request, response) {
             }
 
             // Validate update vehicle's data
-            const validateResponse = validators.validateParkingHistory(updateParkingHistory)
+            const validateResponse =
+                validators.validateParkingHistory(updateParkingHistory)
             if (validateResponse !== true) {
                 return response.status(400).json({
                     message: 'Validation failed!',
@@ -111,7 +112,10 @@ async function updateById(request, response) {
             }
 
             // Update vehicle's data
-            updateParkingHistoryById(updateParkingHistory, dbParkingHistory.id).then((_) => {
+            updateParkingHistoryById(
+                updateParkingHistory,
+                dbParkingHistory.id,
+            ).then((_) => {
                 return response.status(201).json({
                     message: 'Update parking history successfully!',
                 })

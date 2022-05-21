@@ -1,6 +1,7 @@
 const express = require('express')
 const checkAuthMiddleware = require('../middleware/check-auth')
 const checkOwnerMiddleware = require('../middleware/check-owner')
+const checkRoleMiddleware = require('../middleware/check-role')
 const walletApiController = require('../controllers/api/wallet.controller')
 
 const router = express.Router()
@@ -8,7 +9,7 @@ const router = express.Router()
 router.get(
     '/',
     checkAuthMiddleware.checkAuth,
-    checkOwnerMiddleware.checkRoleAdmin,
+    checkRoleMiddleware.checkRoleAdmin,
     walletApiController.index,
 )
 router.get(
