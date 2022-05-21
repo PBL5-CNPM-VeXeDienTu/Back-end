@@ -13,13 +13,11 @@ module.exports = {
                 unique: true,
                 type: Sequelize.INTEGER,
             },
-            bike: {
-                type: Sequelize.FLOAT,
+            vehicle_type_id: {
+                allowNull: false,
+                type: Sequelize.INTEGER,
             },
-            motobike: {
-                type: Sequelize.FLOAT,
-            },
-            car: {
+            price: {
                 type: Sequelize.FLOAT,
             },
             createdAt: {

@@ -13,7 +13,7 @@ const { softDeleteParkingLotByOwnerId } = require('../CRUD/parking_lot')
 const BASIC_USER_ROLE = 1
 const PARKING_LOT_USER_ROLE = 2
 
-async function index(request, respond) {
+async function index(request, response) {
     try {
         const page = Number.parseInt(request.query.page)
         const limit = Number.parseInt(request.query.limit)
@@ -24,7 +24,7 @@ async function index(request, respond) {
             Number.isNaN(limit) ||
             limit < 0
         ) {
-            return respond.status(400).json({
+            return response.status(400).json({
                 message: 'Invalid query parameters!',
             })
         }
@@ -33,37 +33,37 @@ async function index(request, respond) {
 
         const queryResult = await getListUsers(startIndex, limit)
 
-        return respond.status(200).json(queryResult)
+        return response.status(200).json(queryResult)
     } catch (error) {
-        return respond.status(500).json({
+        return response.status(500).json({
             message: 'Something went wrong!',
             error: error,
         })
     }
 }
 
-async function showById(request, respond) {
+async function showById(request, response) {
     try {
         const userId = request.params.id
 
         // Check if user exists
         const dbUser = await getUserById(userId)
         if (dbUser) {
-            return respond.status(200).json(dbUser)
+            return response.status(200).json(dbUser)
         } else {
-            return respond.status(404).json({
+            return response.status(404).json({
                 message: 'User not found!',
             })
         }
     } catch (error) {
-        return respond.status(500).json({
+        return response.status(500).json({
             message: 'Something went wrong!',
             error: error,
         })
     }
 }
 
-async function updateById(request, respond) {
+async function updateById(request, response) {
     try {
         const userId = request.params.id
 
@@ -88,7 +88,7 @@ async function updateById(request, respond) {
                 validators.validateUserInfo(updateUserInfo),
             ]
             if (!validateResponse.every((valid) => valid === true)) {
-                return respond.status(400).json({
+                return response.status(400).json({
                     message: 'Validation failed!',
                     errors: validateResponse,
                 })
@@ -97,23 +97,23 @@ async function updateById(request, respond) {
             updateUserById(updateUser, dbUser.id)
             updateUserInfoByUserId(updateUserInfo, dbUser.id)
 
-            return respond.status(200).json({
+            return response.status(200).json({
                 message: 'Update user information successfully!',
             })
         } else {
-            return respond.status(404).json({
+            return response.status(404).json({
                 message: 'User not found!',
             })
         }
     } catch (error) {
-        return respond.status(500).json({
+        return response.status(500).json({
             message: 'Something went wrong!',
             error: error,
         })
     }
 }
 
-async function softDeleteById(request, respond) {
+async function softDeleteById(request, response) {
     try {
         const userId = request.params.id
 
@@ -129,16 +129,16 @@ async function softDeleteById(request, respond) {
             if (dbUser.role === PARKING_LOT_USER_ROLE)
                 softDeleteParkingLotByOwnerId(dbUser.id)
 
-            return respond.status(200).json({
+            return response.status(200).json({
                 message: 'Delete user successfully!',
             })
         } else {
-            return respond.status(404).json({
+            return response.status(404).json({
                 message: 'User not found!',
             })
         }
     } catch (error) {
-        return respond.status(500).json({
+        return response.status(500).json({
             message: 'Something went wrong!',
             error: error,
         })

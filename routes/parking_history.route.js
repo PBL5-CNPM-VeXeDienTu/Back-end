@@ -2,45 +2,37 @@ const express = require('express')
 const checkAuthMiddleware = require('../middleware/check-auth')
 const checkOwnerMiddleware = require('../middleware/check-owner')
 const checkRoleMiddleware = require('../middleware/check-role')
-const vehicleApiController = require('../controllers/api/vehicle.controller')
+const parkingHistoryApiController = require('../controllers/api/parking_history.controller')
 
 const router = express.Router()
 
 router.get(
     '/',
     checkAuthMiddleware.checkAuth,
-    checkRoleMiddleware.checkRoleAdmin,
-    vehicleApiController.index,
+    parkingHistoryApiController.index,
 )
 router.get(
-    '/get-by-owner/:id',
+    '/get-by-user/:id',
     checkAuthMiddleware.checkAuth,
     checkOwnerMiddleware.checkAccountOwner,
-    vehicleApiController.indexByOwnerId,
+    parkingHistoryApiController.indexByUserId,
 )
 router.get(
     '/:id',
     checkAuthMiddleware.checkAuth,
-    checkOwnerMiddleware.checkVehicleOwner,
-    vehicleApiController.showById,
-)
-router.post(
-    '/',
-    checkAuthMiddleware.checkAuth,
-    checkRoleMiddleware.checkRoleBasicUser,
-    vehicleApiController.create,
+    parkingHistoryApiController.showById,
 )
 router.patch(
     '/:id',
     checkAuthMiddleware.checkAuth,
-    checkOwnerMiddleware.checkVehicleOwner,
-    vehicleApiController.updateById,
+    checkRoleMiddleware.checkRoleAdmin,
+    parkingHistoryApiController.updateById,
 )
 router.delete(
     '/:id',
     checkAuthMiddleware.checkAuth,
-    checkOwnerMiddleware.checkVehicleOwner,
-    vehicleApiController.softDeleteById,
+    checkRoleMiddleware.checkRoleAdmin,
+    parkingHistoryApiController.deleteById,
 )
 
 module.exports = router

@@ -4,7 +4,7 @@ const { getCurrentDateTime } = require(process.cwd() + '/helpers/datetime')
 const include = [
     {
         model: models.User,
-        attributes: ['email', 'name', 'deletedAt', 'createdAt'],
+        attributes: { exclude: ['password', 'qr_key', 'updatedAt'] },
         include: [
             {
                 model: models.Role,
@@ -32,14 +32,14 @@ async function index(startIndex, limit) {
     })
 }
 
-async function indexByOwnerId(owner_id) {
+async function indexByOwnerId(ownerId) {
     return models.ParkingLot.findAll({
         include: include,
         order: [
             ['id', 'DESC'],
             ['name', 'ASC'],
         ],
-        where: { owner_id: owner_id },
+        where: { owner_id: ownerId },
     })
 }
 
@@ -64,7 +64,7 @@ async function update(updateParkingLot, id) {
     return models.ParkingLot.update(updateParkingLot, { where: { id: id } })
 }
 
-async function destroyByOwnerId(owner_id) {
+async function destroyByOwnerId(ownerId) {
     const now = getCurrentDateTime()
 
     // Update deletedAt field of vehicle
@@ -72,7 +72,7 @@ async function destroyByOwnerId(owner_id) {
         deletedAt: now,
     }
     return models.ParkingLot.update(updateParkingLot, {
-        where: { owner_id: owner_id },
+        where: { owner_id: ownerId },
     })
 }
 
@@ -87,9 +87,9 @@ async function destroy(id) {
 }
 
 async function checkOwner(vehicleId, userId) {
-    return !!models.ParkingLot.findOne({
+    return !!(await models.ParkingLot.findOne({
         where: { id: vehicleId, owner_id: userId },
-    })
+    }))
 }
 
 module.exports = {

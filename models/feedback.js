@@ -16,6 +16,7 @@ module.exports = (sequelize, DataTypes) => {
             feature_id: DataTypes.INTEGER,
             content: DataTypes.STRING,
             is_processed: DataTypes.BOOLEAN,
+            response: DataTypes.TEXT,
             createdAt: {
                 type: DataTypes.DATE,
                 get: function () {

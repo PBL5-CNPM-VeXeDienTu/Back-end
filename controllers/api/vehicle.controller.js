@@ -11,7 +11,7 @@ const {
 } = require('../CRUD/vehicle')
 const { addNewVerifyState } = require('../CRUD/verify_state')
 
-async function index(request, respond) {
+async function index(request, response) {
     try {
         const page = Number.parseInt(request.query.page)
         const limit = Number.parseInt(request.query.limit)
@@ -22,7 +22,7 @@ async function index(request, respond) {
             Number.isNaN(limit) ||
             limit < 0
         ) {
-            return respond.status(400).json({
+            return response.status(400).json({
                 message: 'Invalid query parameters!',
             })
         }
@@ -31,47 +31,47 @@ async function index(request, respond) {
 
         const queryResult = await getListVehicles(startIndex, limit)
 
-        return respond.status(200).json(queryResult)
+        return response.status(200).json(queryResult)
     } catch (error) {
-        return respond.status(500).json({
+        return response.status(500).json({
             message: 'Something went wrong!',
             error: error,
         })
     }
 }
 
-async function indexByOwnerId(request, respond) {
+async function indexByOwnerId(request, response) {
     try {
         const ownerId = request.params.id
 
         // Get all vehicles that user own
         const dbVehicles = await getListVehiclesByOwnerId(ownerId)
 
-        return respond.status(200).json(dbVehicles)
+        return response.status(200).json(dbVehicles)
     } catch (error) {
-        return respond.status(500).json({
+        return response.status(500).json({
             message: 'Something went wrong!',
             error: error,
         })
     }
 }
 
-async function showById(request, respond) {
+async function showById(request, response) {
     try {
         const vehicleId = request.params.id
 
-        const dbVehicle = getVehicleById(vehicleId)
+        const dbVehicle = await getVehicleById(vehicleId)
 
-        return respond.status(200).json(dbVehicle)
+        return response.status(200).json(dbVehicle)
     } catch (error) {
-        return respond.status(500).json({
+        return response.status(500).json({
             message: 'Something went wrong!',
             error: error,
         })
     }
 }
 
-async function create(request, respond) {
+async function create(request, response) {
     try {
         // Check if vehicle existed
         const dbVehicle = await getVehicleByLicensePlate(
@@ -80,7 +80,7 @@ async function create(request, respond) {
         if (dbVehicle) {
             // Check if vehicle has owner id
             if (dbVehicle.owner_id) {
-                return respond.status(400).json({
+                return response.status(400).json({
                     message: 'This vehicle already has owner!',
                 })
             }
@@ -102,7 +102,7 @@ async function create(request, respond) {
         // Validate new vehicle's data
         const validateResponse = validators.validateVehicle(newVehicle)
         if (validateResponse !== true) {
-            return respond.status(400).json({
+            return response.status(400).json({
                 message: 'Validation failed!',
                 errors: validateResponse,
             })
@@ -119,22 +119,23 @@ async function create(request, respond) {
 
         // Create new vehicle
         addNewVehicle(newVehicle).then((_) => {
-            return respond.status(201).json({
+            return response.status(201).json({
                 message: 'Create vehicle successfully!',
             })
         })
     } catch (error) {
-        return respond.status(500).json({
+        return response.status(500).json({
             message: 'Something went wrong!',
             error: error,
         })
     }
 }
 
-async function updateById(request, respond) {
+async function updateById(request, response) {
     try {
-        // Check if vehicle exists
         const vehicleId = request.params.id
+
+        // Check if vehicle exists
         const dbVehicle = await getVehicleById(vehicleId)
         if (dbVehicle) {
             const updateVehicle = {
@@ -146,28 +147,32 @@ async function updateById(request, respond) {
             // Validate update vehicle's data
             const validateResponse = validators.validateVehicle(updateVehicle)
             if (validateResponse !== true) {
-                return respond.status(400).json({
+                return response.status(400).json({
                     message: 'Validation failed!',
                     errors: validateResponse,
                 })
             }
 
             // Update vehicle's data
-            updateVehicleById(updateVehicle, dbVehicle.id)
+            updateVehicleById(updateVehicle, dbVehicle.id).then((_) => {
+                return response.status(201).json({
+                    message: 'Update vehicle successfully!',
+                })
+            })
         } else {
-            return respond.status(404).json({
+            return response.status(404).json({
                 message: 'Vehicle not found!',
             })
         }
     } catch (error) {
-        return respond.status(500).json({
+        return response.status(500).json({
             message: 'Something went wrong!',
             error: error,
         })
     }
 }
 
-async function softDeleteById(request, respond) {
+async function softDeleteById(request, response) {
     try {
         const vehicleId = request.params.id
 
@@ -177,16 +182,16 @@ async function softDeleteById(request, respond) {
             // Soft delete vehicle
             softDeleteVehicleById(vehicleId.id)
 
-            return respond.status(200).json({
+            return response.status(200).json({
                 message: 'Delete vehicle successfully!',
             })
         } else {
-            return respond.status(404).json({
+            return response.status(404).json({
                 message: 'Vehicle not found!',
             })
         }
     } catch (error) {
-        return respond.status(500).json({
+        return response.status(500).json({
             message: 'Something went wrong!',
             error: error,
         })

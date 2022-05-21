@@ -10,7 +10,7 @@ const {
 } = require('../CRUD/parking_lot')
 const { addNewVerifyState } = require('../CRUD/verify_state')
 
-async function index(request, respond) {
+async function index(request, response) {
     try {
         const page = Number.parseInt(request.query.page)
         const limit = Number.parseInt(request.query.limit)
@@ -21,7 +21,7 @@ async function index(request, respond) {
             Number.isNaN(limit) ||
             limit < 0
         ) {
-            return respond.status(400).json({
+            return response.status(400).json({
                 message: 'Invalid query parameters!',
             })
         }
@@ -30,47 +30,47 @@ async function index(request, respond) {
 
         const queryResult = await getListParkingLots(startIndex, limit)
 
-        return respond.status(200).json(queryResult)
+        return response.status(200).json(queryResult)
     } catch (error) {
-        return respond.status(500).json({
+        return response.status(500).json({
             message: 'Something went wrong!',
             error: error,
         })
     }
 }
 
-async function indexByOwnerId(request, respond) {
+async function indexByOwnerId(request, response) {
     try {
         const ownerId = request.params.id
 
         // Get all vehicles that user own
         const dbVehicles = await getListParkingLotsByOwnerId(ownerId)
 
-        return respond.status(200).json(dbVehicles)
+        return response.status(200).json(dbVehicles)
     } catch (error) {
-        return respond.status(500).json({
+        return response.status(500).json({
             message: 'Something went wrong!',
             error: error,
         })
     }
 }
 
-async function showById(request, respond) {
+async function showById(request, response) {
     try {
         const vehicleId = request.params.id
 
         const dbVehicle = getParkingLotById(vehicleId)
 
-        return respond.status(200).json(dbVehicle)
+        return response.status(200).json(dbVehicle)
     } catch (error) {
-        return respond.status(500).json({
+        return response.status(500).json({
             message: 'Something went wrong!',
             error: error,
         })
     }
 }
 
-async function create(request, respond) {
+async function create(request, response) {
     try {
         const newParkingLot = {
             name: request.body.name,
@@ -88,7 +88,7 @@ async function create(request, respond) {
         // Validate new vehicle's data
         const validateResponse = validators.validateParkingLot(newParkingLot)
         if (validateResponse !== true) {
-            return respond.status(400).json({
+            return response.status(400).json({
                 message: 'Validation failed!',
                 errors: validateResponse,
             })
@@ -105,22 +105,23 @@ async function create(request, respond) {
 
         // Create new vehicle
         addNewParkingLot(newParkingLot).then((_) => {
-            return respond.status(201).json({
+            return response.status(201).json({
                 message: 'Create parking lot successfully!',
             })
         })
     } catch (error) {
-        return respond.status(500).json({
+        return response.status(500).json({
             message: 'Something went wrong!',
             error: error,
         })
     }
 }
 
-async function updateById(request, respond) {
+async function updateById(request, response) {
     try {
-        // Check if vehicle exists
         const parkingLotId = request.params.id
+
+        // Check if vehicle exists
         const dbParkingLot = await getParkingLotById(parkingLotId)
         if (dbParkingLot) {
             const updateParkingLot = {
@@ -136,28 +137,34 @@ async function updateById(request, respond) {
             const validateResponse =
                 validators.validateParkingLot(updateParkingLot)
             if (validateResponse !== true) {
-                return respond.status(400).json({
+                return response.status(400).json({
                     message: 'Validation failed!',
                     errors: validateResponse,
                 })
             }
 
             // Update vehicle's data
-            updateParkingLotById(updateParkingLot, dbParkingLot.id)
+            updateParkingLotById(updateParkingLot, dbParkingLot.id).then(
+                (_) => {
+                    return response.status(201).json({
+                        message: 'Update parking lot successfully!',
+                    })
+                },
+            )
         } else {
-            return respond.status(404).json({
+            return response.status(404).json({
                 message: 'Parking lot not found!',
             })
         }
     } catch (error) {
-        return respond.status(500).json({
+        return response.status(500).json({
             message: 'Something went wrong!',
             error: error,
         })
     }
 }
 
-async function softDeleteById(request, respond) {
+async function softDeleteById(request, response) {
     try {
         const parkingLotId = request.params.id
 
@@ -167,16 +174,16 @@ async function softDeleteById(request, respond) {
             // Soft delete vehicle
             softDeleteParkingLotById(dbParkingLot.id)
 
-            return respond.status(200).json({
+            return response.status(200).json({
                 message: 'Delete parking lot successfully!',
             })
         } else {
-            return respond.status(404).json({
+            return response.status(404).json({
                 message: 'Parking lot not found!',
             })
         }
     } catch (error) {
-        return respond.status(500).json({
+        return response.status(500).json({
             message: 'Something went wrong!',
             error: error,
         })

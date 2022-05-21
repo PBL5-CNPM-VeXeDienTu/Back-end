@@ -8,6 +8,9 @@ module.exports = (sequelize, DataTypes) => {
                 foreignKey: 'parking_lot_id',
             })
             Package.belongsTo(models.PackageType, { foreignKey: 'type_id' })
+            Package.belongsTo(models.VehicleType, {
+                foreignKey: 'vehicle_type_id',
+            })
             Package.hasMany(models.UserPackage, { foreignKey: 'package_id' })
         }
     }
@@ -16,6 +19,7 @@ module.exports = (sequelize, DataTypes) => {
             parking_lot_id: DataTypes.INTEGER,
             name: DataTypes.STRING,
             type_id: DataTypes.INTEGER,
+            vehicle_type_id: DataTypes.INTEGER,
             price: DataTypes.FLOAT,
             createdAt: {
                 type: DataTypes.DATE,

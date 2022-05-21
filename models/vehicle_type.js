@@ -2,21 +2,23 @@
 const { Model } = require('sequelize')
 const { toLocaleString } = require(process.cwd() + '/helpers/datetime')
 module.exports = (sequelize, DataTypes) => {
-    class ParkingPrice extends Model {
+    class VehicleType extends Model {
         static associate(models) {
-            ParkingPrice.belongsTo(models.ParkingLot, {
-                foreignKey: 'parking_lot_id',
+            VehicleType.hasMany(models.Vehicle, { foreignKey: 'type_id' })
+            VehicleType.hasMany(models.ParkingPrice, {
+                foreignKey: 'vehicle_type_id',
             })
-            ParkingPrice.belongsTo(models.VehicleType, {
+            VehicleType.hasMany(models.Package, {
+                foreignKey: 'vehicle_type_id',
+            })
+            VehicleType.hasMany(models.UserPackage, {
                 foreignKey: 'vehicle_type_id',
             })
         }
     }
-    ParkingPrice.init(
+    VehicleType.init(
         {
-            parking_lot_id: DataTypes.INTEGER,
-            vehicle_type_id: DataTypes.INTEGER,
-            price: DataTypes.FLOAT,
+            type_name: DataTypes.STRING,
             createdAt: {
                 type: DataTypes.DATE,
                 get: function () {
@@ -38,8 +40,8 @@ module.exports = (sequelize, DataTypes) => {
         },
         {
             sequelize,
-            modelName: 'ParkingPrice',
+            modelName: 'VehicleType',
         },
     )
-    return ParkingPrice
+    return VehicleType
 }

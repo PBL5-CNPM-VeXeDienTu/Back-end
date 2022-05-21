@@ -1,29 +1,80 @@
-const walletModel = require(process.cwd() + '/models/index').Wallet
+const models = require(process.cwd() + '/models/index')
 
-async function index() {
-    return walletModel.findAll()
+const include = [
+    {
+        model: models.User,
+        attributes: [
+            'email',
+            'name',
+            'role',
+            'is_verified',
+            'deletedAt',
+            'createdAt',
+        ],
+        include: [
+            {
+                model: models.Role,
+                attributes: ['name'],
+            },
+        ],
+        as: 'Owner',
+        required: true,
+    },
+    {
+        model: models.Transaction,
+        include: [
+            {
+                model: models.TransactionType,
+                attributes: ['type_name'],
+            },
+        ],
+    },
+]
+
+async function index(startIndex, limit) {
+    return models.Wallet.findAll({
+        include: include,
+        attributes: {
+            exclude: ['createdAt', 'updatedAt'],
+        },
+        offset: startIndex,
+        limit: limit,
+        order: [['user_id', 'DESC']],
+    })
 }
 
 async function showById(id) {
-    return walletModel.findByPk(id)
+    return models.Wallet.findByPk(id, {
+        include: include,
+    })
+}
+
+async function showByUserId(userId) {
+    return models.Wallet.findOne({
+        include: include,
+        where: { user_id: userId },
+    })
 }
 
 async function create(newWallet) {
-    return walletModel.create(newWallet)
+    return models.Wallet.create(newWallet)
 }
 
 async function update(updateWallet, id) {
-    return walletModel.update(updateWallet, { where: { id: id } })
+    return models.Wallet.update(updateWallet, { where: { id: id } })
 }
 
-async function destroy(id) {
-    return walletModel.destroy({ where: { id: id } })
+async function checkOwner(walletId, userId) {
+    return !!(await models.Wallet.findOne({
+        where: { id: walletId, user_id: userId },
+    }))
 }
 
 module.exports = {
-    index: index,
+    getListWallets: index,
     getWalletById: showById,
+    getWalletByUserId: showByUserId,
     addNewWallet: create,
     updateWalletById: update,
-    deleteWalletById: destroy,
+    checkUserOwnWallet: checkOwner,
 }
