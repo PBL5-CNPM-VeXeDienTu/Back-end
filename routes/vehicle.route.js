@@ -1,6 +1,7 @@
 const express = require('express')
 const checkAuthMiddleware = require('../middleware/check-auth')
 const checkOwnerMiddleware = require('../middleware/check-owner')
+const checkRoleMiddleware = require('../middleware/check-role')
 const vehicleApiController = require('../controllers/api/vehicle.controller')
 
 const router = express.Router()
@@ -8,7 +9,7 @@ const router = express.Router()
 router.get(
     '/',
     checkAuthMiddleware.checkAuth,
-    checkOwnerMiddleware.checkRoleAdmin,
+    checkRoleMiddleware.checkRoleAdmin,
     vehicleApiController.index,
 )
 router.get(
@@ -23,7 +24,12 @@ router.get(
     checkOwnerMiddleware.checkVehicleOwner,
     vehicleApiController.showById,
 )
-router.post('/', checkAuthMiddleware.checkAuth, vehicleApiController.create)
+router.post(
+    '/',
+    checkAuthMiddleware.checkAuth,
+    checkRoleMiddleware.checkRoleBasicUser,
+    vehicleApiController.create,
+)
 router.patch(
     '/:id',
     checkAuthMiddleware.checkAuth,

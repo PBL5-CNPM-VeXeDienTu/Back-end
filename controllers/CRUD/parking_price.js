@@ -69,6 +69,16 @@ async function destroy(id) {
     return models.ParkingPrice.destroy({ where: { id: id } })
 }
 
+async function checkOwner(parkingPriceId, userId) {
+    return !!(await models.ParkingPrice.findOne({
+        include: include,
+        where: {
+            id: parkingPriceId,
+            user_id: userId,
+        },
+    }))
+}
+
 module.exports = {
     index: index,
     getParkingPricesByParkingLotId: showByParkingLotId,
@@ -78,4 +88,5 @@ module.exports = {
     addNewParkingPrice: create,
     updateParkingPriceById: update,
     deleteParkingPriceById: destroy,
+    checkUserOwnParkingPrice: checkOwner,
 }
