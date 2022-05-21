@@ -6,12 +6,24 @@ module.exports = (sequelize, DataTypes) => {
         static associate(models) {
             UserPackage.belongsTo(models.User, { foreignKey: 'user_id' })
             UserPackage.belongsTo(models.Package, { foreignKey: 'package_id' })
+            UserPackage.belongsTo(models.ParkingLot, {
+                foreignKey: 'parking_lot_id',
+            })
+            UserPackage.belongsTo(models.PackageType, { foreignKey: 'type_id' })
+            UserPackage.belongsTo(models.VehicleType, {
+                foreignKey: 'vehicle_type_id',
+            })
         }
     }
     UserPackage.init(
         {
             user_id: DataTypes.INTEGER,
             package_id: DataTypes.INTEGER,
+            parking_lot_id: DataTypes.INTEGER,
+            name: DataTypes.STRING,
+            type_id: DataTypes.INTEGER,
+            vehicle_type_id: DataTypes.INTEGER,
+            price: DataTypes.FLOAT,
             expireAt: {
                 type: DataTypes.DATE,
                 get: function () {

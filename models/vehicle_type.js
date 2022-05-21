@@ -11,6 +11,9 @@ module.exports = (sequelize, DataTypes) => {
             VehicleType.hasMany(models.Package, {
                 foreignKey: 'vehicle_type_id',
             })
+            VehicleType.hasMany(models.UserPackage, {
+                foreignKey: 'vehicle_type_id',
+            })
         }
     }
     VehicleType.init(
