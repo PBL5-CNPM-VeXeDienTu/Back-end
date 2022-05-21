@@ -5,6 +5,7 @@ const wallet = require('./wallet.route')
 const vehicle = require('./vehicle.route')
 const parkingLot = require('./parking_lot.route')
 const parkingPrice = require('./parking_price.route')
+const package = require('./package.route')
 const parkingHistory = require('./parking_history.route')
 
 module.exports = {
@@ -15,5 +16,6 @@ module.exports = {
     vehicle: vehicle,
     parkingLot: parkingLot,
     parkingPrice: parkingPrice,
+    package: package,
     parkingHistory: parkingHistory,
 }
