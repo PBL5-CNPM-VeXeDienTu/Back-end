@@ -18,6 +18,7 @@ module.exports = (sequelize, DataTypes) => {
                 foreignKey: 'parking_lot_id',
             })
             ParkingLot.hasMany(models.Package, { foreignKey: 'parking_lot_id' })
+            ParkingLot.hasMany(models.UserPackage, { foreignKey: 'parking_lot_id' })
         }
     }
     ParkingLot.init(

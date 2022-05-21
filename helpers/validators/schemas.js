@@ -104,6 +104,11 @@ const packageTypeSchema = {
 const userPackageSchema = {
     user_id: { type: 'number', optional: true },
     package_id: { type: 'number', optional: true },
+    parking_lot_id: { type: 'number', optional: true },
+    name: { type: 'string', optional: true },
+    type_id: { type: 'number', optional: true },
+    vehicle_type_id: { type: 'number', optional: true },
+    price: { type: 'number', optional: true },
     expire_at: { type: 'string', optional: true },
 }
 

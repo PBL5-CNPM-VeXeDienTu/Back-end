@@ -16,6 +16,24 @@ module.exports = {
                 allowNull: false,
                 type: Sequelize.INTEGER,
             },
+            parking_lot_id: {
+                allowNull: false,
+                type: Sequelize.INTEGER,
+            },
+            name: {
+                type: Sequelize.STRING,
+            },
+            type_id: {
+                allowNull: false,
+                type: Sequelize.INTEGER,
+            },
+            vehicle_type_id: {
+                allowNull: false,
+                type: Sequelize.INTEGER,
+            },
+            price: {
+                type: Sequelize.FLOAT,
+            },
             expireAt: {
                 type: Sequelize.DATE,
             },
