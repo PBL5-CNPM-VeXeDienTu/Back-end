@@ -72,6 +72,16 @@ async function destroy(id) {
     return models.Package.destroy({ where: { id: id } })
 }
 
+async function checkOwner(packageId, userId) {
+    return !!(await models.Package.findOne({
+        include: include,
+        where: {
+            id: packageId,
+            user_id: userId,
+        },
+    }))
+}
+
 module.exports = {
     getListPackages: index,
     getPackageById: showById,
@@ -79,4 +89,5 @@ module.exports = {
     addNewPackage: create,
     updatePackageById: update,
     deletePackageById: destroy,
+    checkUserOwnPackage: checkOwner,
 }

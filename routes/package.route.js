@@ -21,13 +21,13 @@ router.post(
 router.patch(
     '/:id',
     checkAuthMiddleware.checkAuth,
-    checkOwnerMiddleware.checkParkingLotOwner,
+    checkOwnerMiddleware.checkPackageOwner,
     packageApiController.updateById,
 )
 router.delete(
     '/:id',
     checkAuthMiddleware.checkAuth,
-    checkOwnerMiddleware.checkParkingLotOwner,
+    checkOwnerMiddleware.checkPackageOwner,
     packageApiController.deleteById,
 )
 
