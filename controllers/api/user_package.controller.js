@@ -84,10 +84,13 @@ async function create(request, response) {
                 type_id: dbPackage.type_id,
                 vehicle_type_id: dbPackage.vehicle_type_id,
                 price: dbPackage.price,
-                expire_at: getExpireOfPackage(request.body.type_id),
+                expire_at: await getExpireDateOfUserPackage(
+                    dbPackage.PackageType.type_name,
+                ),
             }
 
-            const validateResponse = validators.validatePackage(newPackage)
+            const validateResponse =
+                validators.validateUserPackage(newUserPackage)
             if (validateResponse !== true) {
                 return response.status(400).json({
                     message: 'Validation failed!',
@@ -180,6 +183,30 @@ async function deleteById(request, response) {
             error: error,
         })
     }
+}
+
+async function getExpireDateOfUserPackage(packageTypeName) {
+    const now = new Date(date.getTime() - date.getTimezoneOffset() * 60000)
+
+    switch (packageTypeName) {
+        case 'Week':
+            now.setDate(now.getDate() + 7)
+            break
+        case 'Month':
+            now.setMonth(now.getMonth() + 1)
+            break
+        case 'Quarter':
+            now.setMonth(now.getMonth() + 4)
+            break
+        case 'Year':
+            now.setFullYear(now.getFullYear() + 1)
+            break
+    }
+
+    return new Date(now.getTime() - now.getTimezoneOffset() * 60000)
+        .toISOString()
+        .replace(/T/, ' ')
+        .replace(/\..+/, '')
 }
 
 module.exports = {
