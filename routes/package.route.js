@@ -12,12 +12,7 @@ router.get(
     packageApiController.indexByParkingLotId,
 )
 router.get('/:id', checkAuthMiddleware.checkAuth, packageApiController.showById)
-router.post(
-    '/',
-    checkAuthMiddleware.checkAuth,
-    checkOwnerMiddleware.checkParkingLotOwner,
-    packageApiController.create,
-)
+router.post('/', checkAuthMiddleware.checkAuth, packageApiController.create)
 router.patch(
     '/:id',
     checkAuthMiddleware.checkAuth,
