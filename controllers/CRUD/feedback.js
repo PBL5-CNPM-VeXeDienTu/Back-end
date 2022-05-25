@@ -32,7 +32,7 @@ const include = [
 ]
 
 async function index(startIndex, limit) {
-    return models.Feedback.findAll({
+    return models.Feedback.findAndCountAll({
         include: include,
         offset: startIndex,
         limit: limit,

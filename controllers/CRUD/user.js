@@ -22,7 +22,7 @@ const include = [
 ]
 
 async function index(startIndex, limit) {
-    return models.User.findAll({
+    return models.User.findAndCountAll({
         include: include,
         attributes: {
             exclude: ['password', 'qr_key'],

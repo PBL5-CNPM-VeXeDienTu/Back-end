@@ -26,7 +26,7 @@ const include = [
 ]
 
 async function index(startIndex, limit) {
-    return models.Vehicle.findAll({
+    return models.Vehicle.findAndCountAll({
         include: include,
         offset: startIndex,
         limit: limit,

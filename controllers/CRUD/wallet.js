@@ -32,7 +32,7 @@ const include = [
 ]
 
 async function index(startIndex, limit) {
-    return models.Wallet.findAll({
+    return models.Wallet.findAndCountAll({
         include: include,
         attributes: {
             exclude: ['createdAt', 'updatedAt'],

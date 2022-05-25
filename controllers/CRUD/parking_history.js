@@ -51,7 +51,7 @@ const include = [
 ]
 
 async function index(startIndex, limit) {
-    return models.ParkingHistory.findAll({
+    return models.ParkingHistory.findAndCountAll({
         include: include,
         offset: startIndex,
         limit: limit,

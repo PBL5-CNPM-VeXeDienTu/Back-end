@@ -21,7 +21,7 @@ const include = [
 ]
 
 async function index(startIndex, limit) {
-    return models.ParkingLot.findAll({
+    return models.ParkingLot.findAndCountAll({
         include: include,
         offset: startIndex,
         limit: limit,

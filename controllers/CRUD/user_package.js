@@ -31,7 +31,7 @@ const include = [
 ]
 
 async function index(startIndex, limit) {
-    return models.UserPackage.findAll({
+    return models.UserPackage.findAndCountAll({
         include: include,
         offset: startIndex,
         limit: limit,
