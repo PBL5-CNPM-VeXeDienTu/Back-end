@@ -8,6 +8,7 @@ const {
     updatePackageById,
     deletePackageById,
 } = require('../CRUD/package')
+const { checkUserOwnParkingLot } = require('../CRUD/parking_lot')
 
 async function index(request, response) {
     try {
@@ -68,25 +69,33 @@ async function showById(request, response) {
 
 async function create(request, response) {
     try {
-        const newPackage = {
-            parking_lot_id: request.userData.userId,
-            name: request.body.name,
-            type_id: request.body.type_id,
-            vehicle_type_id: request.body.vehicle_type_id,
-            price: request.body.price,
-        }
+        const userId = request.userData.userId
+        const parkingLotId = request.body.parking_lot_id
+        if (checkUserOwnParkingLot(parkingLotId, userId)) {
+            const newPackage = {
+                parking_lot_id: parkingLotId,
+                name: request.body.name,
+                type_id: request.body.type_id,
+                vehicle_type_id: request.body.vehicle_type_id,
+                price: request.body.price,
+            }
 
-        const validateResponse = validators.validatePackage(newPackage)
-        if (validateResponse !== true) {
-            return response.status(400).json({
-                message: 'Validation failed!',
-                errors: validateResponse,
-            })
-        } else {
+            const validateResponse = validators.validatePackage(newPackage)
+            if (validateResponse !== true) {
+                return response.status(400).json({
+                    message: 'Validation failed!',
+                    errors: validateResponse,
+                })
+            }
+
             addNewPackage(newPackage).then((_) => {
-                return response.status(404).json({
+                return response.status(201).json({
                     message: 'Create Package successfully!',
                 })
+            })
+        } else {
+            return response.status(400).json({
+                message: 'User is not the owner of this parking lot!',
             })
         }
     } catch (error) {

@@ -86,9 +86,9 @@ async function destroy(id) {
     await update(updateParkingLot, id)
 }
 
-async function checkOwner(vehicleId, userId) {
+async function checkOwner(parkingLotId, userId) {
     return !!(await models.ParkingLot.findOne({
-        where: { id: vehicleId, owner_id: userId },
+        where: { id: parkingLotId, owner_id: userId },
     }))
 }
 
