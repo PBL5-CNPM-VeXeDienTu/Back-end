@@ -2,7 +2,7 @@ const transactionTypeModel = require(process.cwd() +
     '/models/index').TransactionType
 
 async function index() {
-    return transactionTypeModel.findAll()
+    return transactionTypeModel.findAndCountAll()
 }
 
 async function showById(id) {

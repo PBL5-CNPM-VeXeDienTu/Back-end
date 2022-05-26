@@ -26,7 +26,7 @@ const include = [
 ]
 
 async function index(startIndex, limit) {
-    return models.Vehicle.findAll({
+    return models.Vehicle.findAndCountAll({
         include: include,
         offset: startIndex,
         limit: limit,
@@ -38,7 +38,7 @@ async function index(startIndex, limit) {
 }
 
 async function indexByOwnerId(ownerId) {
-    return models.Vehicle.findAll({
+    return models.Vehicle.findAndCountAll({
         include: include,
         order: [
             ['id', 'DESC'],

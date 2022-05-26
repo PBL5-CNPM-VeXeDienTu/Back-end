@@ -31,11 +31,11 @@ const include = [
 ]
 
 async function index() {
-    return models.ParkingPrice.findAll()
+    return models.ParkingPrice.findAndCountAll()
 }
 
 async function showByParkingLotId(parkingLotId) {
-    return models.ParkingPrice.findAll({
+    return models.ParkingPrice.findAndCountAll({
         include: include,
         order: [
             ['id', 'DESC'],

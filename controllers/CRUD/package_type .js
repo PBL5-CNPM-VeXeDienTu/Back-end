@@ -1,7 +1,7 @@
 const packageTypeModel = require(process.cwd() + '/models/index').PackageType
 
 async function index() {
-    return packageTypeModel.findAll()
+    return packageTypeModel.findAndCountAll()
 }
 
 async function showById(id) {

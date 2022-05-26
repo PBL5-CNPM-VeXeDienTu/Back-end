@@ -1,7 +1,7 @@
 const verifyStateModel = require(process.cwd() + '/models/index').VerifyState
 
 async function index() {
-    return verifyStateModel.findAll()
+    return verifyStateModel.findAndCountAll()
 }
 
 async function showById(id) {

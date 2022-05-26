@@ -1,7 +1,7 @@
 const featureModel = require(process.cwd() + '/models/index').Feature
 
 async function index() {
-    return featureModel.findAll()
+    return featureModel.findAndCountAll()
 }
 
 async function showById(id) {

@@ -1,7 +1,7 @@
 const userInfoModel = require(process.cwd() + '/models/index').UserInfo
 
 async function index() {
-    return userInfoModel.findAll()
+    return userInfoModel.findAndCountAll()
 }
 
 async function showByUserId(user_id) {

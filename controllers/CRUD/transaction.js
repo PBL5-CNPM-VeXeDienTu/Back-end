@@ -1,7 +1,7 @@
 const transactionModel = require(process.cwd() + '/models/index').Transaction
 
 async function index() {
-    return transactionModel.findAll()
+    return transactionModel.findAndCountAll()
 }
 
 async function showById(id) {
