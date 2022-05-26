@@ -10,7 +10,6 @@ module.exports = {
             },
             parking_lot_id: {
                 allowNull: false,
-                unique: true,
                 type: Sequelize.INTEGER,
             },
             vehicle_type_id: {
