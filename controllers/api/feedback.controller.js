@@ -2,6 +2,7 @@ const validators = require(process.cwd() + '/helpers/validators')
 
 const {
     getListFeedbacks,
+    getListFeedbackByUserId,
     getFeedbackById,
     addNewFeedback,
     updateFeedbackById,
@@ -28,6 +29,40 @@ async function index(request, response) {
         const queryResult = await getListFeedbacks(startIndex, limit)
 
         return response.status(200).json(queryResult)
+    } catch (error) {
+        return response.status(500).json({
+            message: 'Something went wrong!',
+            error: error,
+        })
+    }
+}
+
+async function indexByUserId(request, response) {
+    try {
+        const userId = request.params.id
+        const page = Number.parseInt(request.query.page)
+        const limit = Number.parseInt(request.query.limit)
+
+        if (
+            Number.isNaN(page) ||
+            page < 1 ||
+            Number.isNaN(limit) ||
+            limit < 0
+        ) {
+            return response.status(400).json({
+                message: 'Invalid query parameters!',
+            })
+        }
+
+        const startIndex = (page - 1) * limit
+
+        const dbFeedback = await getListFeedbackByUserId(
+            userId,
+            startIndex,
+            limit,
+        )
+
+        return response.status(200).json(dbFeedback)
     } catch (error) {
         return response.status(500).json({
             message: 'Something went wrong!',
@@ -152,6 +187,7 @@ async function deleteById(request, response) {
 
 module.exports = {
     index: index,
+    indexByUserId: indexByUserId,
     showById: showById,
     create: create,
     updateById: updateById,
