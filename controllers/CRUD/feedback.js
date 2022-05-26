@@ -40,6 +40,16 @@ async function index(startIndex, limit) {
     })
 }
 
+async function indexByUserId(userId, startIndex, limit) {
+    return models.Feedback.findAndCountAll({
+        include: include,
+        offset: startIndex,
+        limit: limit,
+        order: [['id', 'DESC']],
+        where: { user_id: userId },
+    })
+}
+
 async function showById(id) {
     return models.Feedback.findByPk(id, {
         include: include,
@@ -66,6 +76,7 @@ async function checkOwner(feedbackId, userId) {
 
 module.exports = {
     getListFeedbacks: index,
+    getListFeedbackByUserId: indexByUserId,
     getFeedbackById: showById,
     addNewFeedback: create,
     updateFeedbackById: update,
