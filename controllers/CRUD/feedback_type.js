@@ -1,7 +1,7 @@
 const feedbackTypeModel = require(process.cwd() + '/models/index').FeedbackType
 
 async function index() {
-    return feedbackTypeModel.findAll()
+    return feedbackTypeModel.findAndCountAll()
 }
 
 async function showById(id) {

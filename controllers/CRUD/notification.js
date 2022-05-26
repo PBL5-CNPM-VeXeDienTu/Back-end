@@ -1,7 +1,7 @@
 const notificationModel = require(process.cwd() + '/models/index').Notification
 
 async function index() {
-    return notificationModel.findAll()
+    return notificationModel.findAndCountAll()
 }
 
 async function showById(id) {

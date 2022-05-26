@@ -31,7 +31,7 @@ const include = [
 ]
 
 async function index(startIndex, limit) {
-    return models.UserPackage.findAll({
+    return models.UserPackage.findAndCountAll({
         include: include,
         offset: startIndex,
         limit: limit,
@@ -49,7 +49,7 @@ async function showById(id) {
 }
 
 async function showByOwnerId(parkingLotId) {
-    return models.UserPackage.findAll({
+    return models.UserPackage.findAndCountAll({
         include: include,
         order: [
             ['id', 'DESC'],

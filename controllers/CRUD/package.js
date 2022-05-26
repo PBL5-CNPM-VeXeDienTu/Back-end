@@ -32,7 +32,7 @@ const include = [
 ]
 
 async function index(startIndex, limit) {
-    return models.Package.findAll({
+    return models.Package.findAndCountAll({
         include: include,
         offset: startIndex,
         limit: limit,
@@ -50,7 +50,7 @@ async function showById(id) {
 }
 
 async function showByParkingLotId(parkingLotId) {
-    return models.Package.findAll({
+    return models.Package.findAndCountAll({
         include: include,
         order: [
             ['id', 'DESC'],
