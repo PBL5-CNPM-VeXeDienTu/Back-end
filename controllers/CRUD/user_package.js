@@ -81,6 +81,16 @@ async function checkOwner(userPackageId, userId) {
     }))
 }
 
+async function checkExisted(userId, packageId) {
+    return !!(await models.UserPackage.findOne({
+        where: {
+            user_id: userId,
+            package_id: packageId,
+            expireAt: null,
+        },
+    }))
+}
+
 module.exports = {
     getListUserPackages: index,
     getUserPackageById: showById,
@@ -89,4 +99,5 @@ module.exports = {
     updateUserPackageById: update,
     deleteUserPackageById: destroy,
     checkUserOwnUserPackage: checkOwner,
+    checkUserPackageExisted: checkExisted,
 }

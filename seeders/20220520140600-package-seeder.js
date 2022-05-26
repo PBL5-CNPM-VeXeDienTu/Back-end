@@ -1,93 +1,48 @@
 'use strict'
 
+const Dummy = require('dummyjs')
+
+async function generatePackageData() {
+    let data = []
+
+    const maxParkingLotId = 6
+    const maxTypeId = 4
+    const maxVehicleTypeId = 3
+
+    for (
+        let parkingLotId = 1;
+        parkingLotId <= maxParkingLotId;
+        parkingLotId++
+    ) {
+        for (
+            let packageTypeId = 1;
+            packageTypeId <= maxTypeId;
+            packageTypeId++
+        ) {
+            for (
+                let vehicleTypeId = 1;
+                vehicleTypeId <= maxVehicleTypeId;
+                vehicleTypeId++
+            ) {
+                let _package = {
+                    parking_lot_id: parkingLotId,
+                    name: Dummy.text(10),
+                    type_id: packageTypeId,
+                    vehicle_type_id: vehicleTypeId,
+                    price: Math.floor(Math.random() * 3 + 1) * 10000,
+                }
+
+                data.push(_package)
+            }
+        }
+    }
+
+    return data
+}
+
 module.exports = {
     async up(queryInterface, Sequelize) {
-        await queryInterface.bulkInsert('Packages', [
-            {
-                parking_lot_id: 1,
-                name: 'Ưu đãi 100 năm có 1',
-                type_id: 1,
-                vehicle_type_id: 1,
-                price: 200000,
-            },
-            {
-                parking_lot_id: 1,
-                name: 'Ưu đãi 100 năm có 1',
-                type_id: 2,
-                vehicle_type_id: 2,
-                price: 200000,
-            },
-            {
-                parking_lot_id: 2,
-                name: 'Ưu đãi 100 năm có 1',
-                type_id: 1,
-                vehicle_type_id: 1,
-                price: 200000,
-            },
-            {
-                parking_lot_id: 2,
-                name: 'Ưu đãi 100 năm có 1',
-                type_id: 2,
-                vehicle_type_id: 2,
-                price: 200000,
-            },
-            {
-                parking_lot_id: 3,
-                name: 'Ưu đãi 100 năm có 1',
-                type_id: 1,
-                vehicle_type_id: 1,
-                price: 200000,
-            },
-            {
-                parking_lot_id: 3,
-                name: 'Ưu đãi 100 năm có 1',
-                type_id: 2,
-                vehicle_type_id: 2,
-                price: 200000,
-            },
-            {
-                parking_lot_id: 4,
-                name: 'Ưu đãi 100 năm có 1',
-                type_id: 1,
-                vehicle_type_id: 1,
-                price: 200000,
-            },
-            {
-                parking_lot_id: 4,
-                name: 'Ưu đãi 100 năm có 1',
-                type_id: 2,
-                vehicle_type_id: 2,
-                price: 200000,
-            },
-            {
-                parking_lot_id: 5,
-                name: 'Ưu đãi 100 năm có 1',
-                type_id: 1,
-                vehicle_type_id: 1,
-                price: 200000,
-            },
-            {
-                parking_lot_id: 5,
-                name: 'Ưu đãi 100 năm có 1',
-                type_id: 2,
-                vehicle_type_id: 2,
-                price: 200000,
-            },
-            {
-                parking_lot_id: 6,
-                name: 'Ưu đãi 100 năm có 1',
-                type_id: 1,
-                vehicle_type_id: 1,
-                price: 200000,
-            },
-            {
-                parking_lot_id: 6,
-                name: 'Ưu đãi 100 năm có 1',
-                type_id: 2,
-                vehicle_type_id: 2,
-                price: 200000,
-            },
-        ])
+        await queryInterface.bulkInsert('Packages', await generatePackageData())
     },
 
     async down(queryInterface, Sequelize) {

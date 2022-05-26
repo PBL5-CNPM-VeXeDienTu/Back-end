@@ -186,6 +186,7 @@ async function deleteById(request, response) {
 }
 
 async function getExpireDateOfUserPackage(packageTypeName) {
+    const date = new Date()
     const now = new Date(date.getTime() - date.getTimezoneOffset() * 60000)
 
     switch (packageTypeName) {
@@ -216,4 +217,5 @@ module.exports = {
     create: create,
     updateById: updateById,
     deleteById: deleteById,
+    getExpireDateOfUserPackage,
 }
