@@ -19,6 +19,10 @@ const include = [
         require: true,
     },
     {
+        model: models.ParkingLot,
+        required: true,
+    },
+    {
         model: models.PackageType,
         attributes: ['type_name'],
         required: true,
@@ -48,14 +52,14 @@ async function showById(id) {
     })
 }
 
-async function showByOwnerId(parkingLotId) {
+async function showByOwnerId(ownerId) {
     return models.UserPackage.findAndCountAll({
         include: include,
         order: [
             ['id', 'DESC'],
             ['price', 'DESC'],
         ],
-        where: { parking_lot_id: parkingLotId },
+        where: { user_id: ownerId },
     })
 }
 
