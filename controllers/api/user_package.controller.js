@@ -43,7 +43,7 @@ async function index(request, response) {
 
 async function indexByOwnerId(request, response) {
     try {
-        const userOwnerId = request.params.id
+        const userOwnerId = request.userData.userId
 
         const queryResult = await getUserPackageByOwnerId(userOwnerId)
 
