@@ -52,9 +52,11 @@ async function showById(id) {
     })
 }
 
-async function showByOwnerId(ownerId) {
+async function showByOwnerId(ownerId, startIndex, limit) {
     return models.UserPackage.findAndCountAll({
         include: include,
+        offset: startIndex,
+        limit: limit,
         order: [
             ['id', 'DESC'],
             ['price', 'DESC'],
