@@ -43,7 +43,27 @@ async function indexByParkingLotId(request, response) {
     try {
         const parkingLotId = request.params.id
 
-        const queryResult = await getPackageByParkingLotId(parkingLotId)
+        const page = Number.parseInt(request.query.page)
+        const limit = Number.parseInt(request.query.limit)
+
+        if (
+            Number.isNaN(page) ||
+            page < 1 ||
+            Number.isNaN(limit) ||
+            limit < 0
+        ) {
+            return response.status(400).json({
+                message: 'Invalid query parameters!',
+            })
+        }
+
+        const startIndex = (page - 1) * limit
+
+        const queryResult = await getPackageByParkingLotId(
+            parkingLotId,
+            startIndex,
+            limit,
+        )
 
         return response.status(200).json(queryResult)
     } catch (error) {

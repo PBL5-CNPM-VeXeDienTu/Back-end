@@ -49,9 +49,11 @@ async function showById(id) {
     })
 }
 
-async function showByParkingLotId(parkingLotId) {
+async function showByParkingLotId(parkingLotId, startIndex, limit) {
     return models.Package.findAndCountAll({
         include: include,
+        offset: startIndex,
+        limit: limit,
         order: [
             ['id', 'DESC'],
             ['price', 'DESC'],
