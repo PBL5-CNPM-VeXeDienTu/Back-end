@@ -43,9 +43,28 @@ async function index(request, response) {
 
 async function indexByOwnerId(request, response) {
     try {
-        const userOwnerId = request.userData.userId
+        const ownerId = request.userData.userId
+        const page = Number.parseInt(request.query.page)
+        const limit = Number.parseInt(request.query.limit)
 
-        const queryResult = await getUserPackageByOwnerId(userOwnerId)
+        if (
+            Number.isNaN(page) ||
+            page < 1 ||
+            Number.isNaN(limit) ||
+            limit < 0
+        ) {
+            return response.status(400).json({
+                message: 'Invalid query parameters!',
+            })
+        }
+
+        const startIndex = (page - 1) * limit
+
+        const queryResult = await getUserPackageByOwnerId(
+            ownerId,
+            startIndex,
+            limit,
+        )
 
         return response.status(200).json(queryResult)
     } catch (error) {
@@ -99,7 +118,7 @@ async function create(request, response) {
             }
 
             addNewUserPackage(newUserPackage).then((_) => {
-                return response.status(404).json({
+                return response.status(201).json({
                     message: 'Create user package successfully!',
                 })
             })
