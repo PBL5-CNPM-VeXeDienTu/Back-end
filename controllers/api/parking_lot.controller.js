@@ -104,8 +104,9 @@ async function create(request, response) {
         })
 
         // Create new parking lot
-        addNewParkingLot(newParkingLot).then((_) => {
+        addNewParkingLot(newParkingLot).then((result) => {
             return response.status(201).json({
+                parkingLotId: result.id,
                 message: 'Create parking lot successfully!',
             })
         })

@@ -91,7 +91,8 @@ async function create(request, response) {
             avatar: '',
             cavet_back: '',
             cavet_front: '',
-            type: request.body.type,
+            type_id: request.body.type_id,
+            brand: request.body.brand,
             color: request.body.color,
             detail: request.body.detail,
             owner_id: request.userData.userId,
@@ -118,8 +119,9 @@ async function create(request, response) {
         })
 
         // Create new vehicle
-        addNewVehicle(newVehicle).then((_) => {
+        addNewVehicle(newVehicle).then((result) => {
             return response.status(201).json({
+                vehicleId: result.id,
                 message: 'Create vehicle successfully!',
             })
         })
@@ -139,7 +141,8 @@ async function updateById(request, response) {
         const dbVehicle = await getVehicleById(vehicleId)
         if (dbVehicle) {
             const updateVehicle = {
-                type: request.body.type,
+                type_id: request.body.type_id,
+                brand: request.body.brand,
                 color: request.body.color,
                 detail: request.body.detail,
             }
