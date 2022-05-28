@@ -43,10 +43,10 @@ async function indexByOwnerId(request, response) {
     try {
         const ownerId = request.params.id
 
-        // Get all vehicles that user own
-        const dbVehicles = await getListParkingLotsByOwnerId(ownerId)
+        // Get all paring lots that user own
+        const dbParkingLots = await getListParkingLotsByOwnerId(ownerId)
 
-        return response.status(200).json(dbVehicles)
+        return response.status(200).json(dbParkingLots)
     } catch (error) {
         return response.status(500).json({
             message: 'Something went wrong!',
@@ -57,11 +57,11 @@ async function indexByOwnerId(request, response) {
 
 async function showById(request, response) {
     try {
-        const vehicleId = request.params.id
+        const parkingLotId = request.params.id
 
-        const dbVehicle = getParkingLotById(vehicleId)
+        const dbParkingLot = await getParkingLotById(parkingLotId)
 
-        return response.status(200).json(dbVehicle)
+        return response.status(200).json(dbParkingLot)
     } catch (error) {
         return response.status(500).json({
             message: 'Something went wrong!',
@@ -85,7 +85,7 @@ async function create(request, response) {
             deletedAt: null,
         }
 
-        // Validate new vehicle's data
+        // Validate new parking lot's data
         const validateResponse = validators.validateParkingLot(newParkingLot)
         if (validateResponse !== true) {
             return response.status(400).json({
@@ -94,7 +94,7 @@ async function create(request, response) {
             })
         }
 
-        // Create new verify state for this vehicle
+        // Create new verify state for this parking lot
         const newVerifyState = {
             state: 'Đang chờ xử lý',
             note: '',
@@ -103,7 +103,7 @@ async function create(request, response) {
             newParkingLot.verify_state_id = result.id
         })
 
-        // Create new vehicle
+        // Create new parking lot
         addNewParkingLot(newParkingLot).then((_) => {
             return response.status(201).json({
                 message: 'Create parking lot successfully!',
@@ -121,7 +121,7 @@ async function updateById(request, response) {
     try {
         const parkingLotId = request.params.id
 
-        // Check if vehicle exists
+        // Check if parking lot exists
         const dbParkingLot = await getParkingLotById(parkingLotId)
         if (dbParkingLot) {
             const updateParkingLot = {
@@ -133,7 +133,7 @@ async function updateById(request, response) {
                 is_full: request.body.is_full,
             }
 
-            // Validate update vehicle's data
+            // Validate update parking lot's data
             const validateResponse =
                 validators.validateParkingLot(updateParkingLot)
             if (validateResponse !== true) {
@@ -143,7 +143,7 @@ async function updateById(request, response) {
                 })
             }
 
-            // Update vehicle's data
+            // Update parking lot's data
             updateParkingLotById(updateParkingLot, dbParkingLot.id).then(
                 (_) => {
                     return response.status(201).json({
@@ -168,10 +168,10 @@ async function softDeleteById(request, response) {
     try {
         const parkingLotId = request.params.id
 
-        // Check if vehicle exists
+        // Check if parking lot exists
         const dbParkingLot = await getParkingLotById(parkingLotId)
         if (dbParkingLot) {
-            // Soft delete vehicle
+            // Soft delete parking lot
             softDeleteParkingLotById(dbParkingLot.id)
 
             return response.status(200).json({

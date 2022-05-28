@@ -16,7 +16,6 @@ router.get(
 router.get(
     '/:id',
     checkAuthMiddleware.checkAuth,
-    checkOwnerMiddleware.checkParkingLotOwner,
     parkingLotApiController.showById,
 )
 router.post(
