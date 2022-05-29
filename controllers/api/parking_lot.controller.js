@@ -72,10 +72,10 @@ async function showById(request, response) {
 
 async function create(request, response) {
     try {
-        const newParkingLot = {
+        let newParkingLot = {
             name: request.body.name,
             address: request.body.address,
-            avatar: '',
+            avatar: 'public/images/avatars/parking-lot/default-avatar.png',
             time_slot: request.body.time_slot,
             capacity: request.body.capacity,
             is_open: false,
@@ -99,7 +99,7 @@ async function create(request, response) {
             state: 'Đang chờ xử lý',
             note: '',
         }
-        addNewVerifyState(newVerifyState).then((result) => {
+        await addNewVerifyState(newVerifyState).then((result) => {
             newParkingLot.verify_state_id = result.id
         })
 

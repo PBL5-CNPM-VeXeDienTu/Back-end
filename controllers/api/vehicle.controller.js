@@ -86,11 +86,11 @@ async function create(request, response) {
             }
         }
 
-        const newVehicle = {
+        let newVehicle = {
             license_plate: request.body.license_plate,
-            avatar: '',
-            cavet_back: '',
-            cavet_front: '',
+            avatar: 'public/images/avatars/vehicle/default-avatar.png',
+            cavet_back: 'public/images/cavet/default.png',
+            cavet_front: 'public/images/cavet/default.png',
             type_id: request.body.type_id,
             brand: request.body.brand,
             color: request.body.color,
@@ -114,7 +114,7 @@ async function create(request, response) {
             state: 'Đang chờ xử lý',
             note: '',
         }
-        addNewVerifyState(newVerifyState).then((result) => {
+        await addNewVerifyState(newVerifyState).then((result) => {
             newVehicle.verify_state_id = result.id
         })
 

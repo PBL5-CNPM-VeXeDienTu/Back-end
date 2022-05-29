@@ -5,8 +5,6 @@ const {
     updateParkingLotById,
 } = require('../../CRUD/parking_lot')
 
-const ADMIN_ROLE = 2
-
 async function uploadSingle(request, response) {
     try {
         if (request.file) {
@@ -15,19 +13,6 @@ async function uploadSingle(request, response) {
             // Check if vehicle exists
             const dbParkingLot = await getParkingLotById(parkingLotId)
             if (dbParkingLot) {
-                // Check if user is admin or not
-                const userRole = request.userData.role
-                const userId = request.userData.userId
-                if (userRole != ADMIN_ROLE) {
-                    if (userId != dbParkingLot.owner_id) {
-                        // Check if user own parking-lot
-                        return response.status(400).json({
-                            message:
-                                'User is not the owner of this parking lot!',
-                        })
-                    }
-                }
-
                 // Update parking lot avatar in database
                 const extName = path.extname(request.file.originalname)
                 const imageUrl = `public/images/avatars/parking-lot/${parkingLotId}${extName}`
