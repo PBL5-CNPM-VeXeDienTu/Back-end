@@ -3,16 +3,18 @@
 async function generateParkingPriceData() {
     let data = []
 
-    const maxParkingLotId = 6
-    const maxVehicleTypeId = 3
+    const minParkingLotId = 1,
+        maxParkingLotId = 6
+    const minVehicleTypeId = 1,
+        maxVehicleTypeId = 3
 
     for (
-        let parkingLotId = 1;
+        let parkingLotId = minParkingLotId;
         parkingLotId <= maxParkingLotId;
         parkingLotId++
     ) {
         for (
-            let vehicleTypeId = 1;
+            let vehicleTypeId = minVehicleTypeId;
             vehicleTypeId <= maxVehicleTypeId;
             vehicleTypeId++
         ) {
