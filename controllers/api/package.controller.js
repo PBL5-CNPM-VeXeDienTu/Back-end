@@ -4,6 +4,7 @@ const {
     getListPackages,
     getPackageById,
     getPackageByParkingLotId,
+    getPackageByOwnerId,
     addNewPackage,
     updatePackageById,
     deletePackageById,
@@ -61,6 +62,40 @@ async function indexByParkingLotId(request, response) {
 
         const queryResult = await getPackageByParkingLotId(
             parkingLotId,
+            startIndex,
+            limit,
+        )
+
+        return response.status(200).json(queryResult)
+    } catch (error) {
+        return response.status(500).json({
+            message: 'Something went wrong!',
+            error: error,
+        })
+    }
+}
+
+async function indexByOwnerId(request, response) {
+    try {
+        const ownerId = request.params.id
+        const page = Number.parseInt(request.query.page)
+        const limit = Number.parseInt(request.query.limit)
+
+        if (
+            Number.isNaN(page) ||
+            page < 1 ||
+            Number.isNaN(limit) ||
+            limit < 0
+        ) {
+            return response.status(400).json({
+                message: 'Invalid query parameters!',
+            })
+        }
+
+        const startIndex = (page - 1) * limit
+
+        const queryResult = await getPackageByOwnerId(
+            ownerId,
             startIndex,
             limit,
         )
@@ -191,6 +226,7 @@ async function deleteById(request, response) {
 module.exports = {
     index: index,
     indexByParkingLotId: indexByParkingLotId,
+    indexByOwnerId:indexByOwnerId,
     showById: showById,
     create: create,
     updateById: updateById,
