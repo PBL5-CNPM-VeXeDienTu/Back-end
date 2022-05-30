@@ -29,7 +29,7 @@ async function generateUserPackageData() {
         const dbPackage = await getPackageById(packageId)
 
         if (dbPackage) {
-            let parkingPrice = {
+            let userPackage = {
                 user_id: userId,
                 package_id: dbPackage.id,
                 parking_lot_id: dbPackage.parking_lot_id,
@@ -40,7 +40,7 @@ async function generateUserPackageData() {
                 expireAt: await getExpireDateOfUserPackage(dbPackage.type_id),
             }
 
-            data.push(parkingPrice)
+            data.push(userPackage)
         }
     }
 

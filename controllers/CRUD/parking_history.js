@@ -1,31 +1,29 @@
 const models = require(process.cwd() + '/models/index')
 
-const userModel = {
-    model: models.User,
-    attributes: [
-        'email',
-        'name',
-        'role',
-        'is_verified',
-        'deletedAt',
-        'createdAt',
-    ],
-    include: [
-        {
-            model: models.Role,
-            attributes: ['name'],
-        },
-    ],
-    as: 'Owner',
-    required: true,
-}
-
 const include = [
     {
         model: models.Vehicle,
         attributes: { exclude: ['updatedAt'] },
         include: [
-            userModel,
+            {
+                model: models.User,
+                attributes: [
+                    'email',
+                    'name',
+                    'role',
+                    'is_verified',
+                    'deletedAt',
+                    'createdAt',
+                ],
+                include: [
+                    {
+                        model: models.Role,
+                        attributes: ['name'],
+                    },
+                ],
+                as: 'Owner',
+                required: true,
+            },
             {
                 model: models.VehicleType,
                 attributes: ['type_name'],
@@ -41,7 +39,25 @@ const include = [
         model: models.ParkingLot,
         attributes: { exclude: ['updatedAt'] },
         include: [
-            userModel,
+            {
+                model: models.User,
+                attributes: [
+                    'email',
+                    'name',
+                    'role',
+                    'is_verified',
+                    'deletedAt',
+                    'createdAt',
+                ],
+                include: [
+                    {
+                        model: models.Role,
+                        attributes: ['name'],
+                    },
+                ],
+                as: 'Owner',
+                required: true,
+            },
             {
                 model: models.VerifyState,
                 required: true,

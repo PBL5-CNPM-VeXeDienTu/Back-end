@@ -1,6 +1,4 @@
 const validators = require(process.cwd() + '/helpers/validators')
-const { getExpireOfPackage, getCurrentDateTime } = require(process.cwd() +
-    '/helpers/datetime')
 
 const {
     getListUserPackages,
@@ -11,6 +9,10 @@ const {
     deleteUserPackageById,
 } = require('../CRUD/user_package')
 const { getPackageById } = require('../CRUD/package')
+const { addNewTransaction } = require('../CRUD/transaction')
+const { getWalletByUserId } = require('../CRUD/wallet')
+
+const BUY_PACKAGE_TRANSACTION_TYPE_ID = 5
 
 async function index(request, response) {
     try {
@@ -117,10 +119,22 @@ async function create(request, response) {
                 })
             }
 
-            addNewUserPackage(newUserPackage).then((_) => {
-                return response.status(201).json({
-                    message: 'Create user package successfully!',
-                })
+            const result = await addNewUserPackage(newUserPackage)
+
+            // Get user's wallet id
+            const walletId = (await getWalletByUserId(result.user_id))?.id
+
+            // Add new transaction history
+            const newTransaction = {
+                wallet_id: walletId,
+                type_id: BUY_PACKAGE_TRANSACTION_TYPE_ID,
+                reference_id: result.id,
+                amount: result.price,
+            }
+            addNewTransaction(newTransaction)
+
+            return response.status(201).json({
+                message: 'Create user package successfully!',
             })
         } else {
             return response.status(404).json({
