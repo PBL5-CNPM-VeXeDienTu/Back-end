@@ -9,7 +9,7 @@ const {
     updateVehicleById,
     softDeleteVehicleById,
 } = require('../CRUD/vehicle')
-const { addNewVerifyState } = require('../CRUD/verify_state')
+const { addNewVerifyState, updateVerifyStateById } = require('../CRUD/verify_state')
 
 async function index(request, response) {
     try {
@@ -175,6 +175,46 @@ async function updateById(request, response) {
     }
 }
 
+async function verifyById(request, response) {
+    try {
+        const vehicleId = request.params.id
+
+        // Check if vehicle exists
+        const dbVehicle = await getVehicleById(vehicleId)
+        if (dbVehicle) {
+            const updateVerifyState = {
+                state: request.params.state,
+                note: request.params.note,
+            }
+
+            // Validate update verify state's data
+            const validateResponse = validators.verifyStateSchema(updateVerifyState)
+            if (validateResponse !== true) {
+                return response.status(400).json({
+                    message: 'Validation failed!',
+                    errors: validateResponse,
+                })
+            }
+
+            // Update verify state's data
+            updateVerifyStateById(updateVerifyState, dbVehicle.verify_state_id).then((_) => {
+                return response.status(201).json({
+                    message: 'Update verify state successfully!',
+                })
+            })
+        } else {
+            return response.status(404).json({
+                message: 'Vehicle not found!',
+            })
+        }
+    } catch (error) {
+        return response.status(500).json({
+            message: 'Something went wrong!',
+            error: error,
+        })
+    }
+}
+
 async function softDeleteById(request, response) {
     try {
         const vehicleId = request.params.id
@@ -207,5 +247,6 @@ module.exports = {
     showById: showById,
     create: create,
     updateById: updateById,
+    verifyById: verifyById,
     softDeleteById: softDeleteById,
 }
