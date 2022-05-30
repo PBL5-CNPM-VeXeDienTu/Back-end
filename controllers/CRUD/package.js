@@ -1,6 +1,8 @@
+const { Op } = require("sequelize");
+
 const models = require(process.cwd() + '/models/index')
 
-const include = [
+const include = (ownerId) => [
     {
         model: models.ParkingLot,
         include: [
@@ -17,6 +19,7 @@ const include = [
                 required: true,
             },
         ],
+        where: { owner_id: ownerId ? ownerId : { [Op.gt]: 0 } },
         required: true,
     },
     {
@@ -33,7 +36,7 @@ const include = [
 
 async function index(startIndex, limit) {
     return models.Package.findAndCountAll({
-        include: include,
+        include: include(),
         offset: startIndex,
         limit: limit,
         order: [
@@ -45,13 +48,13 @@ async function index(startIndex, limit) {
 
 async function showById(id) {
     return models.Package.findByPk(id, {
-        include: include,
+        include: include(),
     })
 }
 
 async function showByParkingLotId(parkingLotId, startIndex, limit) {
     return models.Package.findAndCountAll({
-        include: include,
+        include: include(),
         offset: startIndex,
         limit: limit,
         order: [
@@ -61,6 +64,20 @@ async function showByParkingLotId(parkingLotId, startIndex, limit) {
         where: { parking_lot_id: parkingLotId },
     })
 }
+
+async function showByOwnerId(ownerId, startIndex, limit) {
+    return models.Package.findAndCountAll({
+        include: include(ownerId),
+        offset: startIndex,
+        limit: limit,
+        order: [
+            ['id', 'DESC'],
+            ['price', 'DESC'],
+        ],
+    })
+}
+
+
 
 async function create(newPackage) {
     return models.Package.create(newPackage)
@@ -88,6 +105,7 @@ module.exports = {
     getListPackages: index,
     getPackageById: showById,
     getPackageByParkingLotId: showByParkingLotId,
+    getPackageByOwnerId: showByOwnerId,
     addNewPackage: create,
     updatePackageById: update,
     deletePackageById: destroy,
