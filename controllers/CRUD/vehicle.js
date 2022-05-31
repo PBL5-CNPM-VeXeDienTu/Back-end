@@ -25,7 +25,7 @@ const include = [
     },
 ]
 
-async function index(startIndex, limit) {
+async function index(startIndex, limit, isAdmin) {
     return models.Vehicle.findAndCountAll({
         include: include,
         offset: startIndex,
@@ -34,17 +34,27 @@ async function index(startIndex, limit) {
             ['id', 'DESC'],
             ['license_plate', 'ASC'],
         ],
+        where: {
+            deletedAt: isAdmin
+                ? { [Op.is]: null, [Op.not]: null }
+                : { [Op.not]: null },
+        },
     })
 }
 
-async function indexByOwnerId(ownerId) {
+async function indexByOwnerId(ownerId, isAdmin) {
     return models.Vehicle.findAndCountAll({
         include: include,
         order: [
             ['id', 'DESC'],
             ['license_plate', 'ASC'],
         ],
-        where: { owner_id: ownerId },
+        where: {
+            owner_id: ownerId,
+            deletedAt: isAdmin
+                ? { [Op.is]: null, [Op.not]: null }
+                : { [Op.not]: null },
+        },
     })
 }
 

@@ -226,7 +226,7 @@ async function deleteById(request, response) {
 module.exports = {
     index: index,
     indexByParkingLotId: indexByParkingLotId,
-    indexByOwnerId:indexByOwnerId,
+    indexByOwnerId: indexByOwnerId,
     showById: showById,
     create: create,
     updateById: updateById,
