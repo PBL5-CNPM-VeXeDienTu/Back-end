@@ -1,3 +1,5 @@
+const { Op } = require('sequelize')
+
 const models = require(process.cwd() + '/models/index')
 const { getCurrentDateTime } = require(process.cwd() + '/helpers/datetime')
 
@@ -20,7 +22,7 @@ const include = [
     },
 ]
 
-async function index(startIndex, limit) {
+async function index(startIndex, limit, isAdmin) {
     return models.ParkingLot.findAndCountAll({
         include: include,
         offset: startIndex,
@@ -29,17 +31,27 @@ async function index(startIndex, limit) {
             ['id', 'DESC'],
             ['name', 'ASC'],
         ],
+        where: {
+            deletedAt: isAdmin
+                ? { [Op.is]: null, [Op.not]: null }
+                : { [Op.not]: null },
+        },
     })
 }
 
-async function indexByOwnerId(ownerId) {
+async function indexByOwnerId(ownerId, isAdmin) {
     return models.ParkingLot.findAndCountAll({
         include: include,
         order: [
             ['id', 'DESC'],
             ['name', 'ASC'],
         ],
-        where: { owner_id: ownerId },
+        where: {
+            owner_id: ownerId,
+            deletedAt: isAdmin
+                ? { [Op.is]: null, [Op.not]: null }
+                : { [Op.not]: null },
+        },
     })
 }
 

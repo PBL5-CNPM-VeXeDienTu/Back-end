@@ -13,6 +13,8 @@ const {
     updateVerifyStateById,
 } = require('../CRUD/verify_state')
 
+const ADMIN_ROLE = 3
+
 async function index(request, response) {
     try {
         const page = Number.parseInt(request.query.page)
@@ -31,7 +33,16 @@ async function index(request, response) {
 
         const startIndex = (page - 1) * limit
 
-        const queryResult = await getListParkingLots(startIndex, limit)
+        let queryResult
+        if (userRole !== ADMIN_ROLE) {
+            queryResult = await getListParkingLots(
+                startIndex,
+                limit,
+                !ADMIN_ROLE,
+            )
+        } else {
+            queryResult = await getListVehicles(startIndex, limit)
+        }
 
         return response.status(200).json(queryResult)
     } catch (error) {
@@ -47,7 +58,15 @@ async function indexByOwnerId(request, response) {
         const ownerId = request.params.id
 
         // Get all paring lots that user own
-        const dbParkingLots = await getListParkingLotsByOwnerId(ownerId)
+        let dbParkingLots
+        if (userRole !== ADMIN_ROLE) {
+            dbParkingLots = await getListParkingLotsByOwnerId(
+                ownerId,
+                !ADMIN_ROLE,
+            )
+        } else {
+            dbParkingLots = await getListParkingLotsByOwnerId(ownerId)
+        }
 
         return response.status(200).json(dbParkingLots)
     } catch (error) {
@@ -63,6 +82,13 @@ async function showById(request, response) {
         const parkingLotId = request.params.id
 
         const dbParkingLot = await getParkingLotById(parkingLotId)
+
+        const userRole = request.userData.role
+        if (userRole !== ADMIN_ROLE && dbParkingLot?.deletedAt !== null) {
+            return response.status(401).json({
+                message: 'This parking lot has been deleted!',
+            })
+        }
 
         return response.status(200).json(dbParkingLot)
     } catch (error) {

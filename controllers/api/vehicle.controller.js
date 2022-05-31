@@ -14,6 +14,8 @@ const {
     updateVerifyStateById,
 } = require('../CRUD/verify_state')
 
+const ADMIN_ROLE = 3
+
 async function index(request, response) {
     try {
         const page = Number.parseInt(request.query.page)
@@ -32,7 +34,12 @@ async function index(request, response) {
 
         const startIndex = (page - 1) * limit
 
-        const queryResult = await getListVehicles(startIndex, limit)
+        let queryResult
+        if (userRole !== ADMIN_ROLE) {
+            queryResult = await getListVehicles(startIndex, limit, !ADMIN_ROLE)
+        } else {
+            queryResult = await getListVehicles(startIndex, limit)
+        }
 
         return response.status(200).json(queryResult)
     } catch (error) {
@@ -48,7 +55,12 @@ async function indexByOwnerId(request, response) {
         const ownerId = request.params.id
 
         // Get all vehicles that user own
-        const dbVehicles = await getListVehiclesByOwnerId(ownerId)
+        let dbVehicles
+        if (userRole !== ADMIN_ROLE) {
+            dbVehicles = await getListVehiclesByOwnerId(ownerId, !ADMIN_ROLE)
+        } else {
+            dbVehicles = await getListVehiclesByOwnerId(ownerId)
+        }
 
         return response.status(200).json(dbVehicles)
     } catch (error) {
@@ -64,6 +76,13 @@ async function showById(request, response) {
         const vehicleId = request.params.id
 
         const dbVehicle = await getVehicleById(vehicleId)
+
+        const userRole = request.userData.role
+        if (userRole !== ADMIN_ROLE && dbVehicle?.deletedAt !== null) {
+            return response.status(401).json({
+                message: 'This vehicle has been deleted!',
+            })
+        }
 
         return response.status(200).json(dbVehicle)
     } catch (error) {
