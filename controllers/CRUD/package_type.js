@@ -21,7 +21,7 @@ async function destroy(id) {
 }
 
 module.exports = {
-    index: index,
+    getListPackageTypes: index,
     getPackageTypeById: showById,
     addNewPackageType: create,
     updatePackageTypeById: update,

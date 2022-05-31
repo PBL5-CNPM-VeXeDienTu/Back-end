@@ -9,6 +9,10 @@ const package = require('./package.route')
 const parkingHistory = require('./parking_history.route')
 const userPackage = require('./user_package.route')
 const feedback = require('./feedback.route')
+const packageType = require('./package_type.route')
+const vehicleType = require('./vehicle_type.route')
+const transactionType = require('./transation_type.route')
+const feedbackType = require('./feedback_type.route')
 
 module.exports = {
     auth: auth,
@@ -22,4 +26,8 @@ module.exports = {
     parkingHistory: parkingHistory,
     userPackage: userPackage,
     feedback: feedback,
+    packageType: packageType,
+    vehicleType: vehicleType,
+    transactionType: transactionType,
+    feedbackType: feedbackType,
 }

@@ -167,7 +167,7 @@ async function updateById(request, response) {
         const dbPackage = await getPackageById(packageId)
         if (dbPackage) {
             const updatePackage = {
-                parking_lot_id: request.userData.userId,
+                parking_lot_id: request.body.parking_lot_id,
                 name: request.body.name,
                 type_id: request.body.type_id,
                 vehicle_type_id: request.body.vehicle_type_id,
@@ -183,7 +183,7 @@ async function updateById(request, response) {
             }
 
             // Update Package data
-            updatePackageById(updatePackage, dbPackage.id).then((_) => {
+            updatePackageById(updatePackage, packageId).then((_) => {
                 return response.status(201).json({
                     message: 'Update package successfully!',
                 })
