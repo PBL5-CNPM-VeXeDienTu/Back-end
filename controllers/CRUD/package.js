@@ -1,4 +1,4 @@
-const { Op } = require("sequelize");
+const { Op } = require('sequelize')
 
 const models = require(process.cwd() + '/models/index')
 
@@ -76,8 +76,6 @@ async function showByOwnerId(ownerId, startIndex, limit) {
         ],
     })
 }
-
-
 
 async function create(newPackage) {
     return models.Package.create(newPackage)

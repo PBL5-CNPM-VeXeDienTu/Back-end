@@ -20,11 +20,13 @@ router.get(
     packageApiController.indexByOwnerId,
 )
 router.get('/:id', checkAuthMiddleware.checkAuth, packageApiController.showById)
+
 router.post('/', checkAuthMiddleware.checkAuth, packageApiController.create)
+
 router.patch(
     '/:id',
     checkAuthMiddleware.checkAuth,
-    checkOwnerMiddleware.checkPackageOwner,
+    // checkOwnerMiddleware.checkPackageOwner,
     packageApiController.updateById,
 )
 router.delete(
