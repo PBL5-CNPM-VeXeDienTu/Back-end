@@ -118,7 +118,6 @@ async function generateTransactionData() {
                 data.push(await generateWithDrawTransaction(walletId))
                 break
         }
-        console.log(data);
     }
 
     return data

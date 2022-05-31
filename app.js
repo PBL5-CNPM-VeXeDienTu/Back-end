@@ -27,5 +27,9 @@ app.use('/api/packages', routes.package)
 app.use('/api/user-packages', routes.userPackage)
 app.use('/api/parking-histories', routes.parkingHistory)
 app.use('/api/feedbacks', routes.feedback)
+app.use('/api/package-types', routes.packageType)
+app.use('/api/vehicle-types', routes.vehicleType)
+app.use('/api/feedback-types', routes.feedbackType)
+app.use('/api/transaction-types', routes.transactionType)
 
 module.exports = app

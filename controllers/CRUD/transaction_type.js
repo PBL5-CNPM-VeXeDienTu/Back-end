@@ -24,7 +24,7 @@ async function destroy(id) {
 }
 
 module.exports = {
-    index: index,
+    getListTransactionTypes: index,
     getTransactionTypeById: showById,
     addNewTransactionType: create,
     updateTransactionTypeById: update,

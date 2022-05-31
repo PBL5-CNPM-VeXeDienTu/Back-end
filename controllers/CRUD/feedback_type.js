@@ -21,7 +21,7 @@ async function destroy(id) {
 }
 
 module.exports = {
-    index: index,
+    getListFeedbackTypes: index,
     getFeedbackTypeById: showById,
     addNewFeedbackType: create,
     updateFeedbackTypeById: update,

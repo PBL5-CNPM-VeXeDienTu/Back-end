@@ -9,7 +9,10 @@ const {
     updateVehicleById,
     softDeleteVehicleById,
 } = require('../CRUD/vehicle')
-const { addNewVerifyState, updateVerifyStateById } = require('../CRUD/verify_state')
+const {
+    addNewVerifyState,
+    updateVerifyStateById,
+} = require('../CRUD/verify_state')
 
 async function index(request, response) {
     try {
@@ -188,7 +191,8 @@ async function verifyById(request, response) {
             }
 
             // Validate update verify state's data
-            const validateResponse = validators.verifyStateSchema(updateVerifyState)
+            const validateResponse =
+                validators.verifyStateSchema(updateVerifyState)
             if (validateResponse !== true) {
                 return response.status(400).json({
                     message: 'Validation failed!',
@@ -197,7 +201,10 @@ async function verifyById(request, response) {
             }
 
             // Update verify state's data
-            updateVerifyStateById(updateVerifyState, dbVehicle.verify_state_id).then((_) => {
+            updateVerifyStateById(
+                updateVerifyState,
+                dbVehicle.verify_state_id,
+            ).then((_) => {
                 return response.status(201).json({
                     message: 'Update verify state successfully!',
                 })
