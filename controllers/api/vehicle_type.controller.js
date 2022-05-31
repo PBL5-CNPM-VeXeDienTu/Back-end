@@ -1,6 +1,6 @@
 const {
-    getListVehicleTypes ,
-    getVehicleTypeById ,
+    getListVehicleTypes,
+    getVehicleTypeById,
     addNewVehicleType,
     updateVehicleTypeById,
     deleteVehicleTypeById,
@@ -66,7 +66,8 @@ async function updateById(request, response) {
             const updateVehicleType = {
                 type_name: request.body.type_name,
             }
-            const validateResponse = validator.validateVehicle(updateVehicleType)
+            const validateResponse =
+                validator.validateVehicle(updateVehicleType)
             if (validateResponse !== true) {
                 return response.status(400).json({
                     message: 'Validate failed',
@@ -75,11 +76,13 @@ async function updateById(request, response) {
             }
 
             // Update vehicleType data
-            updateVehicleTypeById(updateVehicleType, dbVehicleType.id).then((_) => {
-                return response.status(201).json({
-                    message: 'Update package type successfully!',
-                })
-            })
+            updateVehicleTypeById(updateVehicleType, dbVehicleType.id).then(
+                (_) => {
+                    return response.status(201).json({
+                        message: 'Update package type successfully!',
+                    })
+                },
+            )
         } else {
             return response.status(404).json({
                 message: 'Vehicle type not found!',
@@ -118,7 +121,7 @@ async function deleteById(request, response) {
 
 module.exports = {
     index: index,
-    showById:indexByVehicleTypeId,
+    showById: indexByVehicleTypeId,
     create: create,
     updateById: updateById,
     deleteById: deleteById,

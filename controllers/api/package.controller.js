@@ -126,6 +126,7 @@ async function create(request, response) {
     try {
         const userId = request.userData.userId
         const parkingLotId = request.body.parking_lot_id
+
         if (checkUserOwnParkingLot(parkingLotId, userId)) {
             const newPackage = {
                 parking_lot_id: parkingLotId,
@@ -165,25 +166,25 @@ async function updateById(request, response) {
     try {
         const packageId = request.params.id
         const dbPackage = await getPackageById(packageId)
+
         if (dbPackage) {
             const updatePackage = {
-                parking_lot_id: request.body.parking_lot_id,
                 name: request.body.name,
                 type_id: request.body.type_id,
                 vehicle_type_id: request.body.vehicle_type_id,
                 price: request.body.price,
             }
 
-            const validateResponse = validator.validatePackage(updatePackage)
+            const validateResponse = validators.validatePackage(updatePackage)
             if (validateResponse !== true) {
                 return response.status(400).json({
-                    message: 'Validate failed',
+                    message: 'Validation failed!',
                     errors: validateResponse,
                 })
             }
 
             // Update Package data
-            updatePackageById(updatePackage, packageId).then((_) => {
+            updatePackageById(updatePackage, dbPackage.id).then((_) => {
                 return response.status(201).json({
                     message: 'Update package successfully!',
                 })
