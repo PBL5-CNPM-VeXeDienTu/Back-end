@@ -33,12 +33,13 @@ async function index(request, response) {
         }
 
         const startIndex = (page - 1) * limit
+        const userRole = request.userData.role
 
         let queryResult
         if (userRole !== ADMIN_ROLE) {
             queryResult = await getListVehicles(startIndex, limit, !ADMIN_ROLE)
         } else {
-            queryResult = await getListVehicles(startIndex, limit)
+            queryResult = await getListVehicles(startIndex, limit, ADMIN_ROLE)
         }
 
         return response.status(200).json(queryResult)
@@ -53,13 +54,14 @@ async function index(request, response) {
 async function indexByOwnerId(request, response) {
     try {
         const ownerId = request.params.id
+        const userRole = request.userData.role
 
         // Get all vehicles that user own
         let dbVehicles
         if (userRole !== ADMIN_ROLE) {
             dbVehicles = await getListVehiclesByOwnerId(ownerId, !ADMIN_ROLE)
         } else {
-            dbVehicles = await getListVehiclesByOwnerId(ownerId)
+            dbVehicles = await getListVehiclesByOwnerId(ownerId, ADMIN_ROLE)
         }
 
         return response.status(200).json(dbVehicles)
@@ -205,13 +207,13 @@ async function verifyById(request, response) {
         const dbVehicle = await getVehicleById(vehicleId)
         if (dbVehicle) {
             const updateVerifyState = {
-                state: request.params.state,
-                note: request.params.note,
+                state: request.body.state,
+                note: request.body.note,
             }
 
             // Validate update verify state's data
             const validateResponse =
-                validators.verifyStateSchema(updateVerifyState)
+                validators.validateVerifyState(updateVerifyState)
             if (validateResponse !== true) {
                 return response.status(400).json({
                     message: 'Validation failed!',

@@ -32,6 +32,7 @@ async function index(request, response) {
         }
 
         const startIndex = (page - 1) * limit
+        const userRole = request.userData.role
 
         let queryResult
         if (userRole !== ADMIN_ROLE) {
@@ -41,7 +42,11 @@ async function index(request, response) {
                 !ADMIN_ROLE,
             )
         } else {
-            queryResult = await getListVehicles(startIndex, limit)
+            queryResult = await getListParkingLots(
+                startIndex,
+                limit,
+                ADMIN_ROLE,
+            )
         }
 
         return response.status(200).json(queryResult)
@@ -56,6 +61,7 @@ async function index(request, response) {
 async function indexByOwnerId(request, response) {
     try {
         const ownerId = request.params.id
+        const userRole = request.userData.role
 
         // Get all paring lots that user own
         let dbParkingLots
@@ -65,7 +71,10 @@ async function indexByOwnerId(request, response) {
                 !ADMIN_ROLE,
             )
         } else {
-            dbParkingLots = await getListParkingLotsByOwnerId(ownerId)
+            dbParkingLots = await getListParkingLotsByOwnerId(
+                ownerId,
+                ADMIN_ROLE,
+            )
         }
 
         return response.status(200).json(dbParkingLots)
@@ -202,13 +211,13 @@ async function verifyById(request, response) {
         const dbParkingLot = await getParkingLotById(parkingLotId)
         if (dbParkingLot) {
             const updateVerifyState = {
-                state: request.params.state,
-                note: request.params.note,
+                state: request.body.state,
+                note: request.body.note,
             }
 
             // Validate update verify state's data
             const validateResponse =
-                validators.verifyStateSchema(updateVerifyState)
+                validators.validateVerifyState(updateVerifyState)
             if (validateResponse !== true) {
                 return response.status(400).json({
                     message: 'Validation failed!',

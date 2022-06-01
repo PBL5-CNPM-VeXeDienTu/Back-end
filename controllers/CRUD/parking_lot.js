@@ -33,8 +33,8 @@ async function index(startIndex, limit, isAdmin) {
         ],
         where: {
             deletedAt: isAdmin
-                ? { [Op.is]: null, [Op.not]: null }
-                : { [Op.not]: null },
+                ? { [Op.or]: [{ [Op.is]: null }, { [Op.not]: null }] }
+                : { [Op.is]: null },
         },
     })
 }
@@ -49,8 +49,8 @@ async function indexByOwnerId(ownerId, isAdmin) {
         where: {
             owner_id: ownerId,
             deletedAt: isAdmin
-                ? { [Op.is]: null, [Op.not]: null }
-                : { [Op.not]: null },
+                ? { [Op.or]: [{ [Op.is]: null }, { [Op.not]: null }] }
+                : { [Op.is]: null },
         },
     })
 }
