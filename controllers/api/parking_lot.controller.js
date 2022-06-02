@@ -255,7 +255,7 @@ async function softDeleteById(request, response) {
         const dbParkingLot = await getParkingLotById(parkingLotId)
         if (dbParkingLot) {
             // Soft delete parking lot
-            softDeleteParkingLotById(dbParkingLot.id)
+            await softDeleteParkingLotById(dbParkingLot.id)
 
             return response.status(200).json({
                 message: 'Delete parking lot successfully!',
