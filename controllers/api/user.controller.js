@@ -121,7 +121,7 @@ async function softDeleteById(request, response) {
         const dbUser = await getUserById(userId)
         if (dbUser) {
             // Soft delete user
-            softDeleteUserById(dbUser.id)
+            await softDeleteUserById(dbUser.id)
 
             // Check user role, soft delete vehicle/parking-lot this user own
             if (dbUser.role === BASIC_USER_ROLE)

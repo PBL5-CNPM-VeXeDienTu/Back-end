@@ -251,7 +251,7 @@ async function softDeleteById(request, response) {
         const dbVehicle = await getVehicleById(vehicleId)
         if (dbVehicle) {
             // Soft delete vehicle
-            softDeleteVehicleById(vehicleId.id)
+            await softDeleteVehicleById(dbVehicle.id)
 
             return response.status(200).json({
                 message: 'Delete vehicle successfully!',
