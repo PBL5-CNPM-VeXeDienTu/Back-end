@@ -1,6 +1,4 @@
-const {
-    getListRoles,
-} = require('../CRUD/role')
+const { getListRoles } = require('../CRUD/role')
 
 async function index(request, response) {
     try {
@@ -13,7 +11,6 @@ async function index(request, response) {
         })
     }
 }
-
 
 module.exports = {
     index: index,

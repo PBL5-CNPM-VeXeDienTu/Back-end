@@ -1,15 +1,20 @@
 const validators = require(process.cwd() + '/helpers/validators')
-const hashHelper = require(process.cwd() + 'hashHelper')
+const hashHelper = require(process.cwd() +
+    '/helpers/password-encrypter/hash_helper')
 
-const { updateUserInfoByUserId } = require('../CRUD/user_info')
+const { addNewUserInfo, updateUserInfoByUserId } = require('../CRUD/user_info')
 const {
     getListUsers,
     getUserById,
+    getUserByEmail,
+    addNewUser,
     updateUserById,
     softDeleteUserById,
 } = require('../CRUD/user')
 const { softDeleteVehicleByOwnerId } = require('../CRUD/vehicle')
 const { softDeleteParkingLotByOwnerId } = require('../CRUD/parking_lot')
+const { getRoleById } = require('../CRUD/role')
+const { addNewWallet } = require('../CRUD/wallet')
 
 const BASIC_USER_ROLE = 1
 const PARKING_LOT_USER_ROLE = 2
