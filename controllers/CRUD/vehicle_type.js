@@ -1,23 +1,31 @@
-const vehicleTypeModel = require(process.cwd() + '/models/index').VehicleType
+const models = require(process.cwd() + '/models/index')
 
 async function index() {
-    return vehicleTypeModel.findAndCountAll()
+    return models.VehicleType.findAndCountAll()
 }
 
 async function showById(id) {
-    return vehicleTypeModel.findByPk(id)
+    return models.VehicleType.findByPk(id)
 }
 
 async function create(newVehicleType) {
-    return vehicleTypeModel.create(newVehicleType)
+    return models.VehicleType.create(newVehicleType)
 }
 
 async function update(updateVehicleType, id) {
-    return vehicleTypeModel.update(updateVehicleType, { where: { id: id } })
+    return models.VehicleType.update(updateVehicleType, { where: { id: id } })
 }
 
 async function destroy(id) {
-    return vehicleTypeModel.destroy({ where: { id: id } })
+    return models.VehicleType.destroy({ where: { id: id } })
+}
+
+async function checkTypeNameExisted(typeName) {
+    return !!(await models.VehicleType.findOne({
+        where: {
+            type_name: typeName,
+        },
+    }))
 }
 
 module.exports = {
@@ -26,4 +34,5 @@ module.exports = {
     addNewVehicleType: create,
     updateVehicleTypeById: update,
     deleteVehicleTypeById: destroy,
+    checkTypeNameExisted: checkTypeNameExisted,
 }

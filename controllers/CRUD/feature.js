@@ -1,29 +1,38 @@
-const featureModel = require(process.cwd() + '/models/index').Feature
+const models = require(process.cwd() + '/models/index')
 
 async function index() {
-    return featureModel.findAndCountAll()
+    return models.Feature.findAndCountAll()
 }
 
 async function showById(id) {
-    return featureModel.findByPk(id)
+    return models.Feature.findByPk(id)
 }
 
 async function create(newFeature) {
-    return featureModel.create(newFeature)
+    return models.Feature.create(newFeature)
 }
 
 async function update(updateFeature, id) {
-    return featureModel.update(updateFeature, { where: { id: id } })
+    return models.Feature.update(updateFeature, { where: { id: id } })
 }
 
 async function destroy(id) {
-    return featureModel.destroy({ where: { id: id } })
+    return models.Feature.destroy({ where: { id: id } })
+}
+
+async function checkNameExisted(typeName) {
+    return !!(await models.Feature.findOne({
+        where: {
+            type_name: typeName,
+        },
+    }))
 }
 
 module.exports = {
-    index: index,
+    getListFeatureTypes: index,
     getFeatureById: showById,
     addNewFeature: create,
     updateFeatureById: update,
     deleteFeatureById: destroy,
+    checkNameExisted: checkNameExisted,
 }

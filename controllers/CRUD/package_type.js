@@ -1,23 +1,31 @@
-const packageTypeModel = require(process.cwd() + '/models/index').PackageType
+const models = require(process.cwd() + '/models/index')
 
 async function index() {
-    return packageTypeModel.findAndCountAll()
+    return models.PackageType.findAndCountAll()
 }
 
 async function showById(id) {
-    return packageTypeModel.findByPk(id)
+    return models.PackageType.findByPk(id)
 }
 
 async function create(newPackageType) {
-    return packageTypeModel.create(newPackageType)
+    return models.PackageType.create(newPackageType)
 }
 
 async function update(updatePackageType, id) {
-    return packageTypeModel.update(updatePackageType, { where: { id: id } })
+    return models.PackageType.update(updatePackageType, { where: { id: id } })
 }
 
 async function destroy(id) {
-    return packageTypeModel.destroy({ where: { id: id } })
+    return models.PackageType.destroy({ where: { id: id } })
+}
+
+async function checkTypeNameExisted(typeName) {
+    return !!(await models.PackageType.findOne({
+        where: {
+            type_name: typeName,
+        },
+    }))
 }
 
 module.exports = {
@@ -26,4 +34,5 @@ module.exports = {
     addNewPackageType: create,
     updatePackageTypeById: update,
     deletePackageTypeById: destroy,
+    checkTypeNameExisted: checkTypeNameExisted,
 }

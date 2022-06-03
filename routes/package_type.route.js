@@ -1,6 +1,5 @@
 const express = require('express')
 const checkAuthMiddleware = require('../middleware/check-auth')
-const checkOwnerMiddleware = require('../middleware/check-owner')
 const checkRoleMiddleware = require('../middleware/check-role')
 const packageTypeApiController = require('../controllers/api/package_type.controller')
 

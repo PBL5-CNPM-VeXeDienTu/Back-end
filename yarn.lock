@@ -116,6 +116,11 @@
   "resolved" "https://registry.npmjs.org/astral-regex/-/astral-regex-2.0.0.tgz"
   "version" "2.0.0"
 
+"async@0.2.9":
+  "integrity" "sha512-OAtM6mexGteNKdU29wcUfRW+VuBr94A3hx9h9yzBnPaQAbKoW1ORd68XM4CCAOpdL5wlNFgO29hsY1TKv2vAKw=="
+  "resolved" "https://registry.npmjs.org/async/-/async-0.2.9.tgz"
+  "version" "0.2.9"
+
 "at-least-node@^1.0.0":
   "integrity" "sha512-+q/t7Ekv1EDY2l6Gda6LLiX14rU9TV20Wa3ofeQmwPFZbOMo9DXrLbOjFaaclkXKWidIaopwAObQDqwWtGUjqg=="
   "resolved" "https://registry.npmjs.org/at-least-node/-/at-least-node-1.0.0.tgz"
@@ -654,6 +659,13 @@
     "onetime" "^5.1.2"
     "signal-exit" "^3.0.3"
     "strip-final-newline" "^2.0.0"
+
+"express-load@^1.1.16":
+  "integrity" "sha512-R+HNkLZMbUCJQ42VPx4sGbs/a0Xv//XUNRft2WqgBz7+6qL8QyTsqBdwPh3h33lxFFrwHKfF4Wn65sDg8POiHA=="
+  "resolved" "https://registry.npmjs.org/express-load/-/express-load-1.1.16.tgz"
+  "version" "1.1.16"
+  dependencies:
+    "async" "0.2.9"
 
 "express@^4.17.3":
   "integrity" "sha512-yuSQpz5I+Ch7gFrPCk4/c+dIBKlQUxtgwqzph132bsT6qhuzss6I8cLJQz7B3rFblzd6wtcI0ZbGltH/C4LjUg=="

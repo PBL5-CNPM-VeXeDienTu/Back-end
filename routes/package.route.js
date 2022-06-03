@@ -16,7 +16,6 @@ router.get(
     '/get-by-owner/:id',
     checkAuthMiddleware.checkAuth,
     checkOwnerMiddleware.checkAccountOwner,
-    checkRoleMiddleware.checkRoleParkingLot,
     packageApiController.indexByOwnerId,
 )
 router.get('/:id', checkAuthMiddleware.checkAuth, packageApiController.showById)

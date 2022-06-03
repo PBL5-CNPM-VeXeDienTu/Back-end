@@ -1,26 +1,33 @@
-const transactionTypeModel = require(process.cwd() +
-    '/models/index').TransactionType
+const models = require(process.cwd() + '/models/index')
 
 async function index() {
-    return transactionTypeModel.findAndCountAll()
+    return models.TransactionType.findAndCountAll()
 }
 
 async function showById(id) {
-    return transactionTypeModel.findByPk(id)
+    return models.TransactionType.findByPk(id)
 }
 
 async function create(newTransactionType) {
-    return transactionTypeModel.create(newTransactionType)
+    return models.TransactionType.create(newTransactionType)
 }
 
 async function update(updateTransactionType, id) {
-    return transactionTypeModel.update(updateTransactionType, {
+    return models.TransactionType.update(updateTransactionType, {
         where: { id: id },
     })
 }
 
 async function destroy(id) {
-    return transactionTypeModel.destroy({ where: { id: id } })
+    return models.TransactionType.destroy({ where: { id: id } })
+}
+
+async function checkTypeNameExisted(typeName) {
+    return models.TransactionType.findOne({
+        where: {
+            type_name: typeName,
+        },
+    })
 }
 
 module.exports = {
@@ -29,4 +36,5 @@ module.exports = {
     addNewTransactionType: create,
     updateTransactionTypeById: update,
     deleteTransactionTypeById: destroy,
+    checkTypeNameExisted: checkTypeNameExisted,
 }
