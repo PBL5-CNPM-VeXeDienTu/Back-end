@@ -106,7 +106,7 @@ async function create(request, response) {
         }
 
         // Add new user to database
-        addNewUser(newUser).then((result) => {
+        addNewUser(newUser).then(async (result) => {
             // Create new user info
             const newUserInfo = {
                 user_id: result.id,
@@ -116,14 +116,14 @@ async function create(request, response) {
                 phone_number: request.body.phone_number,
                 avatar: 'public/images/avatars/user/default-avatar.png',
             }
-            addNewUserInfo(newUserInfo)
+            await addNewUserInfo(newUserInfo)
 
             // Create new wallet
             const newWallet = {
                 user_id: result.id,
                 balance: 0,
             }
-            addNewWallet(newWallet)
+            await addNewWallet(newWallet)
 
             return response.status(201).json({
                 message: 'Create user successfully!',
