@@ -19,6 +19,12 @@ router.get(
     checkOwnerMiddleware.checkAccountOwner,
     userApiController.showById,
 )
+router.post(
+    '/',
+    checkAuthMiddleware.checkAuth,
+    checkRoleMiddleware.checkRoleAdmin,
+    userApiController.create,
+)
 router.patch(
     '/:id',
     checkAuthMiddleware.checkAuth,
