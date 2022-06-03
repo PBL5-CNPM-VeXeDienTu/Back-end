@@ -1,5 +1,6 @@
 const validators = require(process.cwd() + '/helpers/validators')
-const hashHelper = require(process.cwd() + 'hashHelper')
+const hashHelper = require(process.cwd() +
+    '/helpers/password-encrypter/hash_helper')
 
 const { updateUserInfoByUserId } = require('../CRUD/user_info')
 const {
