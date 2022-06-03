@@ -31,5 +31,6 @@ app.use('/api/package-types', routes.packageType)
 app.use('/api/vehicle-types', routes.vehicleType)
 app.use('/api/feedback-types', routes.feedbackType)
 app.use('/api/transaction-types', routes.transactionType)
+app.use('/api/roles', routes.role)
 
 module.exports = app
