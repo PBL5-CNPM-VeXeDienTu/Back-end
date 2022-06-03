@@ -1,9 +1,9 @@
 const roleModel = require(process.cwd() + '/models/index').Role
 
-async function showById(id) {
-    return roleModel.findByPk(id)
+async function index() {
+    return roleModel.findAll()
 }
 
 module.exports = {
-    getRoleById: showById,
+    getListRoles: index,
 }
