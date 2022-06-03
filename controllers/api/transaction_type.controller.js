@@ -1,9 +1,12 @@
+const validators = require(process.cwd() + '/helpers/validators')
+
 const {
     getListTransactionTypes,
     getTransactionTypeById,
     addNewTransactionType,
     updateTransactionTypeById,
     deleteTransactionTypeById,
+    checkTypeNameExisted,
 } = require('../CRUD/transaction_type')
 
 async function index(request, response) {
@@ -18,7 +21,7 @@ async function index(request, response) {
     }
 }
 
-async function indexByTransactionTypeId(request, response) {
+async function showById(request, response) {
     try {
         const transactionTypeId = request.params.id
         const queryResult = await getTransactionTypeById(transactionTypeId)
@@ -35,10 +38,17 @@ async function create(request, response) {
     try {
         const typeName = request.body.type_name
 
+        if (checkTypeNameExisted(typeName)) {
+            return response.status(400).json({
+                message: 'Transaction type already exists!',
+            })
+        }
+
         const newTransactionType = {
             type_name: typeName,
         }
-        const validateResponse = validators.validateTransaction(newTransaction)
+        const validateResponse =
+            validators.validateTransactionType(newTransactionType)
         if (validateResponse !== true) {
             return response.status(400).json({
                 message: 'Validation failed!',
@@ -48,7 +58,7 @@ async function create(request, response) {
 
         addNewTransactionType(newTransactionType).then((_) => {
             return response.status(201).json({
-                message: 'Create Transaction type successfully!',
+                message: 'Create transaction type successfully!',
             })
         })
     } catch (error) {
@@ -65,11 +75,20 @@ async function updateById(request, response) {
         const dbTransactionType = await getTransactionTypeById(
             transactionTypeId,
         )
+
         if (dbTransactionType) {
-            const updateTransactionType = {
-                type_name: request.body.type_name,
+            const typeName = request.body.type_name
+
+            if (checkTypeNameExisted(typeName)) {
+                return response.status(400).json({
+                    message: 'Feedback type already exists!',
+                })
             }
-            const validateResponse = validator.validateTransaction(
+
+            const updateTransactionType = {
+                type_name: typeName,
+            }
+            const validateResponse = validators.validateTransactionType(
                 updateTransactionType,
             )
             if (validateResponse !== true) {
@@ -79,7 +98,7 @@ async function updateById(request, response) {
                 })
             }
 
-            // Update transactionType data
+            // Update transaction type data
             updateTransactionTypeById(
                 updateTransactionType,
                 dbTransactionType.id,
@@ -104,12 +123,13 @@ async function updateById(request, response) {
 async function deleteById(request, response) {
     try {
         const transactionTypeId = request.params.id
+
         //Check transaction type is exits
         const dbTransactionType = await getTransactionTypeById(
             transactionTypeId,
         )
         if (dbTransactionType) {
-            deleteTransactionTypeById(dbTransactionType.id)
+            await deleteTransactionTypeById(dbTransactionType.id)
             return response.status(200).json({
                 message: 'Delete transaction type successfully!',
             })
@@ -120,7 +140,7 @@ async function deleteById(request, response) {
         }
     } catch (error) {
         return response.status(500).json({
-            message: 'Something went wrong !',
+            message: 'Something went wrong!',
             error: error,
         })
     }
@@ -128,7 +148,7 @@ async function deleteById(request, response) {
 
 module.exports = {
     index: index,
-    showById: indexByTransactionTypeId,
+    showById: showById,
     create: create,
     updateById: updateById,
     deleteById: deleteById,

@@ -1,9 +1,12 @@
+const validators = require(process.cwd() + '/helpers/validators')
+
 const {
     getListPackageTypes,
     getPackageTypeById,
     addNewPackageType,
     updatePackageTypeById,
     deletePackageTypeById,
+    checkTypeNameExisted,
 } = require('../CRUD/package_type')
 
 async function index(request, response) {
@@ -18,7 +21,7 @@ async function index(request, response) {
     }
 }
 
-async function indexByPackageTypeId(request, response) {
+async function showById(request, response) {
     try {
         const packageTypeId = request.params.id
         const queryResult = await getPackageTypeById(packageTypeId)
@@ -35,10 +38,16 @@ async function create(request, response) {
     try {
         const typeName = request.body.type_name
 
+        if (checkTypeNameExisted(typeName)) {
+            return response.status(400).json({
+                message: 'Package type already exists!',
+            })
+        }
+
         const newPackageType = {
             type_name: typeName,
         }
-        const validateResponse = validators.validatePackage(newPackage)
+        const validateResponse = validators.validatePackageType(newPackageType)
         if (validateResponse !== true) {
             return response.status(400).json({
                 message: 'Validation failed!',
@@ -48,7 +57,7 @@ async function create(request, response) {
 
         addNewPackageType(newPackageType).then((_) => {
             return response.status(201).json({
-                message: 'Create Package type successfully!',
+                message: 'Create package type successfully!',
             })
         })
     } catch (error) {
@@ -63,12 +72,21 @@ async function updateById(request, response) {
     try {
         const packageTypeId = request.params.id
         const dbPackageType = await getPackageTypeById(packageTypeId)
-        if (dbPackdbPackageTypeage) {
+
+        if (dbPackageType) {
+            const typeName = request.body.type_name
+
+            if (checkTypeNameExisted(typeName)) {
+                return response.status(400).json({
+                    message: 'Package type already exists!',
+                })
+            }
+
             const updatePackageType = {
-                type_name: request.body.type_name,
+                type_name: typeName,
             }
             const validateResponse =
-                validator.validatePackage(updatePackageType)
+                validators.validatePackageType(updatePackageType)
             if (validateResponse !== true) {
                 return response.status(400).json({
                     message: 'Validate failed',
@@ -76,7 +94,7 @@ async function updateById(request, response) {
                 })
             }
 
-            // Update packageType data
+            // Update package type data
             updatePackageTypeById(updatePackageType, dbPackageType.id).then(
                 (_) => {
                     return response.status(201).json({
@@ -100,10 +118,11 @@ async function updateById(request, response) {
 async function deleteById(request, response) {
     try {
         const packageTypeId = request.params.id
+
         //Check package type is exits
         const dbPackageType = await getPackageTypeById(packageTypeId)
-        if (dbPackage) {
-            deletePackageTypeById(dbPackageType.id)
+        if (dbPackageType) {
+            await deletePackageTypeById(dbPackageType.id)
             return response.status(200).json({
                 message: 'Delete package type successfully!',
             })
@@ -114,7 +133,7 @@ async function deleteById(request, response) {
         }
     } catch (error) {
         return response.status(500).json({
-            message: 'Something went wrong !',
+            message: 'Something went wrong!',
             error: error,
         })
     }
@@ -122,7 +141,7 @@ async function deleteById(request, response) {
 
 module.exports = {
     index: index,
-    showById: indexByPackageTypeId,
+    showById: showById,
     create: create,
     updateById: updateById,
     deleteById: deleteById,

@@ -1,36 +1,32 @@
 const express = require('express')
 const checkAuthMiddleware = require('../middleware/check-auth')
 const checkRoleMiddleware = require('../middleware/check-role')
-const feedbackTypeApiController = require('../controllers/api/feedback_type.controller')
+const featureApiFeature = require('../controllers/api/feature.controller')
 
 const router = express.Router()
 
-router.get('/', checkAuthMiddleware.checkAuth, feedbackTypeApiController.index)
+router.get('/', checkAuthMiddleware.checkAuth, featureApiFeature.index)
 
-router.get(
-    '/:id',
-    checkAuthMiddleware.checkAuth,
-    feedbackTypeApiController.showById,
-)
+router.get('/:id', checkAuthMiddleware.checkAuth, featureApiFeature.showById)
 
 router.post(
     '/',
     checkAuthMiddleware.checkAuth,
     checkRoleMiddleware.checkRoleAdmin,
-    feedbackTypeApiController.create,
+    featureApiFeature.create,
 )
 
 router.patch(
     '/:id',
     checkAuthMiddleware.checkAuth,
     checkRoleMiddleware.checkRoleAdmin,
-    feedbackTypeApiController.updateById,
+    featureApiFeature.updateById,
 )
 router.delete(
     '/:id',
     checkAuthMiddleware.checkAuth,
     checkRoleMiddleware.checkRoleAdmin,
-    feedbackTypeApiController.deleteById,
+    featureApiFeature.deleteById,
 )
 
 module.exports = router

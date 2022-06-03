@@ -1,23 +1,31 @@
-const feedbackTypeModel = require(process.cwd() + '/models/index').FeedbackType
+const models = require(process.cwd() + '/models/index')
 
 async function index() {
-    return feedbackTypeModel.findAndCountAll()
+    return models.FeedbackType.findAndCountAll()
 }
 
 async function showById(id) {
-    return feedbackTypeModel.findByPk(id)
+    return models.FeedbackType.findByPk(id)
 }
 
 async function create(newFeedbackType) {
-    return feedbackTypeModel.create(newFeedbackType)
+    return models.FeedbackType.create(newFeedbackType)
 }
 
 async function update(updateFeedbackType, id) {
-    return feedbackTypeModel.update(updateFeedbackType, { where: { id: id } })
+    return models.FeedbackType.update(updateFeedbackType, { where: { id: id } })
 }
 
 async function destroy(id) {
-    return feedbackTypeModel.destroy({ where: { id: id } })
+    return models.FeedbackType.destroy({ where: { id: id } })
+}
+
+async function checkTypeNameExisted(typeName) {
+    return !!(await models.FeedbackType.findOne({
+        where: {
+            type_name: typeName,
+        },
+    }))
 }
 
 module.exports = {
@@ -26,4 +34,5 @@ module.exports = {
     addNewFeedbackType: create,
     updateFeedbackTypeById: update,
     deleteFeedbackTypeById: destroy,
+    checkTypeNameExisted: checkTypeNameExisted,
 }

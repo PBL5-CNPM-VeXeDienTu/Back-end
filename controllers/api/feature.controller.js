@@ -1,17 +1,17 @@
 const validators = require(process.cwd() + '/helpers/validators')
 
 const {
-    getListVehicleTypes,
-    getVehicleTypeById,
-    addNewVehicleType,
-    updateVehicleTypeById,
-    deleteVehicleTypeById,
-    checkTypeNameExisted,
-} = require('../CRUD/vehicle_type')
+    getListFeatureTypes,
+    getFeatureById,
+    addNewFeature,
+    updateFeatureById,
+    deleteFeatureById,
+    checkNameExisted,
+} = require('../CRUD/feature')
 
 async function index(request, response) {
     try {
-        const queryResult = await getListVehicleTypes()
+        const queryResult = await getListFeatureTypes()
         return response.status(200).json(queryResult)
     } catch (error) {
         return response.status(500).json({
@@ -23,8 +23,8 @@ async function index(request, response) {
 
 async function showById(request, response) {
     try {
-        const vehicleTypeId = request.params.id
-        const queryResult = await getVehicleTypeById(vehicleTypeId)
+        const featureId = request.params.id
+        const queryResult = await getFeatureById(featureId)
         return response.status(200).json(queryResult)
     } catch (error) {
         return response.status(500).json({
@@ -36,18 +36,19 @@ async function showById(request, response) {
 
 async function create(request, response) {
     try {
-        const typeName = request.body.type_name
+        const name = request.body.name
 
-        if (checkTypeNameExisted(typeName)) {
+        if (checkNameExisted(name)) {
             return response.status(400).json({
-                message: 'Vehicle type already exists!',
+                message: 'Feature already exists!',
             })
         }
 
-        const newVehicleType = {
-            type_name: typeName,
+        const newFeature = {
+            name: name,
         }
-        const validateResponse = validators.validateVehicleType(newVehicleType)
+
+        const validateResponse = validators.validateFeature(newFeature)
         if (validateResponse !== true) {
             return response.status(400).json({
                 message: 'Validation failed!',
@@ -55,9 +56,9 @@ async function create(request, response) {
             })
         }
 
-        addNewVehicleType(newVehicleType).then((_) => {
+        addNewFeature(newFeature).then((_) => {
             return response.status(201).json({
-                message: 'Create vehicle type successfully!',
+                message: 'Create feature successfully!',
             })
         })
     } catch (error) {
@@ -70,23 +71,22 @@ async function create(request, response) {
 
 async function updateById(request, response) {
     try {
-        const vehicleTypeId = request.params.id
-        const dbVehicleType = await getVehicleTypeById(vehicleTypeId)
+        const featureId = request.params.id
+        const dbFeature = await getFeedbackTypeById(featureId)
 
-        if (dbVehicleType) {
-            const typeName = request.body.type_name
+        if (dbFeature) {
+            const name = request.body.type_name
 
-            if (checkTypeNameExisted(typeName)) {
+            if (checkNameExisted(name)) {
                 return response.status(400).json({
-                    message: 'Vehicle type already exists!',
+                    message: 'Feature already exists!',
                 })
             }
 
-            const updateVehicleType = {
-                type_name: typeName,
+            const updateFeature = {
+                type_name: name,
             }
-            const validateResponse =
-                validators.validateVehicleType(updateVehicleType)
+            const validateResponse = validators.validateFeature(updateFeature)
             if (validateResponse !== true) {
                 return response.status(400).json({
                     message: 'Validate failed',
@@ -94,17 +94,15 @@ async function updateById(request, response) {
                 })
             }
 
-            // Update vehicle type data
-            updateVehicleTypeById(updateVehicleType, dbVehicleType.id).then(
-                (_) => {
-                    return response.status(201).json({
-                        message: 'Update vehicle type successfully!',
-                    })
-                },
-            )
+            // Update featured data
+            updateFeatureById(updateFeature, dbFeature.id).then((_) => {
+                return response.status(201).json({
+                    message: 'Update feature successfully!',
+                })
+            })
         } else {
             return response.status(404).json({
-                message: 'Vehicle type not found!',
+                message: 'Feature not found!',
             })
         }
     } catch (error) {
@@ -117,23 +115,23 @@ async function updateById(request, response) {
 
 async function deleteById(request, response) {
     try {
-        const vehicleTypeId = request.params.id
+        const featureId = request.params.id
 
-        //Check vehicle type is exits
-        const dbVehicleType = await getVehicleTypeById(vehicleTypeId)
-        if (dbVehicleType) {
-            await deleteVehicleTypeById(dbVehicleType.id)
+        //Check feedBack type is exits
+        const dbFeature = await getFeatureById(featureId)
+        if (dbFeature) {
+            await deleteFeatureById(dbFeature.id)
             return response.status(200).json({
-                message: 'Delete vehicle type successfully!',
+                message: 'Delete feature successfully!',
             })
         } else {
             return response.status(404).json({
-                message: 'Vehicle type not found!',
+                message: 'Feature not found!',
             })
         }
     } catch (error) {
         return response.status(500).json({
-            message: 'Something went wrong !',
+            message: 'Something went wrong!',
             error: error,
         })
     }

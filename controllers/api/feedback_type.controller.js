@@ -1,9 +1,12 @@
+const validators = require(process.cwd() + '/helpers/validators')
+
 const {
     getListFeedbackTypes,
     getFeedbackTypeById,
     addNewFeedbackType,
     updateFeedbackTypeById,
     deleteFeedbackTypeById,
+    checkTypeNameExisted,
 } = require('../CRUD/feedback_type')
 
 async function index(request, response) {
@@ -18,7 +21,7 @@ async function index(request, response) {
     }
 }
 
-async function indexByFeedbackTypeId(request, response) {
+async function showById(request, response) {
     try {
         const feedbackTypeId = request.params.id
         const queryResult = await getFeedbackTypeById(feedbackTypeId)
@@ -35,10 +38,18 @@ async function create(request, response) {
     try {
         const typeName = request.body.type_name
 
+        if (checkTypeNameExisted(typeName)) {
+            return response.status(400).json({
+                message: 'Feedback type already exists!',
+            })
+        }
+
         const newFeedbackType = {
             type_name: typeName,
         }
-        const validateResponse = validators.validateFeedback(newFeedbackType)
+
+        const validateResponse =
+            validators.validateFeedbackType(newFeedbackType)
         if (validateResponse !== true) {
             return response.status(400).json({
                 message: 'Validation failed!',
@@ -63,12 +74,21 @@ async function updateById(request, response) {
     try {
         const feedbackTypeId = request.params.id
         const dbFeedbackType = await getFeedbackTypeById(feedbackTypeId)
-        if (dbPackdbFeedbackTypeage) {
+
+        if (dbFeedbackType) {
+            const typeName = request.body.type_name
+
+            if (checkTypeNameExisted(typeName)) {
+                return response.status(400).json({
+                    message: 'Feedback type already exists!',
+                })
+            }
+
             const updateFeedbackType = {
-                type_name: request.body.type_name,
+                type_name: typeName,
             }
             const validateResponse =
-                validator.validateFeedback(updateFeedbackType)
+                validators.validateFeedbackType(updateFeedbackType)
             if (validateResponse !== true) {
                 return response.status(400).json({
                     message: 'Validate failed',
@@ -76,11 +96,11 @@ async function updateById(request, response) {
                 })
             }
 
-            // Update feedbackType data
+            // Update feedback type data
             updateFeedbackTypeById(updateFeedbackType, dbFeedbackType.id).then(
                 (_) => {
                     return response.status(201).json({
-                        message: 'Update feedBack type successfully!',
+                        message: 'Update feedback type successfully!',
                     })
                 },
             )
@@ -100,12 +120,13 @@ async function updateById(request, response) {
 async function deleteById(request, response) {
     try {
         const feedbackTypeId = request.params.id
+
         //Check feedBack type is exits
         const dbFeedbackType = await getFeedbackTypeById(feedbackTypeId)
         if (dbFeedbackType) {
-            deleteFeedbackTypeById(dbFeedbackType.id)
+            await deleteFeedbackTypeById(dbFeedbackType.id)
             return response.status(200).json({
-                message: 'Delete feedBack type successfully!',
+                message: 'Delete feedback type successfully!',
             })
         } else {
             return response.status(404).json({
@@ -114,7 +135,7 @@ async function deleteById(request, response) {
         }
     } catch (error) {
         return response.status(500).json({
-            message: 'Something went wrong !',
+            message: 'Something went wrong!',
             error: error,
         })
     }
@@ -122,7 +143,7 @@ async function deleteById(request, response) {
 
 module.exports = {
     index: index,
-    showById: indexByFeedbackTypeId,
+    showById: showById,
     create: create,
     updateById: updateById,
     deleteById: deleteById,

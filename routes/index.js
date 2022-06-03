@@ -13,6 +13,7 @@ const packageType = require('./package_type.route')
 const vehicleType = require('./vehicle_type.route')
 const transactionType = require('./transation_type.route')
 const feedbackType = require('./feedback_type.route')
+const feature = require('./feature.route')
 const role = require('./role.route')
 
 module.exports = {
@@ -31,5 +32,6 @@ module.exports = {
     vehicleType: vehicleType,
     transactionType: transactionType,
     feedbackType: feedbackType,
+    feature: feature,
     role: role,
 }
