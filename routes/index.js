@@ -15,6 +15,8 @@ const transactionType = require('./transation_type.route')
 const feedbackType = require('./feedback_type.route')
 const feature = require('./feature.route')
 const role = require('./role.route')
+const checkin = require('./checkin.route')
+const checkout = require('./checkout.route')
 
 module.exports = {
     auth: auth,
@@ -34,4 +36,6 @@ module.exports = {
     feedbackType: feedbackType,
     feature: feature,
     role: role,
+    checkin: checkin,
+    checkout: checkout,
 }

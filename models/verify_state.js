@@ -14,7 +14,14 @@ module.exports = (sequelize, DataTypes) => {
     }
     VerifyState.init(
         {
-            state: DataTypes.STRING,
+            state: {
+                type: DataTypes.ENUM,
+                values: [
+                    'Đang chờ xử lý',
+                    'Đã được kiểm duyệt',
+                    'Không đạt yêu cầu',
+                ],
+            },
             note: DataTypes.STRING,
             createdAt: {
                 type: DataTypes.DATE,

@@ -33,5 +33,7 @@ app.use('/api/feedback-types', routes.feedbackType)
 app.use('/api/transaction-types', routes.transactionType)
 app.use('/api/features', routes.feature)
 app.use('/api/roles', routes.role)
+app.use('/api/checkin', routes.checkin)
+app.use('/api/checkout', routes.checkout)
 
 module.exports = app

@@ -1,6 +1,7 @@
 const models = require(process.cwd() + '/models/index')
+const objectCleaner = require(process.cwd() + '/helpers/object-cleaner')
 
-const include = [
+const include = (nestedSelection) => [
     {
         model: models.Vehicle,
         attributes: { exclude: ['updatedAt'] },
@@ -34,6 +35,7 @@ const include = [
                 required: true,
             },
         ],
+        where: nestedSelection.vehicle ? nestedSelection.vehicle : {},
     },
     {
         model: models.ParkingLot,
@@ -63,21 +65,44 @@ const include = [
                 required: true,
             },
         ],
+        where: nestedSelection.parking_lot ? nestedSelection.parking_lot : {},
     },
 ]
 
-async function index(startIndex, limit) {
+function createSelection(params) {
+    return objectCleaner.clean({
+        user_id: params.user_id,
+        vehicle_id: params.vehicle_id,
+        parking_lot_id: params.parking_lot_id,
+        checkin_time: params.checkin_time,
+        is_parking: params.is_parking,
+        qr_key: params.qr_key,
+    })
+}
+
+function createNestedSelection(params) {
+    return objectCleaner.clean({
+        vehicle: objectCleaner.clean(params.vehicle),
+        parking_lot: objectCleaner.clean(params.parking_lot),
+    })
+}
+
+async function index(startIndex, limit, params) {
+    const selection = createSelection(params)
+    const nestedSelection = createNestedSelection(params)
+
     return models.ParkingHistory.findAndCountAll({
-        include: include,
+        include: include(nestedSelection),
         offset: startIndex,
         limit: limit,
         order: [['id', 'DESC']],
+        where: selection,
     })
 }
 
 async function indexByUserId(userId, startIndex, limit) {
     return models.ParkingHistory.findAndCountAll({
-        include: include,
+        include: include(),
         offset: startIndex,
         limit: limit,
         order: [['id', 'DESC']],
@@ -85,8 +110,18 @@ async function indexByUserId(userId, startIndex, limit) {
     })
 }
 
+async function showByParams(params) {
+    const selection = createSelection(params)
+    const nestedSelection = createNestedSelection(params)
+
+    return models.ParkingHistory.findOne({
+        include: include(nestedSelection),
+        where: selection,
+    })
+}
+
 async function showById(id) {
-    return models.ParkingHistory.findByPk(id, { include: include })
+    return models.ParkingHistory.findByPk(id, { include: include() })
 }
 
 async function create(newParkingHistory) {
@@ -106,6 +141,7 @@ async function destroy(id) {
 module.exports = {
     getListParkingHistories: index,
     getListParkingHistoriesByUserId: indexByUserId,
+    getParkingHistoryByParams: showByParams,
     getParkingHistoryById: showById,
     addNewParkingHistory: create,
     updateParkingHistoryById: update,
