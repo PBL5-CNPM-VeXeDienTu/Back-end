@@ -23,6 +23,7 @@ async function index(request, response) {
     try {
         const page = Number.parseInt(request.query.page)
         const limit = Number.parseInt(request.query.limit)
+        const role = Number.parseInt(request.query.role)
 
         if (
             Number.isNaN(page) ||
@@ -37,7 +38,7 @@ async function index(request, response) {
 
         const startIndex = (page - 1) * limit
 
-        const queryResult = await getListUsers(startIndex, limit)
+        const queryResult = await getListUsers(startIndex, limit, role)
 
         return response.status(200).json(queryResult)
     } catch (error) {

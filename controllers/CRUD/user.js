@@ -21,7 +21,7 @@ const include = [
     },
 ]
 
-async function index(startIndex, limit) {
+async function index(startIndex, limit, role) {
     return models.User.findAndCountAll({
         include: include,
         attributes: {
@@ -29,6 +29,7 @@ async function index(startIndex, limit) {
         },
         offset: startIndex,
         limit: limit,
+        where: { role: role },
         order: [
             ['id', 'DESC'],
             ['name', 'ASC'],
