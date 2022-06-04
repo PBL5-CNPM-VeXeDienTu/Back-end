@@ -68,13 +68,13 @@ const parkingLotSchema = {
 
 const parkingHistorySchema = {
     user_id: { type: 'number', optional: true },
-    vehicle_id: { type: 'string', optional: true },
+    vehicle_id: { type: 'number', optional: true },
     parking_lot_id: { type: 'number', optional: true },
     checkin_time: { type: 'string', optional: true },
     checkout_time: { type: 'string', optional: true },
     is_parking: { type: 'boolean', optional: true },
     memo: { type: 'string', optional: true },
-    cost: { type: 'string', optional: true },
+    cost: { type: 'number', optional: true },
     qr_key: { type: 'string', optional: true },
 }
 

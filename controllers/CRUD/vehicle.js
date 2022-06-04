@@ -66,10 +66,10 @@ async function showById(id) {
     })
 }
 
-async function showByLicensePlate(license_plate) {
+async function showByLicensePlate(licensePlate) {
     return models.Vehicle.findOne({
         include: include,
-        where: { license_plate: license_plate },
+        where: { license_plate: licensePlate },
     })
 }
 

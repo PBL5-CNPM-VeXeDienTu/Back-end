@@ -1,10 +1,8 @@
 const { transporter, mailConfig } = require(process.cwd() +
     '/helpers/mailer/transporter')
 const uuid = require('uuid')
-const models = require(process.cwd() + '/models')
 
 const {
-    getAuthKeyByUserId,
     updateAuthKeyById,
     addNewAuthKey,
 } = require('../CRUD/authkey')
