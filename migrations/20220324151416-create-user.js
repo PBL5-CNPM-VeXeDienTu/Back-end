@@ -28,9 +28,6 @@ module.exports = {
                 defaultValue: false,
                 type: Sequelize.BOOLEAN,
             },
-            qr_key: {
-                type: Sequelize.STRING,
-            },
             deletedAt: {
                 type: Sequelize.DATE,
             },

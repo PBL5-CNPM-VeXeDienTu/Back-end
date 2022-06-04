@@ -4,7 +4,6 @@ const userSchema = {
     password: { type: 'string', optional: true },
     role: { type: 'number', optional: true },
     is_verified: { type: 'boolean', optional: true },
-    qr_key: { type: 'string', optional: true },
     deleted_at: { type: 'string', optional: true },
 }
 
@@ -76,6 +75,7 @@ const parkingHistorySchema = {
     is_parking: { type: 'boolean', optional: true },
     memo: { type: 'string', optional: true },
     cost: { type: 'string', optional: true },
+    qr_key: { type: 'string', optional: true },
 }
 
 const verifyStateSchema = {

@@ -13,7 +13,6 @@ module.exports = {
                     password: hash_helper.hash('admin01'),
                     role: 3,
                     is_verified: true,
-                    qr_key: '',
                 },
                 {
                     name: 'Nguyễn Đặng Tuấn Kiệt',
@@ -21,7 +20,6 @@ module.exports = {
                     password: hash_helper.hash('admin02'),
                     role: 3,
                     is_verified: true,
-                    qr_key: '',
                 },
                 {
                     name: 'Hồ Thị Hiếu',
@@ -29,7 +27,6 @@ module.exports = {
                     password: hash_helper.hash('admin03'),
                     role: 3,
                     is_verified: true,
-                    qr_key: '',
                 },
                 {
                     name: 'Phạm Văn Thọ',
@@ -37,7 +34,6 @@ module.exports = {
                     password: hash_helper.hash('admin04'),
                     role: 3,
                     is_verified: true,
-                    qr_key: '',
                 },
                 {
                     name: 'Nguyễn Phạm Nhật Hào',
@@ -45,7 +41,6 @@ module.exports = {
                     password: hash_helper.hash('admin05'),
                     role: 3,
                     is_verified: true,
-                    qr_key: '',
                 },
             ],
             {},

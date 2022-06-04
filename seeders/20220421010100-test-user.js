@@ -13,7 +13,6 @@ module.exports = {
                     password: hash_helper.hash('basic01'),
                     role: 1,
                     is_verified: true,
-                    qr_key: '',
                 },
                 {
                     name: 'Basic user 2',
@@ -21,7 +20,6 @@ module.exports = {
                     password: hash_helper.hash('basic02'),
                     role: 1,
                     is_verified: true,
-                    qr_key: '',
                 },
                 {
                     name: 'Basic user 3',
@@ -29,7 +27,6 @@ module.exports = {
                     password: hash_helper.hash('basic03'),
                     role: 1,
                     is_verified: true,
-                    qr_key: '',
                 },
                 {
                     name: 'Parking lot user 1',
@@ -37,7 +34,6 @@ module.exports = {
                     password: hash_helper.hash('parking01'),
                     role: 2,
                     is_verified: true,
-                    qr_key: '',
                 },
                 {
                     name: 'Parking lot user 2',
@@ -45,7 +41,6 @@ module.exports = {
                     password: hash_helper.hash('parking02'),
                     role: 2,
                     is_verified: true,
-                    qr_key: '',
                 },
                 {
                     name: 'Parking lot user 3',
@@ -53,7 +48,6 @@ module.exports = {
                     password: hash_helper.hash('parking03'),
                     role: 2,
                     is_verified: true,
-                    qr_key: '',
                 },
             ],
             {},

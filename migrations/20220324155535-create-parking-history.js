@@ -37,6 +37,9 @@ module.exports = {
             cost: {
                 type: Sequelize.FLOAT,
             },
+            qr_key: {
+                type: Sequelize.STRING,
+            },
             createdAt: {
                 allowNull: false,
                 type: Sequelize.DATE,

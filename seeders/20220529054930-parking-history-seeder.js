@@ -66,6 +66,7 @@ async function generateParkingHistoryData() {
             is_parking: false,
             memo: Dummy.text(10),
             cost: parkingPrice,
+            qr_key: Dummy.text(5),
         }
 
         data.push(parkingHistory)

@@ -25,7 +25,7 @@ async function index(startIndex, limit) {
     return models.User.findAndCountAll({
         include: include,
         attributes: {
-            exclude: ['password', 'qr_key'],
+            exclude: ['password'],
         },
         offset: startIndex,
         limit: limit,
