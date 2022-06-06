@@ -25,7 +25,7 @@ router.get(
 router.patch(
     '/:id',
     checkAuthMiddleware.checkAuth,
-    checkRoleMiddleware.checkRoleAdmin,
+    checkRoleMiddleware.checkRoleBasicUser,
     parkingHistoryApiController.updateById,
 )
 router.delete(

@@ -1,6 +1,7 @@
 const models = require(process.cwd() + '/models/index')
+const objectCleaner = require(process.cwd() + '/helpers/object-cleaner')
 
-const include = [
+const include = (params) => [
     {
         model: models.User,
         attributes: { exclude: ['password', 'qr_key', 'updatedAt'] },
@@ -19,6 +20,10 @@ const include = [
         require: true,
     },
     {
+        model: models.ParkingLot,
+        required: true,
+    },
+    {
         model: models.PackageType,
         attributes: ['type_name'],
         required: true,
@@ -30,9 +35,29 @@ const include = [
     },
 ]
 
+function createSelection(params) {
+    return objectCleaner.clean({
+        user_id: params.user_id,
+        package_id: params.package_id,
+        parking_lot_id: params.parking_lot_id,
+        name: params.name,
+        type_id: params.type_id,
+        vehicle_type_id: params.vehicle_type_id,
+        price: params.price,
+    })
+}
+
+function createNestedSelection(params) {
+    return objectCleaner.clean({
+        user: objectCleaner.clean(params.user),
+        vehicle: objectCleaner.clean(params.vehicle),
+        parking_lot: objectCleaner.clean(params.parking_lot),
+    })
+}
+
 async function index(startIndex, limit) {
-    return models.UserPackage.findAll({
-        include: include,
+    return models.UserPackage.findAndCountAll({
+        include: include(),
         offset: startIndex,
         limit: limit,
         order: [
@@ -44,18 +69,30 @@ async function index(startIndex, limit) {
 
 async function showById(id) {
     return models.UserPackage.findByPk(id, {
-        include: include,
+        include: include(),
     })
 }
 
-async function showByOwnerId(parkingLotId) {
-    return models.UserPackage.findAll({
-        include: include,
+async function showByParams(params) {
+    const selection = createSelection(params)
+    const nestedSelection = createNestedSelection(params)
+
+    return models.UserPackage.findOne({
+        include: include(nestedSelection),
+        where: selection,
+    })
+}
+
+async function showByOwnerId(ownerId, startIndex, limit) {
+    return models.UserPackage.findAndCountAll({
+        include: include(),
+        offset: startIndex,
+        limit: limit,
         order: [
             ['id', 'DESC'],
             ['price', 'DESC'],
         ],
-        where: { parking_lot_id: parkingLotId },
+        where: { user_id: ownerId },
     })
 }
 
@@ -81,12 +118,24 @@ async function checkOwner(userPackageId, userId) {
     }))
 }
 
+async function checkExisted(userId, packageId) {
+    return !!(await models.UserPackage.findOne({
+        where: {
+            user_id: userId,
+            package_id: packageId,
+            expireAt: null,
+        },
+    }))
+}
+
 module.exports = {
     getListUserPackages: index,
+    getUserPackageByParams: showByParams,
     getUserPackageById: showById,
     getUserPackageByOwnerId: showByOwnerId,
     addNewUserPackage: create,
     updateUserPackageById: update,
     deleteUserPackageById: destroy,
     checkUserOwnUserPackage: checkOwner,
+    checkUserPackageExisted: checkExisted,
 }

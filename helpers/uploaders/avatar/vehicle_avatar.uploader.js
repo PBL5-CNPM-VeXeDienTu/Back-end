@@ -31,6 +31,6 @@ const uploader = multer({
         fileSize: 1024 * 1024 * 10,
     },
     fileFilter: fileFilter,
-}).single('vehicle-image')
+}).single('vehicle-avatar')
 
 module.exports = uploader

@@ -41,6 +41,7 @@ module.exports = (sequelize, DataTypes) => {
             is_parking: DataTypes.BOOLEAN,
             memo: DataTypes.STRING,
             cost: DataTypes.FLOAT,
+            qr_key: DataTypes.STRING,
             createdAt: {
                 type: DataTypes.DATE,
                 get: function () {

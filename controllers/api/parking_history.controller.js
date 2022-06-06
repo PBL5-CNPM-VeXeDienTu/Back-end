@@ -12,6 +12,7 @@ async function index(request, response) {
     try {
         const page = Number.parseInt(request.query.page)
         const limit = Number.parseInt(request.query.limit)
+        const queryParams = request.query
 
         if (
             Number.isNaN(page) ||
@@ -25,8 +26,20 @@ async function index(request, response) {
         }
 
         const startIndex = (page - 1) * limit
+        const params = {
+            user_id: queryParams.user_id,
+            vehicle_id: queryParams.vehicle_id,
+            parking_lot_id: queryParams.parking_lot_id,
+            checkin_time: queryParams.checkin_time,
+            is_parking: queryParams.is_parking,
+            qr_key: queryParams.qr_key,
+        }
 
-        const queryResult = await getListParkingHistories(startIndex, limit)
+        const queryResult = await getListParkingHistories(
+            startIndex,
+            limit,
+            params,
+        )
 
         return response.status(200).json(queryResult)
     } catch (error) {
@@ -101,7 +114,7 @@ async function updateById(request, response) {
                 cost: request.body.cost,
             }
 
-            // Validate update vehicle's data
+            // Validate update parking history's data
             const validateResponse =
                 validators.validateParkingHistory(updateParkingHistory)
             if (validateResponse !== true) {

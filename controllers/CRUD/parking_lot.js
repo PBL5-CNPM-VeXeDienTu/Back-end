@@ -1,3 +1,5 @@
+const { Op } = require('sequelize')
+
 const models = require(process.cwd() + '/models/index')
 const { getCurrentDateTime } = require(process.cwd() + '/helpers/datetime')
 
@@ -20,8 +22,8 @@ const include = [
     },
 ]
 
-async function index(startIndex, limit) {
-    return models.ParkingLot.findAll({
+async function index(startIndex, limit, isAdmin) {
+    return models.ParkingLot.findAndCountAll({
         include: include,
         offset: startIndex,
         limit: limit,
@@ -29,17 +31,27 @@ async function index(startIndex, limit) {
             ['id', 'DESC'],
             ['name', 'ASC'],
         ],
+        where: {
+            deletedAt: isAdmin
+                ? { [Op.or]: [{ [Op.is]: null }, { [Op.not]: null }] }
+                : { [Op.is]: null },
+        },
     })
 }
 
-async function indexByOwnerId(ownerId) {
-    return models.ParkingLot.findAll({
+async function indexByOwnerId(ownerId, isAdmin) {
+    return models.ParkingLot.findAndCountAll({
         include: include,
         order: [
             ['id', 'DESC'],
             ['name', 'ASC'],
         ],
-        where: { owner_id: ownerId },
+        where: {
+            owner_id: ownerId,
+            deletedAt: isAdmin
+                ? { [Op.or]: [{ [Op.is]: null }, { [Op.not]: null }] }
+                : { [Op.is]: null },
+        },
     })
 }
 
@@ -86,9 +98,9 @@ async function destroy(id) {
     await update(updateParkingLot, id)
 }
 
-async function checkOwner(vehicleId, userId) {
+async function checkOwner(parkingLotId, userId) {
     return !!(await models.ParkingLot.findOne({
-        where: { id: vehicleId, owner_id: userId },
+        where: { id: parkingLotId, owner_id: userId },
     }))
 }
 

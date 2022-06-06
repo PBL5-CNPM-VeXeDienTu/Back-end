@@ -28,7 +28,6 @@ module.exports = (sequelize, DataTypes) => {
             password: DataTypes.STRING,
             role: DataTypes.TINYINT,
             is_verified: DataTypes.BOOLEAN,
-            qr_key: DataTypes.STRING,
             deletedAt: {
                 type: DataTypes.DATE,
                 get: function () {

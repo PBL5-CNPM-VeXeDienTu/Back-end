@@ -1,6 +1,4 @@
 const validators = require(process.cwd() + '/helpers/validators')
-const { getExpireOfPackage, getCurrentDateTime } = require(process.cwd() +
-    '/helpers/datetime')
 
 const {
     getListUserPackages,
@@ -11,6 +9,10 @@ const {
     deleteUserPackageById,
 } = require('../CRUD/user_package')
 const { getPackageById } = require('../CRUD/package')
+const { addNewTransaction } = require('../CRUD/transaction')
+const { getWalletByUserId } = require('../CRUD/wallet')
+
+const BUY_PACKAGE_TRANSACTION_TYPE_ID = 5
 
 async function index(request, response) {
     try {
@@ -43,9 +45,28 @@ async function index(request, response) {
 
 async function indexByOwnerId(request, response) {
     try {
-        const userOwnerId = request.params.id
+        const ownerId = request.userData.userId
+        const page = Number.parseInt(request.query.page)
+        const limit = Number.parseInt(request.query.limit)
 
-        const queryResult = await getUserPackageByOwnerId(userOwnerId)
+        if (
+            Number.isNaN(page) ||
+            page < 1 ||
+            Number.isNaN(limit) ||
+            limit < 0
+        ) {
+            return response.status(400).json({
+                message: 'Invalid query parameters!',
+            })
+        }
+
+        const startIndex = (page - 1) * limit
+
+        const queryResult = await getUserPackageByOwnerId(
+            ownerId,
+            startIndex,
+            limit,
+        )
 
         return response.status(200).json(queryResult)
     } catch (error) {
@@ -84,10 +105,13 @@ async function create(request, response) {
                 type_id: dbPackage.type_id,
                 vehicle_type_id: dbPackage.vehicle_type_id,
                 price: dbPackage.price,
-                expire_at: getExpireOfPackage(request.body.type_id),
+                expire_at: await getExpireDateOfUserPackage(
+                    dbPackage.PackageType.type_name,
+                ),
             }
 
-            const validateResponse = validators.validatePackage(newPackage)
+            const validateResponse =
+                validators.validateUserPackage(newUserPackage)
             if (validateResponse !== true) {
                 return response.status(400).json({
                     message: 'Validation failed!',
@@ -95,10 +119,22 @@ async function create(request, response) {
                 })
             }
 
-            addNewUserPackage(newUserPackage).then((_) => {
-                return response.status(404).json({
-                    message: 'Create user package successfully!',
-                })
+            const result = await addNewUserPackage(newUserPackage)
+
+            // Get user's wallet id
+            const walletId = (await getWalletByUserId(result.user_id))?.id
+
+            // Add new transaction history
+            const newTransaction = {
+                wallet_id: walletId,
+                type_id: BUY_PACKAGE_TRANSACTION_TYPE_ID,
+                reference_id: result.id,
+                amount: result.price,
+            }
+            addNewTransaction(newTransaction)
+
+            return response.status(201).json({
+                message: 'Create user package successfully!',
             })
         } else {
             return response.status(404).json({
@@ -182,6 +218,31 @@ async function deleteById(request, response) {
     }
 }
 
+async function getExpireDateOfUserPackage(packageTypeName) {
+    const date = new Date()
+    const now = new Date(date.getTime() - date.getTimezoneOffset() * 60000)
+
+    switch (packageTypeName) {
+        case 'Week':
+            now.setDate(now.getDate() + 7)
+            break
+        case 'Month':
+            now.setMonth(now.getMonth() + 1)
+            break
+        case 'Quarter':
+            now.setMonth(now.getMonth() + 4)
+            break
+        case 'Year':
+            now.setFullYear(now.getFullYear() + 1)
+            break
+    }
+
+    return new Date(now.getTime() - now.getTimezoneOffset() * 60000)
+        .toISOString()
+        .replace(/T/, ' ')
+        .replace(/\..+/, '')
+}
+
 module.exports = {
     index: index,
     indexByOwnerId: indexByOwnerId,
@@ -189,4 +250,5 @@ module.exports = {
     create: create,
     updateById: updateById,
     deleteById: deleteById,
+    getExpireDateOfUserPackage,
 }

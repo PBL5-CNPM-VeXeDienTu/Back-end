@@ -116,6 +116,11 @@
   "resolved" "https://registry.npmjs.org/astral-regex/-/astral-regex-2.0.0.tgz"
   "version" "2.0.0"
 
+"async@0.2.9":
+  "integrity" "sha512-OAtM6mexGteNKdU29wcUfRW+VuBr94A3hx9h9yzBnPaQAbKoW1ORd68XM4CCAOpdL5wlNFgO29hsY1TKv2vAKw=="
+  "resolved" "https://registry.npmjs.org/async/-/async-0.2.9.tgz"
+  "version" "0.2.9"
+
 "at-least-node@^1.0.0":
   "integrity" "sha512-+q/t7Ekv1EDY2l6Gda6LLiX14rU9TV20Wa3ofeQmwPFZbOMo9DXrLbOjFaaclkXKWidIaopwAObQDqwWtGUjqg=="
   "resolved" "https://registry.npmjs.org/at-least-node/-/at-least-node-1.0.0.tgz"
@@ -517,6 +522,11 @@
   "resolved" "https://registry.npmjs.org/dottie/-/dottie-2.0.2.tgz"
   "version" "2.0.2"
 
+"dummyjs@^1.1.7":
+  "integrity" "sha512-LLbsaDZN7biLCmBf4rtMKkjQU9poMzkm01UQYoDxosFohtco9tT/bvhU4Juq+gODd7gpXsTDq1DdXW4g2q1zQw=="
+  "resolved" "https://registry.npmjs.org/dummyjs/-/dummyjs-1.1.7.tgz"
+  "version" "1.1.7"
+
 "duplexer3@^0.1.4":
   "integrity" "sha1-7gHdHKwO08vH/b6jfcCo8c4ALOI="
   "resolved" "https://registry.npmjs.org/duplexer3/-/duplexer3-0.1.4.tgz"
@@ -649,6 +659,13 @@
     "onetime" "^5.1.2"
     "signal-exit" "^3.0.3"
     "strip-final-newline" "^2.0.0"
+
+"express-load@^1.1.16":
+  "integrity" "sha512-R+HNkLZMbUCJQ42VPx4sGbs/a0Xv//XUNRft2WqgBz7+6qL8QyTsqBdwPh3h33lxFFrwHKfF4Wn65sDg8POiHA=="
+  "resolved" "https://registry.npmjs.org/express-load/-/express-load-1.1.16.tgz"
+  "version" "1.1.16"
+  dependencies:
+    "async" "0.2.9"
 
 "express@^4.17.3":
   "integrity" "sha512-yuSQpz5I+Ch7gFrPCk4/c+dIBKlQUxtgwqzph132bsT6qhuzss6I8cLJQz7B3rFblzd6wtcI0ZbGltH/C4LjUg=="
@@ -1595,10 +1612,10 @@
   "resolved" "https://registry.npmjs.org/prepend-http/-/prepend-http-2.0.0.tgz"
   "version" "2.0.0"
 
-"prettier@^2.6.1":
-  "integrity" "sha512-8UVbTBYGwN37Bs9LERmxCPjdvPxlEowx2urIL6urHzdb3SDq4B/Z6xLFCblrSnE4iKWcS6ziJ3aOYrc1kz/E2A=="
-  "resolved" "https://registry.npmjs.org/prettier/-/prettier-2.6.1.tgz"
-  "version" "2.6.1"
+"prettier@2.6.2":
+  "integrity" "sha512-PkUpF+qoXTqhOeWL9fu7As8LXsIUZ1WYaJiY/a7McAQzxjk82OF0tibkFXVCDImZtWxbvojFjerkiLb0/q8mew=="
+  "resolved" "https://registry.npmjs.org/prettier/-/prettier-2.6.2.tgz"
+  "version" "2.6.2"
 
 "process-nextick-args@~2.0.0":
   "integrity" "sha512-3ouUOpQhtgrbOa17J7+uxOTpITYWaGP7/AhoR3+A+/1e9skrzelGi/dXzEYyvbxubEF6Wn2ypscTKiKJFFn1ag=="

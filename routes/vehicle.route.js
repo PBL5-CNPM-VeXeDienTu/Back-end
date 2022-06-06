@@ -36,6 +36,12 @@ router.patch(
     checkOwnerMiddleware.checkVehicleOwner,
     vehicleApiController.updateById,
 )
+router.patch(
+    '/:id/verify',
+    checkAuthMiddleware.checkAuth,
+    checkRoleMiddleware.checkRoleAdmin,
+    vehicleApiController.verifyById,
+)
 router.delete(
     '/:id',
     checkAuthMiddleware.checkAuth,

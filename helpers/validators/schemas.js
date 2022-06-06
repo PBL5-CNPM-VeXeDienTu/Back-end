@@ -3,8 +3,7 @@ const userSchema = {
     email: { type: 'string', optional: true },
     password: { type: 'string', optional: true },
     role: { type: 'number', optional: true },
-    is_verified: { type: 'number', optional: true },
-    qr_key: { type: 'string', optional: true },
+    is_verified: { type: 'boolean', optional: true },
     deleted_at: { type: 'string', optional: true },
 }
 
@@ -60,8 +59,8 @@ const parkingLotSchema = {
     avatar: { type: 'string', optional: true },
     time_slot: { type: 'string', optional: true },
     capacity: { type: 'number', optional: true },
-    is_open: { type: 'number', optional: true },
-    is_full: { type: 'number', optional: true },
+    is_open: { type: 'boolean', optional: true },
+    is_full: { type: 'boolean', optional: true },
     owner_id: { type: 'number', optional: true },
     verify_state: { type: 'number', optional: true },
     deleted_at: { type: 'string', optional: true },
@@ -69,13 +68,14 @@ const parkingLotSchema = {
 
 const parkingHistorySchema = {
     user_id: { type: 'number', optional: true },
-    vehicle_id: { type: 'string', optional: true },
+    vehicle_id: { type: 'number', optional: true },
     parking_lot_id: { type: 'number', optional: true },
     checkin_time: { type: 'string', optional: true },
     checkout_time: { type: 'string', optional: true },
-    is_parking: { type: 'number', optional: true },
+    is_parking: { type: 'boolean', optional: true },
     memo: { type: 'string', optional: true },
-    cost: { type: 'string', optional: true },
+    cost: { type: 'number', optional: true },
+    qr_key: { type: 'string', optional: true },
 }
 
 const verifyStateSchema = {
@@ -117,7 +117,7 @@ const feedbackSchema = {
     type_id: { type: 'number', optional: true },
     feature_id: { type: 'number', optional: true },
     content: { type: 'string', optional: true },
-    is_processed: { type: 'number', optional: true },
+    is_processed: { type: 'boolean', optional: true },
 }
 
 const feedbackTypeSchema = {
@@ -132,7 +132,7 @@ const notificationSchema = {
     user_id: { type: 'number', optional: true },
     title: { type: 'string', optional: true },
     content: { type: 'string', optional: true },
-    is_read: { type: 'number', optional: true },
+    is_read: { type: 'boolean', optional: true },
 }
 
 const authKeySchema = {

@@ -1,11 +1,11 @@
 const authKeyModel = require(process.cwd() + '/models/index').AuthKey
 
 async function index() {
-    return authKeyModel.findAll()
+    return authKeyModel.findAndCountAll()
 }
 
-async function showByUserId(user_id) {
-    return authKeyModel.findOne({ where: { user_id: user_id } })
+async function showByUserId(userId) {
+    return authKeyModel.findOne({ where: { user_id: userId } })
 }
 
 async function create(newAuthKey) {

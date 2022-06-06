@@ -21,14 +21,15 @@ const include = [
     },
 ]
 
-async function index(startIndex, limit) {
-    return models.User.findAll({
+async function index(startIndex, limit, role) {
+    return models.User.findAndCountAll({
         include: include,
         attributes: {
-            exclude: ['password', 'qr_key'],
+            exclude: ['password'],
         },
         offset: startIndex,
         limit: limit,
+        where: { role: role },
         order: [
             ['id', 'DESC'],
             ['name', 'ASC'],

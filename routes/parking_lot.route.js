@@ -16,7 +16,6 @@ router.get(
 router.get(
     '/:id',
     checkAuthMiddleware.checkAuth,
-    checkOwnerMiddleware.checkParkingLotOwner,
     parkingLotApiController.showById,
 )
 router.post(
@@ -30,6 +29,12 @@ router.patch(
     checkAuthMiddleware.checkAuth,
     checkOwnerMiddleware.checkParkingLotOwner,
     parkingLotApiController.updateById,
+)
+router.patch(
+    '/:id/verify',
+    checkAuthMiddleware.checkAuth,
+    checkRoleMiddleware.checkRoleAdmin,
+    parkingLotApiController.verifyById,
 )
 router.delete(
     '/:id',

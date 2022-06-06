@@ -11,23 +11,25 @@ async function uploadSingle(request, response) {
             const userId = request.params.id
 
             // Check if user exists
-            const dbUser = await getUserInfoByUserId(userId)
-            if (dbUser) {
+            const dbUserInfo = await getUserInfoByUserId(userId)
+            if (dbUserInfo) {
                 // Update user avatar in database
                 const extName = path.extname(request.file.originalname)
                 const imageUrl = `public/images/avatars/user/${userId}${extName}`
                 const updateUser = {
                     avatar: imageUrl,
                 }
-                updateUserInfoByUserId(updateUser, dbUser.id).then(() => {
-                    return response.status(200).json({
-                        message: "Upload user's avatar successfully!",
-                        url: imageUrl,
-                    })
-                })
+                updateUserInfoByUserId(updateUser, dbUserInfo.user_id).then(
+                    () => {
+                        return response.status(200).json({
+                            message: "Upload user's avatar successfully!",
+                            url: imageUrl,
+                        })
+                    },
+                )
             } else {
                 return response.status(404).json({
-                    message: 'User not found!',
+                    message: 'User info not found!',
                 })
             }
         } else {

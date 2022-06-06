@@ -27,7 +27,7 @@ async function checkAccountOwner(request, response, next) {
 
             if (requestUserId != userId) {
                 return response.status(400).json({
-                    message: 'Invalid role!',
+                    message: 'Access denied for this role!',
                 })
             } else next()
         } else next()

@@ -1,14 +1,20 @@
 const validators = require(process.cwd() + '/helpers/validators')
+const hashHelper = require(process.cwd() +
+    '/helpers/password-encrypter/hash_helper')
 
-const { updateUserInfoByUserId } = require('../CRUD/user_info')
+const { addNewUserInfo, updateUserInfoByUserId } = require('../CRUD/user_info')
 const {
     getListUsers,
     getUserById,
+    getUserByEmail,
+    addNewUser,
     updateUserById,
     softDeleteUserById,
 } = require('../CRUD/user')
 const { softDeleteVehicleByOwnerId } = require('../CRUD/vehicle')
 const { softDeleteParkingLotByOwnerId } = require('../CRUD/parking_lot')
+const { getRoleById } = require('../CRUD/role')
+const { addNewWallet } = require('../CRUD/wallet')
 
 const BASIC_USER_ROLE = 1
 const PARKING_LOT_USER_ROLE = 2
@@ -17,6 +23,7 @@ async function index(request, response) {
     try {
         const page = Number.parseInt(request.query.page)
         const limit = Number.parseInt(request.query.limit)
+        const role = Number.parseInt(request.query.role)
 
         if (
             Number.isNaN(page) ||
@@ -31,7 +38,7 @@ async function index(request, response) {
 
         const startIndex = (page - 1) * limit
 
-        const queryResult = await getListUsers(startIndex, limit)
+        const queryResult = await getListUsers(startIndex, limit, role)
 
         return response.status(200).json(queryResult)
     } catch (error) {
@@ -55,6 +62,74 @@ async function showById(request, response) {
                 message: 'User not found!',
             })
         }
+    } catch (error) {
+        return response.status(500).json({
+            message: 'Something went wrong!',
+            error: error,
+        })
+    }
+}
+
+async function create(request, response) {
+    try {
+        // Check if email already registered
+        const dbUser = await getUserByEmail(request.body.email)
+        if (dbUser) {
+            return response.status(409).json({
+                message: 'Email already exists!',
+            })
+        }
+
+        // Check if role is valid
+        const dbRole = await getRoleById(request.body.role)
+        if (!dbRole) {
+            return response.status(409).json({
+                message: 'Invalid role!',
+            })
+        }
+
+        // Create new user
+        const newUser = {
+            name: request.body.name,
+            email: request.body.email,
+            password: hashHelper.hash(request.body.password),
+            role: request.body.role,
+            is_verified: true,
+        }
+
+        // Validate new user's data
+        const validateResponse = validators.validateUser(newUser)
+        if (validateResponse !== true) {
+            return response.status(400).json({
+                message: 'Validation failed!',
+                errors: validateResponse,
+            })
+        }
+
+        // Add new user to database
+        addNewUser(newUser).then(async (result) => {
+            // Create new user info
+            const newUserInfo = {
+                user_id: result.id,
+                gender: request.body.gender,
+                birthday: request.body.birthday,
+                address: request.body.address,
+                phone_number: request.body.phone_number,
+                avatar: 'public/images/avatars/user/default-avatar.png',
+            }
+            await addNewUserInfo(newUserInfo)
+
+            // Create new wallet
+            const newWallet = {
+                user_id: result.id,
+                balance: 0,
+            }
+            await addNewWallet(newWallet)
+
+            return response.status(201).json({
+                message: 'Create user successfully!',
+            })
+        })
     } catch (error) {
         return response.status(500).json({
             message: 'Something went wrong!',
@@ -121,7 +196,7 @@ async function softDeleteById(request, response) {
         const dbUser = await getUserById(userId)
         if (dbUser) {
             // Soft delete user
-            softDeleteUserById(dbUser.id)
+            await softDeleteUserById(dbUser.id)
 
             // Check user role, soft delete vehicle/parking-lot this user own
             if (dbUser.role === BASIC_USER_ROLE)
@@ -148,6 +223,7 @@ async function softDeleteById(request, response) {
 module.exports = {
     index: index,
     showById: showById,
+    create: create,
     updateById: updateById,
     softDeleteById: softDeleteById,
 }

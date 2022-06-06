@@ -8,9 +8,9 @@ const router = express.Router()
 
 router.get('/', checkAuthMiddleware.checkAuth, userPackageApiController.index)
 router.get(
-    '/:id',
+    '/get-by-owner/:id',
     checkAuthMiddleware.checkAuth,
-    checkOwnerMiddleware.checkUserPackageOwner,
+    checkOwnerMiddleware.checkAccountOwner,
     userPackageApiController.indexByOwnerId,
 )
 router.post(

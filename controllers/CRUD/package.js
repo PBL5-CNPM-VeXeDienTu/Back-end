@@ -1,12 +1,14 @@
+const { Op } = require('sequelize')
+
 const models = require(process.cwd() + '/models/index')
 
-const include = [
+const include = (ownerId) => [
     {
         model: models.ParkingLot,
         include: [
             {
                 model: models.User,
-                attributes: { exclude: ['password', 'qr_key', 'updatedAt'] },
+                attributes: { exclude: ['password', 'updatedAt'] },
                 include: [
                     {
                         model: models.Role,
@@ -17,6 +19,7 @@ const include = [
                 required: true,
             },
         ],
+        where: { owner_id: ownerId ? ownerId : { [Op.gt]: 0 } },
         required: true,
     },
     {
@@ -32,8 +35,8 @@ const include = [
 ]
 
 async function index(startIndex, limit) {
-    return models.Package.findAll({
-        include: include,
+    return models.Package.findAndCountAll({
+        include: include(),
         offset: startIndex,
         limit: limit,
         order: [
@@ -45,18 +48,32 @@ async function index(startIndex, limit) {
 
 async function showById(id) {
     return models.Package.findByPk(id, {
-        include: include,
+        include: include(),
     })
 }
 
-async function showByParkingLotId(parkingLotId) {
-    return models.Package.findAll({
-        include: include,
+async function showByParkingLotId(parkingLotId, startIndex, limit) {
+    return models.Package.findAndCountAll({
+        include: include(),
+        offset: startIndex,
+        limit: limit,
         order: [
             ['id', 'DESC'],
             ['price', 'DESC'],
         ],
         where: { parking_lot_id: parkingLotId },
+    })
+}
+
+async function showByOwnerId(ownerId, startIndex, limit) {
+    return models.Package.findAndCountAll({
+        include: include(ownerId),
+        offset: startIndex,
+        limit: limit,
+        order: [
+            ['id', 'DESC'],
+            ['price', 'DESC'],
+        ],
     })
 }
 
@@ -86,6 +103,7 @@ module.exports = {
     getListPackages: index,
     getPackageById: showById,
     getPackageByParkingLotId: showByParkingLotId,
+    getPackageByOwnerId: showByOwnerId,
     addNewPackage: create,
     updatePackageById: update,
     deletePackageById: destroy,

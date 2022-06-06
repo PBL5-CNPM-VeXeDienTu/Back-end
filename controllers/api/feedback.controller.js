@@ -2,8 +2,10 @@ const validators = require(process.cwd() + '/helpers/validators')
 
 const {
     getListFeedbacks,
+    getListFeedbackByUserId,
     getFeedbackById,
     addNewFeedback,
+    updateFeedbackById,
 } = require('../CRUD/feedback')
 
 async function index(request, response) {
@@ -27,6 +29,40 @@ async function index(request, response) {
         const queryResult = await getListFeedbacks(startIndex, limit)
 
         return response.status(200).json(queryResult)
+    } catch (error) {
+        return response.status(500).json({
+            message: 'Something went wrong!',
+            error: error,
+        })
+    }
+}
+
+async function indexByUserId(request, response) {
+    try {
+        const userId = request.params.id
+        const page = Number.parseInt(request.query.page)
+        const limit = Number.parseInt(request.query.limit)
+
+        if (
+            Number.isNaN(page) ||
+            page < 1 ||
+            Number.isNaN(limit) ||
+            limit < 0
+        ) {
+            return response.status(400).json({
+                message: 'Invalid query parameters!',
+            })
+        }
+
+        const startIndex = (page - 1) * limit
+
+        const dbFeedback = await getListFeedbackByUserId(
+            userId,
+            startIndex,
+            limit,
+        )
+
+        return response.status(200).json(dbFeedback)
     } catch (error) {
         return response.status(500).json({
             message: 'Something went wrong!',
@@ -61,7 +97,7 @@ async function create(request, response) {
             response: null,
         }
 
-        // Validate new vehicle's data
+        // Validate new feedback's data
         const validateResponse = validators.validateFeedback(newFeedback)
         if (validateResponse !== true) {
             return response.status(400).json({
@@ -70,13 +106,11 @@ async function create(request, response) {
             })
         }
 
-        addNewFeedback(
-            newFeedback.then((_) => {
-                return response.status(201).json({
-                    message: 'Create feedback successfully!',
-                })
-            }),
-        )
+        addNewFeedback(newFeedback).then((_) => {
+            return response.status(201).json({
+                message: 'Create feedback successfully!',
+            })
+        })
     } catch (error) {
         return response.status(500).json({
             message: 'Something went wrong!',
@@ -89,15 +123,15 @@ async function updateById(request, response) {
     try {
         const feedbackId = request.params.id
 
-        // Check if vehicle exists
-        const dbFeedback = await getVehicleById(feedbackId)
+        // Check if feedback exists
+        const dbFeedback = await getFeedbackById(feedbackId)
         if (dbFeedback) {
             const updateFeedback = {
                 is_processed: request.body.is_processed,
                 response: request.body.response,
             }
 
-            // Validate update vehicle's data
+            // Validate update feedback's data
             const validateResponse = validators.validateFeedback(updateFeedback)
             if (validateResponse !== true) {
                 return response.status(400).json({
@@ -106,8 +140,8 @@ async function updateById(request, response) {
                 })
             }
 
-            // Update vehicle's data
-            updateVehicleById(updateFeedback, dbFeedback.id).then((_) => {
+            // Update feedback's data
+            updateFeedbackById(updateFeedback, dbFeedback.id).then((_) => {
                 return response.status(201).json({
                     message: 'Update feedback successfully!',
                 })
@@ -129,11 +163,11 @@ async function deleteById(request, response) {
     try {
         const feedbackId = request.params.id
 
-        // Check if vehicle exists
+        // Check if feedback exists
         const dbFeedback = await getFeedbackById(feedbackId)
         if (dbFeedback) {
-            // Soft delete vehicle
-            softDeleteVehicleById(dbFeedback.id)
+            // Delete feedback
+            deleteById(dbFeedback.id)
 
             return response.status(200).json({
                 message: 'Delete feedback successfully!',
@@ -153,6 +187,7 @@ async function deleteById(request, response) {
 
 module.exports = {
     index: index,
+    indexByUserId: indexByUserId,
     showById: showById,
     create: create,
     updateById: updateById,

@@ -32,11 +32,21 @@ const include = [
 ]
 
 async function index(startIndex, limit) {
-    return models.Feedback.findAll({
+    return models.Feedback.findAndCountAll({
         include: include,
         offset: startIndex,
         limit: limit,
         order: [['id', 'DESC']],
+    })
+}
+
+async function indexByUserId(userId, startIndex, limit) {
+    return models.Feedback.findAndCountAll({
+        include: include,
+        offset: startIndex,
+        limit: limit,
+        order: [['id', 'DESC']],
+        where: { user_id: userId },
     })
 }
 
@@ -66,6 +76,7 @@ async function checkOwner(feedbackId, userId) {
 
 module.exports = {
     getListFeedbacks: index,
+    getListFeedbackByUserId: indexByUserId,
     getFeedbackById: showById,
     addNewFeedback: create,
     updateFeedbackById: update,

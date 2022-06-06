@@ -4,7 +4,10 @@ const { toLocaleString } = require(process.cwd() + '/helpers/datetime')
 module.exports = (sequelize, DataTypes) => {
     class UserPackage extends Model {
         static associate(models) {
-            UserPackage.belongsTo(models.User, { foreignKey: 'user_id' })
+            UserPackage.belongsTo(models.User, {
+                foreignKey: 'user_id',
+                as: 'Owner',
+            })
             UserPackage.belongsTo(models.Package, { foreignKey: 'package_id' })
             UserPackage.belongsTo(models.ParkingLot, {
                 foreignKey: 'parking_lot_id',

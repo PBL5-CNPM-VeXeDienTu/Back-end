@@ -1,3 +1,5 @@
+const { Op } = require('sequelize')
+
 const models = require(process.cwd() + '/models/index')
 const { getCurrentDateTime } = require(process.cwd() + '/helpers/datetime')
 
@@ -25,8 +27,8 @@ const include = [
     },
 ]
 
-async function index(startIndex, limit) {
-    return models.Vehicle.findAll({
+async function index(startIndex, limit, isAdmin) {
+    return models.Vehicle.findAndCountAll({
         include: include,
         offset: startIndex,
         limit: limit,
@@ -34,17 +36,27 @@ async function index(startIndex, limit) {
             ['id', 'DESC'],
             ['license_plate', 'ASC'],
         ],
+        where: {
+            deletedAt: isAdmin
+                ? { [Op.or]: [{ [Op.is]: null }, { [Op.not]: null }] }
+                : { [Op.is]: null },
+        },
     })
 }
 
-async function indexByOwnerId(ownerId) {
-    return models.Vehicle.findAll({
+async function indexByOwnerId(ownerId, isAdmin) {
+    return models.Vehicle.findAndCountAll({
         include: include,
         order: [
             ['id', 'DESC'],
             ['license_plate', 'ASC'],
         ],
-        where: { owner_id: ownerId },
+        where: {
+            owner_id: ownerId,
+            deletedAt: isAdmin
+                ? { [Op.or]: [{ [Op.is]: null }, { [Op.not]: null }] }
+                : { [Op.is]: null },
+        },
     })
 }
 
@@ -54,10 +66,10 @@ async function showById(id) {
     })
 }
 
-async function showByLicensePlate(license_plate) {
+async function showByLicensePlate(licensePlate) {
     return models.Vehicle.findOne({
         include: include,
-        where: { license_plate: license_plate },
+        where: { license_plate: licensePlate },
     })
 }
 

@@ -13,6 +13,12 @@ router.get(
     feedbackApiController.index,
 )
 router.get(
+    '/get-by-user/:id',
+    checkAuthMiddleware.checkAuth,
+    checkOwnerMiddleware.checkAccountOwner,
+    feedbackApiController.indexByUserId,
+)
+router.get(
     '/:id',
     checkAuthMiddleware.checkAuth,
     checkOwnerMiddleware.checkFeedbackOwner,
