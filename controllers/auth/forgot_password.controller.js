@@ -2,10 +2,7 @@ const { transporter, mailConfig } = require(process.cwd() +
     '/helpers/mailer/transporter')
 const uuid = require('uuid')
 
-const {
-    updateAuthKeyById,
-    addNewAuthKey,
-} = require('../CRUD/authkey')
+const { updateAuthKeyById, addNewAuthKey } = require('../CRUD/authkey')
 const { getUserByEmail } = require('../CRUD/user')
 
 const RESET_PASSWORD = 2
