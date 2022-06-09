@@ -35,7 +35,7 @@ const include = (nestedSelection) => [
                 required: true,
             },
         ],
-        where: nestedSelection.vehicle ? nestedSelection.vehicle : {},
+        where: nestedSelection?.vehicle ? nestedSelection.vehicle : {},
     },
     {
         model: models.ParkingLot,
@@ -65,7 +65,7 @@ const include = (nestedSelection) => [
                 required: true,
             },
         ],
-        where: nestedSelection.parking_lot ? nestedSelection.parking_lot : {},
+        where: nestedSelection?.parking_lot ? nestedSelection.parking_lot : {},
     },
 ]
 
