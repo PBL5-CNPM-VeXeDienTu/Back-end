@@ -27,7 +27,7 @@ router.get(
 router.post(
     '/',
     checkAuthMiddleware.checkAuth,
-    checkRoleMiddleware.checkRoleBasicUser,
+    checkRoleMiddleware.checkRoleParkingUser,
     vehicleApiController.create,
 )
 router.patch(

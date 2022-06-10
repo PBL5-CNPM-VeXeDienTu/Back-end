@@ -6,7 +6,7 @@ module.exports = {
             'Roles',
             [
                 {
-                    name: 'Basic User',
+                    name: 'Parking User',
                 },
                 {
                     name: 'Parking-lot User',

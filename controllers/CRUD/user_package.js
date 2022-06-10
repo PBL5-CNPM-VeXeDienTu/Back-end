@@ -57,7 +57,7 @@ function createNestedSelection(params) {
 
 async function index(startIndex, limit) {
     return models.UserPackage.findAndCountAll({
-        include: include(),
+        include: include({}),
         offset: startIndex,
         limit: limit,
         order: [

@@ -63,7 +63,7 @@ async function generateRefundTransaction() {
 
 async function generatePayParkingFeeTransaction() {
     // Duyệt qua bảng lịch sử đổ xe -> thêm transaction
-    const dbParkingHistoryList = (await getListParkingHistories(1, 1000))?.rows
+    const dbParkingHistoryList = (await getListParkingHistories(1, 1000, {}))?.rows
 
     dbParkingHistoryList.forEach(async (parkingHistory) => {
         const dbWallet = await getWalletByUserId(parkingHistory.user_id)

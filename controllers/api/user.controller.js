@@ -16,7 +16,7 @@ const { softDeleteParkingLotByOwnerId } = require('../CRUD/parking_lot')
 const { getRoleById } = require('../CRUD/role')
 const { addNewWallet } = require('../CRUD/wallet')
 
-const BASIC_USER_ROLE = 1
+const PARKING_USER_ROLE = 1
 const PARKING_LOT_USER_ROLE = 2
 
 async function index(request, response) {
@@ -199,7 +199,7 @@ async function softDeleteById(request, response) {
             await softDeleteUserById(dbUser.id)
 
             // Check user role, soft delete vehicle/parking-lot this user own
-            if (dbUser.role === BASIC_USER_ROLE)
+            if (dbUser.role === PARKING_USER_ROLE)
                 softDeleteVehicleByOwnerId(dbUser.id)
             if (dbUser.role === PARKING_LOT_USER_ROLE)
                 softDeleteParkingLotByOwnerId(dbUser.id)

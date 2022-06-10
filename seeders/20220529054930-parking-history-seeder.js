@@ -8,9 +8,9 @@ const {
 } = require('../controllers/CRUD/parking_price')
 
 const vehicleIds = [
-    [1, 2], // Basic user 1's vehicles
-    [3, 4, 5], // Basic user 2's vehicles
-    [6, 7, 8], // Basic user 3's vehicles
+    [1, 2], // Parking user 1's vehicles
+    [3, 4, 5], // Parking user 2's vehicles
+    [6, 7, 8], // Parking user 3's vehicles
 ]
 
 const PAY_PARKING_FEE_TRANSACTION_TYPE_ID = 4
@@ -26,21 +26,21 @@ async function randomDate() {
 async function generateParkingHistoryData() {
     let data = []
 
-    const minBasicUserId = 6,
-        maxBasicUserId = 8
+    const minParkingUserId = 6,
+        maxParkingUserId = 8
     const minParkingLotId = 1,
         maxParkingLotId = 6
 
     for (let i = 0; i < 50; i++) {
         let userId = Math.floor(
-            Math.random() * (maxBasicUserId - minBasicUserId + 1) +
-                minBasicUserId,
+            Math.random() * (maxParkingUserId - minParkingUserId + 1) +
+                minParkingUserId,
         )
         let vehicleId =
-            vehicleIds[userId - minBasicUserId][
+            vehicleIds[userId - minParkingUserId][
                 Math.floor(
                     Math.random() *
-                        (vehicleIds[userId - minBasicUserId].length - 1),
+                        (vehicleIds[userId - minParkingUserId].length - 1),
                 )
             ]
         let parkingLotId = Math.floor(
