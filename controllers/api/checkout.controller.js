@@ -120,20 +120,26 @@ async function checkout(request, response) {
 
                 // Check if user have valid wallet balance
                 if (dbWallet.balance >= dbParkingPrice.price) {
+                    const oldBalance = dbWallet.balance
+
                     // Update balance
                     const updateWallet = {
                         balance: dbWallet.balance - dbParkingPrice.price,
                     }
-                    await updateWalletById(updateWallet, dbWallet.id)
-
-                    // Add new transaction history
-                    const newTransaction = {
-                        wallet_id: dbWallet.id,
-                        type_id: PAY_PARKING_FEE_TRANSACTION_TYPE_ID,
-                        reference_id: dbParkingHistory.id,
-                        amount: -dbParkingPrice.price,
-                    }
-                    await addNewTransaction(newTransaction)
+                    await updateWalletById(updateWallet, dbWallet.id).then(
+                        async (result) => {
+                            // Add new transaction history
+                            const newTransaction = {
+                                wallet_id: dbWallet.id,
+                                old_balance: oldBalance,
+                                amount: -dbParkingPrice.price,
+                                new_balance: result.balance,
+                                type_id: PAY_PARKING_FEE_TRANSACTION_TYPE_ID,
+                                reference_id: dbParkingHistory.id,
+                            }
+                            await addNewTransaction(newTransaction)
+                        },
+                    )
 
                     // Checkout success, update parking history
                     await checkoutSuccess(

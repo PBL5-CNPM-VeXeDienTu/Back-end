@@ -82,6 +82,8 @@ async function rechargeById(request, response) {
                 })
             }
 
+            const oldBalance = dbWallet.balance
+
             // Update wallet's balance
             const cardValue = 20000
             const updateWallet = {
@@ -91,15 +93,16 @@ async function rechargeById(request, response) {
                 // Add new transaction
                 const newTransaction = {
                     wallet_id: dbWallet.id,
+                    old_balance: oldBalance,
+                    amount: cardValue,
+                    new_balance: result.balance,
                     type_id: 1,
                     reference_id: result.id,
-                    amount: cardValue,
                 }
                 addNewTransaction(newTransaction)
 
                 return response.status(201).json({
                     message: 'Recharge wallet successfully!',
-                    newBalance: result.balance,
                 })
             })
         } else {
@@ -130,6 +133,8 @@ async function withDrawById(request, response) {
                 })
             }
 
+            const oldBalance = dbWallet.balance
+
             // Update wallet's balance
             const updateWallet = {
                 balance: dbWallet.balance - drawAmount,
@@ -138,15 +143,16 @@ async function withDrawById(request, response) {
                 // Add new transaction
                 const newTransaction = {
                     wallet_id: dbWallet.id,
+                    old_balance: oldBalance,
+                    amount: -drawAmount,
+                    new_balance: result.balance,
                     type_id: 5,
                     reference_id: result.id,
-                    amount: -drawAmount,
                 }
                 addNewTransaction(newTransaction)
 
                 return response.status(201).json({
                     message: 'With draw wallet successfully!',
-                    newBalance: result.balance,
                 })
             })
         } else {

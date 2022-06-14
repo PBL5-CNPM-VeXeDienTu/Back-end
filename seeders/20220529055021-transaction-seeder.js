@@ -20,38 +20,46 @@ const BUY_PACKAGE_TRANSACTION_TYPE_ID = 5
 async function generateRechargeTransaction(walletId) {
     const amount = Math.floor(Math.random() * 3 + 2) * 10000
 
-    const wallet = await getWalletById(walletId)
-    if (wallet) {
+    const dbWallet = await getWalletById(walletId)
+    if (dbWallet) {
+        const oldBalance = dbWallet.balance
+
         const updateWallet = {
-            balance: wallet.balance + amount,
+            balance: dbWallet.balance + amount,
         }
-        updateWalletById(updateWallet, wallet.id)
+        await updateWalletById(updateWallet, dbWallet.id)
 
         return {
             wallet_id: walletId,
+            old_balance: oldBalance,
+            amount: amount,
+            new_balance: updateWallet.balance,
             type_id: RECHARGE_TRANSACTION_TYPE_ID,
             reference_id: walletId,
-            amount: amount,
         }
     }
 }
 
 async function generateWithDrawTransaction(walletId) {
-    let amount = Math.floor(Math.random() * 3 + 1) * 10000
+    const amount = Math.floor(Math.random() * 3 + 1) * 10000
 
-    const wallet = await getWalletById(walletId)
-    if (wallet) {
-        if (amount < wallet.balance) {
+    const dbWallet = await getWalletById(walletId)
+    if (dbWallet) {
+        if (amount < dbWallet.balance) {
+            const oldBalance = dbWallet.balance
+
             const updateWallet = {
-                balance: wallet.balance - amount,
+                balance: dbWallet.balance - amount,
             }
-            updateWalletById(updateWallet, wallet.id)
+            await updateWalletById(updateWallet, dbWallet.id)
 
             return {
                 wallet_id: walletId,
+                old_balance: oldBalance,
+                amount: -amount,
+                new_balance: updateWallet.balance,
                 type_id: WITH_DRAW_TRANSACTION_TYPE_ID,
                 reference_id: walletId,
-                amount: -amount,
             }
         }
     }
@@ -63,15 +71,19 @@ async function generateRefundTransaction() {
 
 async function generatePayParkingFeeTransaction() {
     // Duyệt qua bảng lịch sử đổ xe -> thêm transaction
-    const dbParkingHistoryList = (await getListParkingHistories(1, 1000, {}))?.rows
+    const dbParkingHistoryList = (await getListParkingHistories(1, 1000, {}))
+        ?.rows
 
     dbParkingHistoryList.forEach(async (parkingHistory) => {
         const dbWallet = await getWalletByUserId(parkingHistory.user_id)
+
         const transaction = {
             wallet_id: dbWallet.id,
+            old_balance: dbWallet.balance,
+            amount: -parkingHistory.cost,
+            new_balance: dbWallet.balance,
             type_id: PAY_PARKING_FEE_TRANSACTION_TYPE_ID,
             reference_id: parkingHistory.id,
-            amount: -parkingHistory.cost,
             createdAt: parkingHistory.createdAt,
             updatedAt: parkingHistory.updatedAt,
         }
@@ -87,9 +99,11 @@ async function generateBuyPackageTransaction() {
         const dbWallet = await getWalletByUserId(userPackage.user_id)
         const transaction = {
             wallet_id: dbWallet.id,
+            old_balance: dbWallet.balance,
+            amount: -userPackage.price,
+            new_balance: dbWallet.balance,
             type_id: BUY_PACKAGE_TRANSACTION_TYPE_ID,
             reference_id: userPackage.id,
-            amount: -userPackage.price,
             createdAt: userPackage.createdAt,
             updatedAt: userPackage.updatedAt,
         }
