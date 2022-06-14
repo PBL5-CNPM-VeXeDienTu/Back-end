@@ -12,6 +12,15 @@ module.exports = {
                 allowNull: false,
                 type: Sequelize.INTEGER,
             },
+            old_balance: {
+                type: Sequelize.FLOAT,
+            },
+            amount: {
+                type: Sequelize.FLOAT,
+            },
+            new_balance: {
+                type: Sequelize.FLOAT,
+            },
             type_id: {
                 allowNull: false,
                 type: Sequelize.INTEGER,
@@ -19,9 +28,6 @@ module.exports = {
             reference_id: {
                 allowNull: false,
                 type: Sequelize.INTEGER,
-            },
-            amount: {
-                type: Sequelize.FLOAT,
             },
             createdAt: {
                 allowNull: false,
