@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
             ParkingLot.belongsTo(models.VerifyState, {
                 foreignKey: 'verify_state_id',
             })
-            ParkingLot.hasOne(models.ParkingPrice, {
+            ParkingLot.hasMany(models.ParkingPrice, {
                 foreignKey: 'parking_lot_id',
             })
             ParkingLot.hasMany(models.Package, { foreignKey: 'parking_lot_id' })

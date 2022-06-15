@@ -9,36 +9,6 @@ const {
     deleteParkingPriceById,
 } = require('../CRUD/parking_price')
 
-async function indexByParkingLotId(request, response) {
-    try {
-        const parkingLotId = request.params.id
-
-        const queryResult = await getParkingPricesByParkingLotId(parkingLotId)
-
-        return response.status(200).json(queryResult)
-    } catch (error) {
-        return response.status(500).json({
-            message: 'Something went wrong!',
-            error: error,
-        })
-    }
-}
-
-async function showById(request, response) {
-    try {
-        const parkingPriceId = request.params.id
-
-        const dbParkingPrice = await getParkingPriceById(parkingPriceId)
-
-        return response.status(200).json(dbParkingPrice)
-    } catch (error) {
-        return response.status(500).json({
-            message: 'Something went wrong!',
-            error: error,
-        })
-    }
-}
-
 async function create(request, response) {
     try {
         const newParkingPrice = {
@@ -159,9 +129,6 @@ async function deleteById(request, response) {
 }
 
 module.exports = {
-    // index: index,
-    indexByParkingLotId: indexByParkingLotId,
-    showById: showById,
     create: create,
     updateById: updateById,
     deleteById: deleteById,

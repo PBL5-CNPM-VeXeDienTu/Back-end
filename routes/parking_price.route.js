@@ -6,17 +6,6 @@ const parkingPriceApiController = require('../controllers/api/parking_price.cont
 
 const router = express.Router()
 
-router.get(
-    '/get-by-parking-lot/:id',
-    checkAuthMiddleware.checkAuth,
-    checkOwnerMiddleware.checkParkingLotOwner,
-    parkingPriceApiController.indexByParkingLotId,
-)
-router.get(
-    '/:id',
-    checkAuthMiddleware.checkAuth,
-    parkingPriceApiController.showById,
-)
 router.post(
     '/',
     checkAuthMiddleware.checkAuth,
