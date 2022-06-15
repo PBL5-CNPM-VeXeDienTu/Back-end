@@ -2,9 +2,9 @@ const validators = require(process.cwd() + '/helpers/validators')
 
 const {
     getListPackages,
+    getListPackagesByParkingLotId,
+    getListPackagesByOwnerId,
     getPackageById,
-    getPackageByParkingLotId,
-    getPackageByOwnerId,
     addNewPackage,
     updatePackageById,
     deletePackageById,
@@ -29,7 +29,15 @@ async function index(request, response) {
 
         const startIndex = (page - 1) * limit
 
-        const queryResult = await getListPackages(startIndex, limit)
+        const params = {
+            txt_search: request.query.txt_search
+                ? request.query.txt_search.trim()
+                : '',
+            type_id: request.query.type_id,
+            vehicle_type_id: request.query.vehicle_type_id,
+        }
+
+        const queryResult = await getListPackages(startIndex, limit, params)
 
         return response.status(200).json(queryResult)
     } catch (error) {
@@ -60,7 +68,7 @@ async function indexByParkingLotId(request, response) {
 
         const startIndex = (page - 1) * limit
 
-        const queryResult = await getPackageByParkingLotId(
+        const queryResult = await getListPackagesByParkingLotId(
             parkingLotId,
             startIndex,
             limit,
@@ -94,7 +102,7 @@ async function indexByOwnerId(request, response) {
 
         const startIndex = (page - 1) * limit
 
-        const queryResult = await getPackageByOwnerId(
+        const queryResult = await getListPackagesByOwnerId(
             ownerId,
             startIndex,
             limit,

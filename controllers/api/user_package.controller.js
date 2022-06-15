@@ -3,7 +3,7 @@ const validators = require(process.cwd() + '/helpers/validators')
 const {
     getListUserPackages,
     getUserPackageById,
-    getUserPackageByOwnerId,
+    getListUserPackagesByOwnerId,
     addNewUserPackage,
     updateUserPackageById,
     deleteUserPackageById,
@@ -32,7 +32,15 @@ async function index(request, response) {
 
         const startIndex = (page - 1) * limit
 
-        const queryResult = await getListUserPackages(startIndex, limit)
+        const params = {
+            txt_search: request.query.txt_search
+                ? request.query.txt_search.trim()
+                : '',
+            type_id: request.query.type_id,
+            vehicle_type_id: request.query.vehicle_type_id,
+        }
+
+        const queryResult = await getListUserPackages(startIndex, limit, params)
 
         return response.status(200).json(queryResult)
     } catch (error) {
@@ -45,7 +53,7 @@ async function index(request, response) {
 
 async function indexByOwnerId(request, response) {
     try {
-        const ownerId = request.userData.userId
+        const ownerId = request.params.id
         const page = Number.parseInt(request.query.page)
         const limit = Number.parseInt(request.query.limit)
 
@@ -62,10 +70,19 @@ async function indexByOwnerId(request, response) {
 
         const startIndex = (page - 1) * limit
 
-        const queryResult = await getUserPackageByOwnerId(
+        const params = {
+            txt_search: request.query.txt_search
+                ? request.query.txt_search.trim()
+                : '',
+            type_id: request.query.type_id,
+            vehicle_type_id: request.query.vehicle_type_id,
+        }
+
+        const queryResult = await getListUserPackagesByOwnerId(
             ownerId,
             startIndex,
             limit,
+            params,
         )
 
         return response.status(200).json(queryResult)
