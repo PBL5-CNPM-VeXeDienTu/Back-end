@@ -34,20 +34,20 @@ async function index(request, response) {
         const startIndex = (page - 1) * limit
         const userRole = request.userData.role
 
-        let queryResult
-        if (userRole !== ADMIN_ROLE) {
-            queryResult = await getListParkingLots(
-                startIndex,
-                limit,
-                !ADMIN_ROLE,
-            )
-        } else {
-            queryResult = await getListParkingLots(
-                startIndex,
-                limit,
-                ADMIN_ROLE,
-            )
+        const params = {
+            txt_search: request.query.txt_search
+                ? request.query.txt_search.trim()
+                : '',
+            is_open: request.query.is_open,
+            is_full: request.query.is_full,
         }
+
+        const queryResult = await getListParkingLots(
+            startIndex,
+            limit,
+            userRole === ADMIN_ROLE,
+            params,
+        )
 
         return response.status(200).json(queryResult)
     } catch (error) {
@@ -64,18 +64,10 @@ async function indexByOwnerId(request, response) {
         const userRole = request.userData.role
 
         // Get all paring lots that user own
-        let dbParkingLots
-        if (userRole !== ADMIN_ROLE) {
-            dbParkingLots = await getListParkingLotsByOwnerId(
-                ownerId,
-                !ADMIN_ROLE,
-            )
-        } else {
-            dbParkingLots = await getListParkingLotsByOwnerId(
-                ownerId,
-                ADMIN_ROLE,
-            )
-        }
+        const dbParkingLots = await getListParkingLotsByOwnerId(
+            ownerId,
+            userRole === ADMIN_ROLE,
+        )
 
         return response.status(200).json(dbParkingLots)
     } catch (error) {

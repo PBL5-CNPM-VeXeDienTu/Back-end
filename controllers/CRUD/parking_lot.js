@@ -2,6 +2,7 @@ const { Op } = require('sequelize')
 
 const models = require(process.cwd() + '/models/index')
 const { getCurrentDateTime } = require(process.cwd() + '/helpers/datetime')
+const objectCleaner = require(process.cwd() + '/helpers/object-cleaner')
 
 const include = [
     {
@@ -22,7 +23,20 @@ const include = [
     },
 ]
 
-async function index(startIndex, limit, isAdmin) {
+async function index(startIndex, limit, isAdmin, params) {
+    const selection = objectCleaner.clean({
+        [Op.or]: objectCleaner.clean({
+            name: { [Op.like]: `%${params.txt_search}%` },
+            address: { [Op.like]: `%${params.txt_search}%` },
+            '$Owner.name$': { [Op.like]: `%${params.txt_search}%` },
+        }),
+        is_open: params.is_open !== '' ? params.is_open : null,
+        is_full: params.is_full !== '' ? params.is_full : null,
+        deletedAt: isAdmin
+            ? { [Op.or]: [{ [Op.is]: null }, { [Op.not]: null }] }
+            : { [Op.is]: null },
+    })
+
     return models.ParkingLot.findAndCountAll({
         include: include,
         offset: startIndex,
@@ -31,11 +45,7 @@ async function index(startIndex, limit, isAdmin) {
             ['id', 'DESC'],
             ['name', 'ASC'],
         ],
-        where: {
-            deletedAt: isAdmin
-                ? { [Op.or]: [{ [Op.is]: null }, { [Op.not]: null }] }
-                : { [Op.is]: null },
-        },
+        where: selection,
     })
 }
 
@@ -57,7 +67,17 @@ async function indexByOwnerId(ownerId, isAdmin) {
 
 async function showById(id) {
     return models.ParkingLot.findByPk(id, {
-        include: include,
+        include: [
+            ...include,
+            {
+                model: models.ParkingPrice,
+                include: {
+                    model: models.VehicleType,
+                    attributes: ['type_name'],
+                    required: true,
+                },
+            },
+        ],
     })
 }
 
