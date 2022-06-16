@@ -73,7 +73,7 @@ async function showById(id) {
                 model: models.ParkingPrice,
                 include: {
                     model: models.VehicleType,
-                    attributes: ['type_name'],
+                    attributes: ['id', 'type_name'],
                     required: true,
                 },
             },

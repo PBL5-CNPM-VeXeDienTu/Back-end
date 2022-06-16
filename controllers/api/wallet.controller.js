@@ -1,10 +1,14 @@
+const { getCurrentDateTime } = require('../../helpers/datetime')
 const {
     getListWallets,
     getWalletById,
     getWalletByUserId,
     updateWalletById,
 } = require('../CRUD/wallet')
-const { addNewTransaction } = require('../CRUD/transaction')
+const {
+    addNewTransaction,
+    getListTransactionsByWalletId,
+} = require('../CRUD/transaction')
 
 async function index(request, response) {
     try {
@@ -35,28 +39,56 @@ async function index(request, response) {
     }
 }
 
-async function showById(request, response) {
+async function showByOwnerId(request, response) {
     try {
-        const walletId = request.params.id
+        // Transaction list's params
+        const page = Number.parseInt(request.query.page)
+        const limit = Number.parseInt(request.query.limit)
 
-        const dbWallet = await getWalletById(walletId)
+        if (
+            Number.isNaN(page) ||
+            page < 1 ||
+            Number.isNaN(limit) ||
+            limit < 0
+        ) {
+            return response.status(400).json({
+                message: 'Invalid query parameters!',
+            })
+        }
 
-        return response.status(200).json(dbWallet)
-    } catch (error) {
-        return response.status(500).json({
-            message: 'Something went wrong!',
-            error: error,
+        const startIndex = (page - 1) * limit
+
+        const params = {
+            type_id: request.query.type_id,
+            from_date: request.query.from_date
+                ? request.query.from_date.trim() + ' 00:00:00'
+                : '0000-00-00 00:00:00',
+            to_date: request.query.to_date
+                ? request.query.to_date.trim() + ' 23:59:59'
+                : getCurrentDateTime().split(' ')[0] + ' 23:59:59',
+        }
+
+        const ownerId = request.params.id
+
+        const dbWallet = await getWalletByUserId(ownerId)
+
+        if (!dbWallet) {
+            return response.status(404).json({
+                message: 'Wallet not found!',
+            })
+        }
+
+        const dbTransactions = await getListTransactionsByWalletId(
+            dbWallet.id,
+            startIndex,
+            limit,
+            params,
+        )
+
+        return response.status(200).json({
+            Wallet: dbWallet,
+            Transactions: dbTransactions,
         })
-    }
-}
-
-async function showByUserId(request, response) {
-    try {
-        const userId = request.params.id
-
-        const dbWallet = await getWalletByUserId(userId)
-
-        return response.status(200).json(dbWallet)
     } catch (error) {
         return response.status(500).json({
             message: 'Something went wrong!',
@@ -170,8 +202,7 @@ async function withDrawById(request, response) {
 
 module.exports = {
     index: index,
-    showById: showById,
-    showByUserId: showByUserId,
+    showByOwnerId: showByOwnerId,
     rechargeById: rechargeById,
     withDrawById: withDrawById,
 }

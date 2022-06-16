@@ -20,38 +20,11 @@ const include = [
         as: 'Owner',
         required: true,
     },
-    {
-        model: models.Transaction,
-        include: [
-            {
-                model: models.TransactionType,
-                attributes: ['type_name'],
-            },
-        ],
-    },
 ]
 
 async function index(startIndex, limit) {
     return models.Wallet.findAndCountAll({
-        include: {
-            model: models.User,
-            attributes: [
-                'email',
-                'name',
-                'role',
-                'is_verified',
-                'deletedAt',
-                'createdAt',
-            ],
-            include: [
-                {
-                    model: models.Role,
-                    attributes: ['name'],
-                },
-            ],
-            as: 'Owner',
-            required: true,
-        },
+        include: include,
         attributes: {
             exclude: ['createdAt', 'updatedAt'],
         },
