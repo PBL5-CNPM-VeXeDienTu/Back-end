@@ -110,7 +110,7 @@ async function destroy(id) {
 
 async function checkOwner(userPackageId, userId) {
     return !!(await models.UserPackage.findOne({
-        include: include,
+        include: include(),
         where: {
             id: userPackageId,
             user_id: userId,

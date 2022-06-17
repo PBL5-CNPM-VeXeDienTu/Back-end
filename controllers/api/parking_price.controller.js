@@ -12,7 +12,7 @@ const {
 async function create(request, response) {
     try {
         const newParkingPrice = {
-            parking_lot_id: request.userData.userId,
+            parking_lot_id: request.body.parking_lot_id,
             vehicle_type_id: request.body.vehicle_type_id,
             price: request.body.price,
         }
@@ -45,7 +45,7 @@ async function create(request, response) {
             })
         } else {
             addNewParkingPrice(newParkingPrice).then((_) => {
-                return response.status(404).json({
+                return response.status(200).json({
                     message: 'Create parking price successfully!',
                 })
             })
@@ -66,7 +66,7 @@ async function updateById(request, response) {
         const dbParkingPrice = await getParkingPriceById(parkingPriceId)
         if (dbParkingPrice) {
             const updateParkingPrice = {
-                parking_lot_id: request.userData.userId,
+                parking_lot_id: request.body.parking_lot_id,
                 vehicle_type_id: request.body.vehicle_type_id,
                 price: request.body.price,
             }
