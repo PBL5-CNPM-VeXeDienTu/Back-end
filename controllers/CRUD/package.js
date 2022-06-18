@@ -1,8 +1,9 @@
 const { Op } = require('sequelize')
 
 const models = require(process.cwd() + '/models/index')
+const objectCleaner = require(process.cwd() + '/helpers/object-cleaner')
 
-const include = (ownerId) => [
+const include = [
     {
         model: models.ParkingLot,
         include: [
@@ -19,7 +20,6 @@ const include = (ownerId) => [
                 required: true,
             },
         ],
-        where: { owner_id: ownerId ? ownerId : { [Op.gt]: 0 } },
         required: true,
     },
     {
@@ -34,27 +34,32 @@ const include = (ownerId) => [
     },
 ]
 
-async function index(startIndex, limit) {
+async function index(startIndex, limit, params) {
+    const selection = objectCleaner.clean({
+        [Op.or]: objectCleaner.clean({
+            name: { [Op.like]: `%${params.txt_search}%` },
+            '$ParkingLot.name$': { [Op.like]: `%${params.txt_search}%` },
+        }),
+        type_id: params.type_id !== '' ? params.type_id : null,
+        vehicle_type_id:
+            params.vehicle_type_id !== '' ? params.vehicle_type_id : null,
+    })
+
     return models.Package.findAndCountAll({
-        include: include(),
+        include: include,
         offset: startIndex,
         limit: limit,
         order: [
             ['id', 'DESC'],
             ['name', 'ASC'],
         ],
+        where: selection,
     })
 }
 
-async function showById(id) {
-    return models.Package.findByPk(id, {
-        include: include(),
-    })
-}
-
-async function showByParkingLotId(parkingLotId, startIndex, limit) {
+async function indexByParkingLotId(parkingLotId, startIndex, limit) {
     return models.Package.findAndCountAll({
-        include: include(),
+        include: include,
         offset: startIndex,
         limit: limit,
         order: [
@@ -65,15 +70,24 @@ async function showByParkingLotId(parkingLotId, startIndex, limit) {
     })
 }
 
-async function showByOwnerId(ownerId, startIndex, limit) {
+async function indexByOwnerId(ownerId, startIndex, limit) {
     return models.Package.findAndCountAll({
-        include: include(ownerId),
+        include: include,
         offset: startIndex,
         limit: limit,
         order: [
             ['id', 'DESC'],
             ['price', 'DESC'],
         ],
+        where: {
+            '$ParkingLot.owner_id$': ownerId,
+        },
+    })
+}
+
+async function showById(id) {
+    return models.Package.findByPk(id, {
+        include: include,
     })
 }
 
@@ -101,9 +115,9 @@ async function checkOwner(packageId, userId) {
 
 module.exports = {
     getListPackages: index,
+    getListPackagesByParkingLotId: indexByParkingLotId,
+    getListPackagesByOwnerId: indexByOwnerId,
     getPackageById: showById,
-    getPackageByParkingLotId: showByParkingLotId,
-    getPackageByOwnerId: showByOwnerId,
     addNewPackage: create,
     updatePackageById: update,
     deletePackageById: destroy,

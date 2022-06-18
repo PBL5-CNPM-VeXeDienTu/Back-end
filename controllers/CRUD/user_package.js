@@ -1,7 +1,9 @@
+const { Op } = require('sequelize')
+
 const models = require(process.cwd() + '/models/index')
 const objectCleaner = require(process.cwd() + '/helpers/object-cleaner')
 
-const include = (params) => [
+const include = [
     {
         model: models.User,
         attributes: { exclude: ['password', 'qr_key', 'updatedAt'] },
@@ -35,64 +37,56 @@ const include = (params) => [
     },
 ]
 
-function createSelection(params) {
-    return objectCleaner.clean({
-        user_id: params.user_id,
-        package_id: params.package_id,
-        parking_lot_id: params.parking_lot_id,
-        name: params.name,
-        type_id: params.type_id,
-        vehicle_type_id: params.vehicle_type_id,
-        price: params.price,
+async function index(startIndex, limit, params) {
+    const selection = objectCleaner.clean({
+        [Op.or]: objectCleaner.clean({
+            name: { [Op.like]: `%${params.txt_search}%` },
+            '$ParkingLot.name$': { [Op.like]: `%${params.txt_search}%` },
+        }),
+        type_id: params.type_id !== '' ? params.type_id : null,
+        vehicle_type_id:
+            params.vehicle_type_id !== '' ? params.vehicle_type_id : null,
     })
-}
 
-function createNestedSelection(params) {
-    return objectCleaner.clean({
-        user: objectCleaner.clean(params.user),
-        vehicle: objectCleaner.clean(params.vehicle),
-        parking_lot: objectCleaner.clean(params.parking_lot),
-    })
-}
-
-async function index(startIndex, limit) {
     return models.UserPackage.findAndCountAll({
-        include: include({}),
+        include: include,
         offset: startIndex,
         limit: limit,
         order: [
             ['id', 'DESC'],
             ['name', 'ASC'],
         ],
-    })
-}
-
-async function showById(id) {
-    return models.UserPackage.findByPk(id, {
-        include: include(),
-    })
-}
-
-async function showByParams(params) {
-    const selection = createSelection(params)
-    const nestedSelection = createNestedSelection(params)
-
-    return models.UserPackage.findOne({
-        include: include(nestedSelection),
         where: selection,
     })
 }
 
-async function showByOwnerId(ownerId, startIndex, limit) {
+async function indexByOwnerId(ownerId, startIndex, limit, params) {
+    const selection = objectCleaner.clean({
+        [Op.or]: objectCleaner.clean({
+            name: { [Op.like]: `%${params.txt_search}%` },
+            '$ParkingLot.name$': { [Op.like]: `%${params.txt_search}%` },
+        }),
+        type_id: params.type_id !== '' ? params.type_id : null,
+        vehicle_type_id:
+            params.vehicle_type_id !== '' ? params.vehicle_type_id : null,
+        user_id: ownerId,
+    })
+
     return models.UserPackage.findAndCountAll({
-        include: include(),
+        include: include,
         offset: startIndex,
         limit: limit,
         order: [
             ['id', 'DESC'],
             ['price', 'DESC'],
         ],
-        where: { user_id: ownerId },
+        where: selection,
+    })
+}
+
+async function showById(id) {
+    return models.UserPackage.findByPk(id, {
+        include: include,
     })
 }
 
@@ -130,9 +124,8 @@ async function checkExisted(userId, packageId) {
 
 module.exports = {
     getListUserPackages: index,
-    getUserPackageByParams: showByParams,
+    getListUserPackagesByOwnerId: indexByOwnerId,
     getUserPackageById: showById,
-    getUserPackageByOwnerId: showByOwnerId,
     addNewUserPackage: create,
     updateUserPackageById: update,
     deleteUserPackageById: destroy,
