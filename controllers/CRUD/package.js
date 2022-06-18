@@ -57,7 +57,18 @@ async function index(startIndex, limit, params) {
     })
 }
 
-async function indexByParkingLotId(parkingLotId, startIndex, limit) {
+async function indexByOwnerId(ownerId, startIndex, limit, params) {
+    const selection = objectCleaner.clean({
+        [Op.or]: objectCleaner.clean({
+            name: { [Op.like]: `%${params.txt_search}%` },
+            '$ParkingLot.name$': { [Op.like]: `%${params.txt_search}%` },
+        }),
+        type_id: params.type_id !== '' ? params.type_id : null,
+        vehicle_type_id:
+            params.vehicle_type_id !== '' ? params.vehicle_type_id : null,
+        '$ParkingLot.owner_id$': ownerId,
+    })
+
     return models.Package.findAndCountAll({
         include: include,
         offset: startIndex,
@@ -66,11 +77,22 @@ async function indexByParkingLotId(parkingLotId, startIndex, limit) {
             ['id', 'DESC'],
             ['price', 'DESC'],
         ],
-        where: { parking_lot_id: parkingLotId },
+        where: selection,
     })
 }
 
-async function indexByOwnerId(ownerId, startIndex, limit) {
+async function indexByParkingLotId(parkingLotId, startIndex, limit, params) {
+    const selection = objectCleaner.clean({
+        [Op.or]: objectCleaner.clean({
+            name: { [Op.like]: `%${params.txt_search}%` },
+            '$ParkingLot.name$': { [Op.like]: `%${params.txt_search}%` },
+        }),
+        type_id: params.type_id !== '' ? params.type_id : null,
+        vehicle_type_id:
+            params.vehicle_type_id !== '' ? params.vehicle_type_id : null,
+        parking_lot_id: parkingLotId,
+    })
+
     return models.Package.findAndCountAll({
         include: include,
         offset: startIndex,
@@ -79,9 +101,7 @@ async function indexByOwnerId(ownerId, startIndex, limit) {
             ['id', 'DESC'],
             ['price', 'DESC'],
         ],
-        where: {
-            '$ParkingLot.owner_id$': ownerId,
-        },
+        where: selection,
     })
 }
 
