@@ -6,7 +6,7 @@ const include = [
         include: [
             {
                 model: models.User,
-                attributes: { exclude: ['password', 'updatedAt'] },
+                attributes: { exclude: ['password', 'qr_key', 'updatedAt'] },
                 include: [
                     {
                         model: models.Role,
