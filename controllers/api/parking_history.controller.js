@@ -83,6 +83,7 @@ async function indexByUserId(request, response) {
             to_date: request.query.to_date
                 ? request.query.to_date.trim() + ' 23:59:59'
                 : getCurrentDateTime().split(' ')[0] + ' 23:59:59',
+            role: request.userData.role,
         }
 
         const queryResult = await getListParkingHistoriesByUserId(
