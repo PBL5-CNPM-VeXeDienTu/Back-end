@@ -12,6 +12,7 @@ async function index(request, response) {
     try {
         const page = Number.parseInt(request.query.page)
         const limit = Number.parseInt(request.query.limit)
+        const queryParams = request.query
 
         if (
             Number.isNaN(page) ||
@@ -25,8 +26,16 @@ async function index(request, response) {
         }
 
         const startIndex = (page - 1) * limit
+        const params = {
+            txt_search: queryParams.txt_search
+                ? queryParams.txt_search.trim()
+                : '',
+            type_id: queryParams.type_id,
+            feature_id: queryParams.feature_id,
+            is_processed: queryParams.is_processed,
+        }
 
-        const queryResult = await getListFeedbacks(startIndex, limit)
+        const queryResult = await getListFeedbacks(startIndex, limit, params)
 
         return response.status(200).json(queryResult)
     } catch (error) {
@@ -42,6 +51,7 @@ async function indexByUserId(request, response) {
         const userId = request.params.id
         const page = Number.parseInt(request.query.page)
         const limit = Number.parseInt(request.query.limit)
+        const queryParams = request.query
 
         if (
             Number.isNaN(page) ||
@@ -55,11 +65,20 @@ async function indexByUserId(request, response) {
         }
 
         const startIndex = (page - 1) * limit
+        const params = {
+            txt_search: queryParams.txt_search
+                ? queryParams.txt_search.trim()
+                : '',
+            type_id: queryParams.type_id,
+            feature_id: queryParams.feature_id,
+            is_processed: queryParams.is_processed,
+        }
 
         const dbFeedback = await getListFeedbackByUserId(
             userId,
             startIndex,
             limit,
+            params,
         )
 
         return response.status(200).json(dbFeedback)
