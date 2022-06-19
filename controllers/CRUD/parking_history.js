@@ -37,14 +37,7 @@ const include = [
         include: [
             {
                 model: models.User,
-                attributes: [
-                    'email',
-                    'name',
-                    'role',
-                    'is_verified',
-                    'deletedAt',
-                    'createdAt',
-                ],
+                attributes: { exclude: ['password', 'updatedAt'] },
                 include: [
                     {
                         model: models.Role,
@@ -61,6 +54,9 @@ const include = [
         ],
     },
 ]
+
+const PARKING_USER_ROLE = 1
+const PARKING_LOT_USER_ROLE = 2
 
 async function index(startIndex, limit, params) {
     const selection = objectCleaner.clean({
@@ -83,7 +79,7 @@ async function index(startIndex, limit, params) {
     })
 }
 
-async function indexByUserId(userId, startIndex, limit) {
+async function indexByUserId(userId, startIndex, limit, params) {
     const selection = objectCleaner.clean({
         [Op.or]: objectCleaner.clean({
             '$Vehicle.license_plate$': { [Op.like]: `%${params.txt_search}%` },
@@ -93,11 +89,13 @@ async function indexByUserId(userId, startIndex, limit) {
         createdAt: {
             [Op.between]: [params.from_date, params.to_date],
         },
-        user_id: userId,
+        user_id: params.role === PARKING_USER_ROLE ? userId : null,
+        '$ParkingLot.Owner.id$':
+            params.role === PARKING_LOT_USER_ROLE ? userId : null,
     })
 
     return models.ParkingHistory.findAndCountAll({
-        include: include(),
+        include: include,
         offset: startIndex,
         limit: limit,
         order: [['id', 'DESC']],
