@@ -12,6 +12,11 @@ const include = [
                 model: models.Role,
                 attributes: ['name'],
             },
+            {
+                model: models.UserInfo,
+                attributes: { exclude: ['id', 'user_id', 'createdAt'] },
+                required: true,
+            },
         ],
         as: 'Owner',
         required: true,
