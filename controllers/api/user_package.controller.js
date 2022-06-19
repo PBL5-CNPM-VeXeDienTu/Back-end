@@ -1,4 +1,5 @@
 const validators = require(process.cwd() + '/helpers/validators')
+const { getCurrentDateTime } = require(process.cwd() + '/helpers/datetime')
 
 const {
     getListUserPackages,
@@ -38,6 +39,13 @@ async function index(request, response) {
                 : '',
             type_id: request.query.type_id,
             vehicle_type_id: request.query.vehicle_type_id,
+            from_date: request.query.from_date
+                ? request.query.from_date.trim() + ' 00:00:00'
+                : '0000-00-00 00:00:00',
+            to_date: request.query.to_date
+                ? request.query.to_date.trim() + ' 23:59:59'
+                : getCurrentDateTime().split(' ')[0] + ' 23:59:59',
+            is_expired: request.query.is_expired,
         }
 
         const queryResult = await getListUserPackages(startIndex, limit, params)
@@ -76,6 +84,13 @@ async function indexByOwnerId(request, response) {
                 : '',
             type_id: request.query.type_id,
             vehicle_type_id: request.query.vehicle_type_id,
+            from_date: request.query.from_date
+                ? request.query.from_date.trim() + ' 00:00:00'
+                : '0000-00-00 00:00:00',
+            to_date: request.query.to_date
+                ? request.query.to_date.trim() + ' 23:59:59'
+                : getCurrentDateTime().split(' ')[0] + ' 23:59:59',
+            is_expired: request.query.is_expired,
         }
 
         const queryResult = await getListUserPackagesByOwnerId(

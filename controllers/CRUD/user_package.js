@@ -1,6 +1,7 @@
 const { Op } = require('sequelize')
 
 const models = require(process.cwd() + '/models/index')
+const { getCurrentDateTime } = require(process.cwd() + '/helpers/datetime')
 const objectCleaner = require(process.cwd() + '/helpers/object-cleaner')
 
 const include = [
@@ -46,6 +47,15 @@ async function index(startIndex, limit, params) {
         type_id: params.type_id !== '' ? params.type_id : null,
         vehicle_type_id:
             params.vehicle_type_id !== '' ? params.vehicle_type_id : null,
+        expireAt:
+            params.is_expired !== ''
+                ? params.is_expired === '1'
+                    ? { [Op.lt]: getCurrentDateTime() }
+                    : { [Op.gte]: getCurrentDateTime() }
+                : null,
+        createdAt: {
+            [Op.between]: [params.from_date, params.to_date],
+        },
     })
 
     return models.UserPackage.findAndCountAll({
@@ -69,7 +79,15 @@ async function indexByOwnerId(ownerId, startIndex, limit, params) {
         type_id: params.type_id !== '' ? params.type_id : null,
         vehicle_type_id:
             params.vehicle_type_id !== '' ? params.vehicle_type_id : null,
-        user_id: ownerId,
+        expireAt:
+            params.is_expired !== ''
+                ? params.is_expired === '1'
+                    ? { [Op.lt]: getCurrentDateTime() }
+                    : { [Op.gte]: getCurrentDateTime() }
+                : null,
+        createdAt: {
+            [Op.between]: [params.from_date, params.to_date],
+        },
     })
 
     return models.UserPackage.findAndCountAll({
