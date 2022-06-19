@@ -1,4 +1,5 @@
 const validators = require(process.cwd() + '/helpers/validators')
+const { getCurrentDateTime } = require(process.cwd() + '/helpers/datetime')
 
 const {
     getListVehicles,
@@ -34,13 +35,26 @@ async function index(request, response) {
 
         const startIndex = (page - 1) * limit
         const userRole = request.userData.role
-
-        let queryResult
-        if (userRole !== ADMIN_ROLE) {
-            queryResult = await getListVehicles(startIndex, limit, !ADMIN_ROLE)
-        } else {
-            queryResult = await getListVehicles(startIndex, limit, ADMIN_ROLE)
+        const params = {
+            txt_search: request.query.txt_search
+                ? request.query.txt_search.trim()
+                : '',
+            type_id: request.query.type_id,
+            verify_state_id: request.query.verify_state_id,
+            from_date: request.query.from_date
+                ? request.query.from_date.trim() + ' 00:00:00'
+                : '0000-00-00 00:00:00',
+            to_date: request.query.to_date
+                ? request.query.to_date.trim() + ' 23:59:59'
+                : getCurrentDateTime().split(' ')[0] + ' 23:59:59',
         }
+
+        const queryResult = await getListVehicles(
+            startIndex,
+            limit,
+            userRole === ADMIN_ROLE,
+            params,
+        )
 
         return response.status(200).json(queryResult)
     } catch (error) {

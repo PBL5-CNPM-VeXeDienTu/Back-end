@@ -2,11 +2,12 @@ const { Op } = require('sequelize')
 
 const models = require(process.cwd() + '/models/index')
 const { getCurrentDateTime } = require(process.cwd() + '/helpers/datetime')
+const objectCleaner = require(process.cwd() + '/helpers/object-cleaner')
 
 const include = [
     {
         model: models.User,
-        attributes: ['email', 'name', 'is_verified', 'deletedAt', 'createdAt'],
+        attributes: { exclude: ['password', 'qr_key', 'updatedAt'] },
         include: [
             {
                 model: models.Role,
@@ -27,7 +28,26 @@ const include = [
     },
 ]
 
-async function index(startIndex, limit, isAdmin) {
+async function index(startIndex, limit, isAdmin, params) {
+    const selection = objectCleaner.clean({
+        [Op.or]: objectCleaner.clean({
+            '$Owner.name$': { [Op.like]: `%${params.txt_search}%` },
+            brand: { [Op.like]: `%${params.txt_search}%` },
+            license_plate: { [Op.like]: `%${params.txt_search}%` },
+            '$VehicleType.type_name$': { [Op.like]: `%${params.txt_search}%` },
+            '$VerifyState.state$': { [Op.like]: `%${params.txt_search}%` },
+        }),
+        type_id: params.type_id !== '' ? params.type_id : null,
+        verify_state_id:
+            params.verify_state_id !== '' ? params.verify_state_id : null,
+        createdAt: {
+            [Op.between]: [params.from_date, params.to_date],
+        },
+        deletedAt: isAdmin
+            ? { [Op.or]: [{ [Op.is]: null }, { [Op.not]: null }] }
+            : { [Op.is]: null },
+    })
+
     return models.Vehicle.findAndCountAll({
         include: include,
         offset: startIndex,
@@ -36,11 +56,7 @@ async function index(startIndex, limit, isAdmin) {
             ['id', 'DESC'],
             ['license_plate', 'ASC'],
         ],
-        where: {
-            deletedAt: isAdmin
-                ? { [Op.or]: [{ [Op.is]: null }, { [Op.not]: null }] }
-                : { [Op.is]: null },
-        },
+        where: selection,
     })
 }
 
