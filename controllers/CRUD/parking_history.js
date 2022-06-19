@@ -75,6 +75,7 @@ async function index(startIndex, limit, params) {
             '$Vehicle.license_plate$': { [Op.like]: `%${params.txt_search}%` },
             '$ParkingLot.name$': { [Op.like]: `%${params.txt_search}%` },
         }),
+        is_parking: params.is_parking !== '' ? params.is_parking : null,
         createdAt: {
             [Op.between]: [params.from_date, params.to_date],
         },
@@ -95,6 +96,7 @@ async function indexByUserId(userId, startIndex, limit) {
             '$Vehicle.license_plate$': { [Op.like]: `%${params.txt_search}%` },
             '$ParkingLot.name$': { [Op.like]: `%${params.txt_search}%` },
         }),
+        is_parking: params.is_parking !== '' ? params.is_parking : null,
         createdAt: {
             [Op.between]: [params.from_date, params.to_date],
         },

@@ -29,6 +29,7 @@ async function index(request, response) {
 
         const params = {
             txt_search: request.query.txt_search,
+            is_parking: request.query.is_parking,
             from_date: request.query.from_date
                 ? request.query.from_date.trim() + ' 00:00:00'
                 : '0000-00-00 00:00:00',
@@ -73,6 +74,7 @@ async function indexByUserId(request, response) {
 
         const params = {
             txt_search: request.query.txt_search,
+            is_parking: request.query.is_parking,
             from_date: request.query.from_date
                 ? request.query.from_date.trim() + ' 00:00:00'
                 : '0000-00-00 00:00:00',
