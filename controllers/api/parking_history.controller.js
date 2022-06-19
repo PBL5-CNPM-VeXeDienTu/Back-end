@@ -1,4 +1,5 @@
 const validators = require(process.cwd() + '/helpers/validators')
+const { getCurrentDateTime } = require('../../helpers/datetime')
 
 const {
     getListParkingHistories,
@@ -12,7 +13,6 @@ async function index(request, response) {
     try {
         const page = Number.parseInt(request.query.page)
         const limit = Number.parseInt(request.query.limit)
-        const queryParams = request.query
 
         if (
             Number.isNaN(page) ||
@@ -26,13 +26,15 @@ async function index(request, response) {
         }
 
         const startIndex = (page - 1) * limit
+
         const params = {
-            user_id: queryParams.user_id,
-            vehicle_id: queryParams.vehicle_id,
-            parking_lot_id: queryParams.parking_lot_id,
-            checkin_time: queryParams.checkin_time,
-            is_parking: queryParams.is_parking,
-            qr_key: queryParams.qr_key,
+            txt_search: request.query.txt_search,
+            from_date: request.query.from_date
+                ? request.query.from_date.trim() + ' 00:00:00'
+                : '0000-00-00 00:00:00',
+            to_date: request.query.to_date
+                ? request.query.to_date.trim() + ' 23:59:59'
+                : getCurrentDateTime().split(' ')[0] + ' 23:59:59',
         }
 
         const queryResult = await getListParkingHistories(
@@ -69,10 +71,21 @@ async function indexByUserId(request, response) {
 
         const startIndex = (page - 1) * limit
 
+        const params = {
+            txt_search: request.query.txt_search,
+            from_date: request.query.from_date
+                ? request.query.from_date.trim() + ' 00:00:00'
+                : '0000-00-00 00:00:00',
+            to_date: request.query.to_date
+                ? request.query.to_date.trim() + ' 23:59:59'
+                : getCurrentDateTime().split(' ')[0] + ' 23:59:59',
+        }
+
         const queryResult = await getListParkingHistoriesByUserId(
             userId,
             startIndex,
             limit,
+            params,
         )
 
         return response.status(200).json(queryResult)

@@ -1,7 +1,9 @@
+const { Op } = require('sequelize')
+
 const models = require(process.cwd() + '/models/index')
 const objectCleaner = require(process.cwd() + '/helpers/object-cleaner')
 
-const include = (nestedSelection) => [
+const include = [
     {
         model: models.Vehicle,
         attributes: { exclude: ['updatedAt'] },
@@ -35,7 +37,6 @@ const include = (nestedSelection) => [
                 required: true,
             },
         ],
-        where: nestedSelection?.vehicle ? nestedSelection.vehicle : {},
     },
     {
         model: models.ParkingLot,
@@ -65,34 +66,22 @@ const include = (nestedSelection) => [
                 required: true,
             },
         ],
-        where: nestedSelection?.parking_lot ? nestedSelection.parking_lot : {},
     },
 ]
 
-function createSelection(params) {
-    return objectCleaner.clean({
-        user_id: params.user_id,
-        vehicle_id: params.vehicle_id,
-        parking_lot_id: params.parking_lot_id,
-        checkin_time: params.checkin_time,
-        is_parking: params.is_parking,
-        qr_key: params.qr_key,
-    })
-}
-
-function createNestedSelection(params) {
-    return objectCleaner.clean({
-        vehicle: objectCleaner.clean(params.vehicle),
-        parking_lot: objectCleaner.clean(params.parking_lot),
-    })
-}
-
 async function index(startIndex, limit, params) {
-    const selection = createSelection(params)
-    const nestedSelection = createNestedSelection(params)
+    const selection = objectCleaner.clean({
+        [Op.or]: objectCleaner.clean({
+            '$Vehicle.license_plate$': { [Op.like]: `%${params.txt_search}%` },
+            '$ParkingLot.name$': { [Op.like]: `%${params.txt_search}%` },
+        }),
+        createdAt: {
+            [Op.between]: [params.from_date, params.to_date],
+        },
+    })
 
     return models.ParkingHistory.findAndCountAll({
-        include: include(nestedSelection),
+        include: include,
         offset: startIndex,
         limit: limit,
         order: [['id', 'DESC']],
@@ -101,21 +90,38 @@ async function index(startIndex, limit, params) {
 }
 
 async function indexByUserId(userId, startIndex, limit) {
+    const selection = objectCleaner.clean({
+        [Op.or]: objectCleaner.clean({
+            '$Vehicle.license_plate$': { [Op.like]: `%${params.txt_search}%` },
+            '$ParkingLot.name$': { [Op.like]: `%${params.txt_search}%` },
+        }),
+        createdAt: {
+            [Op.between]: [params.from_date, params.to_date],
+        },
+        user_id: userId,
+    })
+
     return models.ParkingHistory.findAndCountAll({
         include: include(),
         offset: startIndex,
         limit: limit,
         order: [['id', 'DESC']],
-        where: { user_id: userId },
+        where: selection,
     })
 }
 
 async function showByParams(params) {
-    const selection = createSelection(params)
-    const nestedSelection = createNestedSelection(params)
+    const selection = objectCleaner.clean({
+        parking_lot_id: params.parking_lot_id,
+        is_parking: params.is_parking,
+        checkin_time: params.checkin_time,
+        qr_key: params.qr_key,
+        '$Vehicle.id$': params.vehicle_id,
+        '$Vehicle.license_plate$': params.license_plate,
+    })
 
     return models.ParkingHistory.findOne({
-        include: include(nestedSelection),
+        include: include,
         where: selection,
     })
 }
