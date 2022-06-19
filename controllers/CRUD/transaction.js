@@ -13,11 +13,19 @@ const include = [
 async function indexByWalletId(walletId, startIndex, limit, params) {
     const selection = objectCleaner.clean({
         type_id: params.type_id !== '' ? params.type_id : null,
+        amount:
+            params.state !== ''
+                ? params.state === 'Nạp tiền'
+                    ? { [Op.gt]: 0 }
+                    : { [Op.lt]: 0 }
+                : null,
         createdAt: {
             [Op.between]: [params.from_date, params.to_date],
         },
         wallet_id: walletId,
     })
+
+    console.log(selection)
 
     return models.Transaction.findAndCountAll({
         include: include,

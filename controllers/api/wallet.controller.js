@@ -73,6 +73,7 @@ async function indexByOwnerId(request, response) {
 
         const params = {
             type_id: request.query.type_id,
+            state: request.query.state ? request.query.state.trim() : '',
             from_date: request.query.from_date
                 ? request.query.from_date.trim() + ' 00:00:00'
                 : '0000-00-00 00:00:00',
