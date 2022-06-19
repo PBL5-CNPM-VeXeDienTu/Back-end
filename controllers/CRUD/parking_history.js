@@ -10,14 +10,7 @@ const include = [
         include: [
             {
                 model: models.User,
-                attributes: [
-                    'email',
-                    'name',
-                    'role',
-                    'is_verified',
-                    'deletedAt',
-                    'createdAt',
-                ],
+                attributes: { exclude: ['password', 'updatedAt'] },
                 include: [
                     {
                         model: models.Role,
