@@ -35,11 +35,9 @@ async function index(startIndex, limit, isAdmin, params) {
             brand: { [Op.like]: `%${params.txt_search}%` },
             license_plate: { [Op.like]: `%${params.txt_search}%` },
             '$VehicleType.type_name$': { [Op.like]: `%${params.txt_search}%` },
-            '$VerifyState.state$': { [Op.like]: `%${params.txt_search}%` },
         }),
         type_id: params.type_id !== '' ? params.type_id : null,
-        verify_state_id:
-            params.verify_state_id !== '' ? params.verify_state_id : null,
+        '$VerifyState.state$': { [Op.like]: `%${params.verify_state}%` },
         createdAt: {
             [Op.between]: [params.from_date, params.to_date],
         },

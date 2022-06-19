@@ -40,7 +40,9 @@ async function index(request, response) {
                 ? request.query.txt_search.trim()
                 : '',
             type_id: request.query.type_id,
-            verify_state_id: request.query.verify_state_id,
+            verify_state: request.query.verify_state
+                ? request.query.verify_state.trim()
+                : '',
             from_date: request.query.from_date
                 ? request.query.from_date.trim() + ' 00:00:00'
                 : '0000-00-00 00:00:00',
