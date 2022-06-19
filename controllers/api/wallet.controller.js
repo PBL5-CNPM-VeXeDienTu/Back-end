@@ -28,7 +28,20 @@ async function index(request, response) {
 
         const startIndex = (page - 1) * limit
 
-        const queryResult = await getListWallets(startIndex, limit)
+        const params = {
+            role: request.query.role,
+            txt_search: request.query.txt_search
+                ? request.query.txt_search.trim()
+                : '',
+            from_date: request.query.from_date
+                ? request.query.from_date.trim() + ' 00:00:00'
+                : '0000-00-00 00:00:00',
+            to_date: request.query.to_date
+                ? request.query.to_date.trim() + ' 23:59:59'
+                : getCurrentDateTime().split(' ')[0] + ' 23:59:59',
+        }
+
+        const queryResult = await getListWallets(startIndex, limit, params)
 
         return response.status(200).json(queryResult)
     } catch (error) {
@@ -39,7 +52,7 @@ async function index(request, response) {
     }
 }
 
-async function showByOwnerId(request, response) {
+async function indexByOwnerId(request, response) {
     try {
         // Transaction list's params
         const page = Number.parseInt(request.query.page)
@@ -202,7 +215,7 @@ async function withDrawById(request, response) {
 
 module.exports = {
     index: index,
-    showByOwnerId: showByOwnerId,
+    indexByOwnerId: indexByOwnerId,
     rechargeById: rechargeById,
     withDrawById: withDrawById,
 }
