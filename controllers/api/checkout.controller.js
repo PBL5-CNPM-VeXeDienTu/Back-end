@@ -63,10 +63,8 @@ async function checkout(request, response) {
                 is_parking: true,
                 checkin_time: qrData.checkin_time,
                 qr_key: qrData.qr_key,
-                vehicle: {
-                    id: qrData.vehicle_id,
-                    license_plate: licensePlate,
-                },
+                vehicle_id: qrData.vehicle_id,
+                license_plate: licensePlate,
             }
 
             const dbParkingHistory = await getParkingHistoryByParams(
