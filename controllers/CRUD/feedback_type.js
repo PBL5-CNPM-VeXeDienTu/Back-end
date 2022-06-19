@@ -1,4 +1,5 @@
 const models = require(process.cwd() + '/models/index')
+const objectCleaner = require(process.cwd() + '/helpers/object-cleaner')
 
 async function index() {
     return models.FeedbackType.findAndCountAll()
