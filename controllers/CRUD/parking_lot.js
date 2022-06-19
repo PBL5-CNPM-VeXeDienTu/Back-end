@@ -30,8 +30,12 @@ async function index(startIndex, limit, isAdmin, params) {
             address: { [Op.like]: `%${params.txt_search}%` },
             '$Owner.name$': { [Op.like]: `%${params.txt_search}%` },
         }),
+        '$VerifyState.state$': { [Op.like]: `%${params.verify_state}%` },
         is_open: params.is_open !== '' ? params.is_open : null,
         is_full: params.is_full !== '' ? params.is_full : null,
+        createdAt: {
+            [Op.between]: [params.from_date, params.to_date],
+        },
         deletedAt: isAdmin
             ? { [Op.or]: [{ [Op.is]: null }, { [Op.not]: null }] }
             : { [Op.is]: null },

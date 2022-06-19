@@ -38,8 +38,17 @@ async function index(request, response) {
             txt_search: request.query.txt_search
                 ? request.query.txt_search.trim()
                 : '',
+            verify_state: request.query.verify_state
+                ? request.query.verify_state.trim()
+                : '',
             is_open: request.query.is_open,
             is_full: request.query.is_full,
+            from_date: request.query.from_date
+                ? request.query.from_date.trim() + ' 00:00:00'
+                : '0000-00-00 00:00:00',
+            to_date: request.query.to_date
+                ? request.query.to_date.trim() + ' 23:59:59'
+                : getCurrentDateTime().split(' ')[0] + ' 23:59:59',
         }
 
         const queryResult = await getListParkingLots(
