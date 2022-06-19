@@ -12,7 +12,6 @@ async function index(request, response) {
     try {
         const page = Number.parseInt(request.query.page)
         const limit = Number.parseInt(request.query.limit)
-        const queryParams = request.query
 
         if (
             Number.isNaN(page) ||
@@ -27,12 +26,12 @@ async function index(request, response) {
 
         const startIndex = (page - 1) * limit
         const params = {
-            txt_search: queryParams.txt_search
-                ? queryParams.txt_search.trim()
+            txt_search: request.query.txt_search
+                ? request.query.txt_search.trim()
                 : '',
-            type_id: queryParams.type_id,
-            feature_id: queryParams.feature_id,
-            is_processed: queryParams.is_processed,
+            type_id: request.query.type_id,
+            feature_id: request.query.feature_id,
+            is_processed: request.query.is_processed,
         }
 
         const queryResult = await getListFeedbacks(startIndex, limit, params)

@@ -1,16 +1,12 @@
+const { Op } = require('sequelize')
+
 const models = require(process.cwd() + '/models/index')
+const objectCleaner = require(process.cwd() + '/helpers/object-cleaner')
 
 const include = [
     {
         model: models.User,
-        attributes: [
-            'email',
-            'name',
-            'role',
-            'is_verified',
-            'deletedAt',
-            'createdAt',
-        ],
+        attributes: { exclude: ['password', 'qr_key', 'updatedAt'] },
         include: [
             {
                 model: models.Role,
@@ -20,9 +16,22 @@ const include = [
         as: 'Owner',
         required: true,
     },
+    {
+        model: models.Transaction,
+        limit: 1,
+        order: [['id', 'DESC']],
+    },
 ]
 
-async function index(startIndex, limit) {
+async function index(startIndex, limit, params) {
+    const selection = objectCleaner.clean({
+        '$Owner.role$': params.role !== '' ? params.role : null,
+        '$Owner.name$': { [Op.like]: `%${params.txt_search}%` },
+        createdAt: {
+            [Op.between]: [params.from_date, params.to_date],
+        },
+    })
+
     return models.Wallet.findAndCountAll({
         include: include,
         attributes: {
@@ -31,6 +40,7 @@ async function index(startIndex, limit) {
         offset: startIndex,
         limit: limit,
         order: [['user_id', 'DESC']],
+        where: selection,
     })
 }
 

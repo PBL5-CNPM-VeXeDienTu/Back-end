@@ -28,7 +28,9 @@ async function index(request, response) {
         const startIndex = (page - 1) * limit
 
         const params = {
-            txt_search: request.query.txt_search,
+            txt_search: request.query.txt_search
+                ? request.query.txt_search.trim()
+                : '',
             is_parking: request.query.is_parking,
             from_date: request.query.from_date
                 ? request.query.from_date.trim() + ' 00:00:00'
