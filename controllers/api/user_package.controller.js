@@ -1,9 +1,10 @@
 const validators = require(process.cwd() + '/helpers/validators')
+const { getCurrentDateTime } = require(process.cwd() + '/helpers/datetime')
 
 const {
     getListUserPackages,
     getUserPackageById,
-    getUserPackageByOwnerId,
+    getListUserPackagesByOwnerId,
     addNewUserPackage,
     updateUserPackageById,
     deleteUserPackageById,
@@ -32,7 +33,22 @@ async function index(request, response) {
 
         const startIndex = (page - 1) * limit
 
-        const queryResult = await getListUserPackages(startIndex, limit)
+        const params = {
+            txt_search: request.query.txt_search
+                ? request.query.txt_search.trim()
+                : '',
+            type_id: request.query.type_id,
+            vehicle_type_id: request.query.vehicle_type_id,
+            from_date: request.query.from_date
+                ? request.query.from_date.trim() + ' 00:00:00'
+                : '0000-00-00 00:00:00',
+            to_date: request.query.to_date
+                ? request.query.to_date.trim() + ' 23:59:59'
+                : getCurrentDateTime().split(' ')[0] + ' 23:59:59',
+            is_expired: request.query.is_expired,
+        }
+
+        const queryResult = await getListUserPackages(startIndex, limit, params)
 
         return response.status(200).json(queryResult)
     } catch (error) {
@@ -45,7 +61,7 @@ async function index(request, response) {
 
 async function indexByOwnerId(request, response) {
     try {
-        const ownerId = request.userData.userId
+        const ownerId = request.params.id
         const page = Number.parseInt(request.query.page)
         const limit = Number.parseInt(request.query.limit)
 
@@ -62,10 +78,26 @@ async function indexByOwnerId(request, response) {
 
         const startIndex = (page - 1) * limit
 
-        const queryResult = await getUserPackageByOwnerId(
+        const params = {
+            txt_search: request.query.txt_search
+                ? request.query.txt_search.trim()
+                : '',
+            type_id: request.query.type_id,
+            vehicle_type_id: request.query.vehicle_type_id,
+            from_date: request.query.from_date
+                ? request.query.from_date.trim() + ' 00:00:00'
+                : '0000-00-00 00:00:00',
+            to_date: request.query.to_date
+                ? request.query.to_date.trim() + ' 23:59:59'
+                : getCurrentDateTime().split(' ')[0] + ' 23:59:59',
+            is_expired: request.query.is_expired,
+        }
+
+        const queryResult = await getListUserPackagesByOwnerId(
             ownerId,
             startIndex,
             limit,
+            params,
         )
 
         return response.status(200).json(queryResult)
@@ -92,50 +124,77 @@ async function showById(request, response) {
 
 async function create(request, response) {
     try {
+        const userId = request.userData.userId
         const packageId = request.body.package_id
         const dbPackage = await getPackageById(packageId)
 
         // Check if package exists
         if (dbPackage) {
-            const newUserPackage = {
-                user_id: request.userData.userId,
-                package_id: dbPackage.id,
-                parking_lot_id: dbPackage.parking_lot_id,
-                name: dbPackage.name,
-                type_id: dbPackage.type_id,
-                vehicle_type_id: dbPackage.vehicle_type_id,
-                price: dbPackage.price,
-                expire_at: await getExpireDateOfUserPackage(
-                    dbPackage.PackageType.type_name,
-                ),
-            }
+            const dbWallet = await getWalletByUserId(userId)
 
-            const validateResponse =
-                validators.validateUserPackage(newUserPackage)
-            if (validateResponse !== true) {
-                return response.status(400).json({
-                    message: 'Validation failed!',
-                    errors: validateResponse,
+            if (!dbWallet) {
+                return response.status(404).json({
+                    message: 'Wallet not found!',
                 })
             }
 
-            const result = await addNewUserPackage(newUserPackage)
+            // Check if user' wallet have enough balance
+            if (dbWallet.balance >= dbPackage.price) {
+                // Add new user package
+                const newUserPackage = {
+                    user_id: request.userData.userId,
+                    package_id: dbPackage.id,
+                    parking_lot_id: dbPackage.parking_lot_id,
+                    name: dbPackage.name,
+                    type_id: dbPackage.type_id,
+                    vehicle_type_id: dbPackage.vehicle_type_id,
+                    price: dbPackage.price,
+                    expire_at: await getExpireDateOfUserPackage(
+                        dbPackage.PackageType.type_name,
+                    ),
+                }
 
-            // Get user's wallet id
-            const walletId = (await getWalletByUserId(result.user_id))?.id
+                const validateResponse =
+                    validators.validateUserPackage(newUserPackage)
+                if (validateResponse !== true) {
+                    return response.status(400).json({
+                        message: 'Validation failed!',
+                        errors: validateResponse,
+                    })
+                }
 
-            // Add new transaction history
-            const newTransaction = {
-                wallet_id: walletId,
-                type_id: BUY_PACKAGE_TRANSACTION_TYPE_ID,
-                reference_id: result.id,
-                amount: result.price,
+                const addedUserPackage = await addNewUserPackage(newUserPackage)
+
+                // Update wallet's balance and create transaction
+                const oldBalance = dbWallet.balance
+
+                // Update balance
+                const updateWallet = {
+                    balance: dbWallet.balance - addedUserPackage.price,
+                }
+                await updateWalletById(updateWallet, dbWallet.id).then(
+                    async (result) => {
+                        // Add new transaction history
+                        const newTransaction = {
+                            wallet_id: dbWallet.id,
+                            old_balance: oldBalance,
+                            amount: -addedUserPackage.price,
+                            new_balance: result.balance,
+                            type_id: BUY_PACKAGE_TRANSACTION_TYPE_ID,
+                            reference_id: addedUserPackage.id,
+                        }
+                        await addNewTransaction(newTransaction)
+                    },
+                )
+
+                return response.status(201).json({
+                    message: 'Create user package successfully!',
+                })
+            } else {
+                return response.status(401).json({
+                    message: 'Wallet have not enough balance!',
+                })
             }
-            addNewTransaction(newTransaction)
-
-            return response.status(201).json({
-                message: 'Create user package successfully!',
-            })
         } else {
             return response.status(404).json({
                 message: 'Package not found!',
@@ -165,7 +224,7 @@ async function updateById(request, response) {
             }
 
             const validateResponse =
-                validator.validateUserPackage(updateUserPackage)
+                validators.validateUserPackage(updateUserPackage)
             if (validateResponse !== true) {
                 return response.status(400).json({
                     message: 'Validate failed',

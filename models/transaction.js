@@ -13,9 +13,11 @@ module.exports = (sequelize, DataTypes) => {
     Transaction.init(
         {
             wallet_id: DataTypes.INTEGER,
+            old_balance: DataTypes.FLOAT,
+            amount: DataTypes.FLOAT,
+            new_balance: DataTypes.FLOAT,
             type_id: DataTypes.INTEGER,
             reference_id: DataTypes.INTEGER,
-            amount: DataTypes.FLOAT,
             createdAt: {
                 type: DataTypes.DATE,
                 get: function () {

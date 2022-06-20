@@ -1,14 +1,14 @@
-const BASIC_USER_ROLE = 1
+const PARKING_USER_ROLE = 1
 const PARKING_LOT_USER_ROLE = 2
 const ADMIN_ROLE = 3
 
-async function checkRoleBasicUser(request, response, next) {
+async function checkRoleParkingUser(request, response, next) {
     try {
         const requestRole = request.userData.role
 
         // Check if request user is admin or not
         if (requestRole != ADMIN_ROLE) {
-            if (requestRole != BASIC_USER_ROLE) {
+            if (requestRole != PARKING_USER_ROLE) {
                 return response.status(400).json({
                     message: 'Invalid role!',
                 })
@@ -61,7 +61,7 @@ async function checkRoleAdmin(request, response, next) {
 }
 
 module.exports = {
-    checkRoleBasicUser: checkRoleBasicUser,
+    checkRoleParkingUser: checkRoleParkingUser,
     checkRoleParkingLot: checkRoleParkingLot,
     checkRoleAdmin: checkRoleAdmin,
 }

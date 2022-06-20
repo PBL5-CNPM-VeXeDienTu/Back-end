@@ -1,5 +1,7 @@
+const { Op } = require('sequelize')
 const models = require(process.cwd() + '/models/index')
 const { getCurrentDateTime } = require(process.cwd() + '/helpers/datetime')
+const objectCleaner = require(process.cwd() + '/helpers/object-cleaner')
 
 const include = [
     {
@@ -21,7 +23,25 @@ const include = [
     },
 ]
 
-async function index(startIndex, limit, role) {
+async function index(startIndex, limit, params) {
+    const selection = objectCleaner.clean({
+        [Op.or]: objectCleaner.clean({
+            name: { [Op.like]: `%${params.txt_search}%` },
+            email: { [Op.like]: `%${params.txt_search}%` },
+            '$UserInfo.phone_number$': { [Op.like]: `%${params.txt_search}%` },
+            '$UserInfo.address$': { [Op.like]: `%${params.txt_search}%` },
+        }),
+        deletedAt:
+            params.is_deleted !== ''
+                ? params.is_deleted === '1'
+                    ? { [Op.not]: null }
+                    : { [Op.is]: null }
+                : null,
+        role: params.role !== '' ? params.role : null,
+    })
+
+    console.log(selection)
+
     return models.User.findAndCountAll({
         include: include,
         attributes: {
@@ -29,11 +49,11 @@ async function index(startIndex, limit, role) {
         },
         offset: startIndex,
         limit: limit,
-        where: { role: role },
         order: [
             ['id', 'DESC'],
             ['name', 'ASC'],
         ],
+        where: selection,
     })
 }
 

@@ -32,9 +32,10 @@ async function forgotPassword(request, response) {
             )
 
             // Save authKey, replace old key if already exist
-            const oldKey = dbUser.AuthKey?.key
-            if (oldKey) updateAuthKeyById({ key: authKey }, oldKey.id)
-            else addNewAuthKey({ user_id: dbUser.id, key: authKey })
+            const oldAuthKey = dbUser.AuthKey
+            if (oldAuthKey)
+                await updateAuthKeyById({ key: authKey }, oldAuthKey.id)
+            else await addNewAuthKey({ user_id: dbUser.id, key: authKey })
 
             return response.status(201).json({
                 message: 'Reset password email sended!',

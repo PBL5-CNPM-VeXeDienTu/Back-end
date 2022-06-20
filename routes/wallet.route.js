@@ -13,16 +13,10 @@ router.get(
     walletApiController.index,
 )
 router.get(
-    '/:id',
-    checkAuthMiddleware.checkAuth,
-    checkOwnerMiddleware.checkWalletOwner,
-    walletApiController.showById,
-)
-router.get(
     '/get-by-owner/:id',
     checkAuthMiddleware.checkAuth,
     checkOwnerMiddleware.checkAccountOwner,
-    walletApiController.showByUserId,
+    walletApiController.indexByOwnerId,
 )
 router.post(
     '/:id/recharge',
