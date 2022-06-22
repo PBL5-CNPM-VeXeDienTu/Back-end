@@ -43,6 +43,8 @@ const validateNotification = (notification) =>
     validator.validate(notification, schemas.notificationSchema)
 const validateAuthKey = (authKey) =>
     validator.validate(authKey, schemas.authKeySchema)
+const validateQRData = (qrData) =>
+    validator.validate(qrData, schemas.qrDataSchema)
 
 module.exports = {
     validateUser: validateUser,
@@ -65,4 +67,5 @@ module.exports = {
     validateFeature: validateFeature,
     validateNotification: validateNotification,
     validateAuthKey: validateAuthKey,
+    validateQRData: validateQRData,
 }

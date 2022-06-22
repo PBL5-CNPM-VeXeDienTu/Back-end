@@ -17,9 +17,7 @@ async function checkin(request, response) {
         // Check parking state of vehicle
         const params = {
             is_parking: true,
-            vehicle: {
-                license_plate: licensePlate,
-            },
+            license_plate: licensePlate,
         }
         const dbParkingHistory = await getParkingHistoryByParams(params)
         if (dbParkingHistory) {

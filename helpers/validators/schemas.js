@@ -140,6 +140,13 @@ const authKeySchema = {
     key: { type: 'string', optional: true },
 }
 
+const qrDataSchema = {
+    vehicle_id: { type: 'number', optional: false },
+    parking_lot_id: { type: 'number', optional: false },
+    checkin_time: { type: 'string', optional: false },
+    qr_key: { type: 'string', optional: false },
+}
+
 module.exports = {
     userSchema: userSchema,
     roleSchema: roleSchema,
@@ -161,4 +168,5 @@ module.exports = {
     featureSchema: featureSchema,
     notificationSchema: notificationSchema,
     authKeySchema: authKeySchema,
+    qrDataSchema: qrDataSchema,
 }
