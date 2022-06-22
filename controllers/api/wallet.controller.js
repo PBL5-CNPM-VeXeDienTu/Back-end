@@ -52,7 +52,7 @@ async function index(request, response) {
     }
 }
 
-async function indexByOwnerId(request, response) {
+async function showByOwnerId(request, response) {
     try {
         // Transaction list's params
         const page = Number.parseInt(request.query.page)
@@ -131,25 +131,25 @@ async function rechargeById(request, response) {
             const oldBalance = dbWallet.balance
 
             // Update wallet's balance
-            const cardValue = 20000
+            const cardPrice = Number.parseInt(request.body.price)
             const updateWallet = {
-                balance: dbWallet.balance + cardValue,
+                balance: oldBalance + cardPrice,
             }
-            updateWalletById(updateWallet, dbWallet.id).then((result) => {
-                // Add new transaction
-                const newTransaction = {
-                    wallet_id: dbWallet.id,
-                    old_balance: oldBalance,
-                    amount: cardValue,
-                    new_balance: result.balance,
-                    type_id: 1,
-                    reference_id: result.id,
-                }
-                addNewTransaction(newTransaction)
+            await updateWalletById(updateWallet, dbWallet.id)
 
-                return response.status(201).json({
-                    message: 'Recharge wallet successfully!',
-                })
+            // Add new transaction
+            const newTransaction = {
+                wallet_id: dbWallet.id,
+                old_balance: oldBalance,
+                amount: cardPrice,
+                new_balance: updateWallet.balance,
+                type_id: 1,
+                reference_id: dbWallet.id,
+            }
+            await addNewTransaction(newTransaction)
+
+            return response.status(201).json({
+                message: 'Recharge wallet successfully!',
             })
         } else {
             return response.status(404).json({
@@ -216,7 +216,7 @@ async function withDrawById(request, response) {
 
 module.exports = {
     index: index,
-    indexByOwnerId: indexByOwnerId,
+    showByOwnerId: showByOwnerId,
     rechargeById: rechargeById,
     withDrawById: withDrawById,
 }
