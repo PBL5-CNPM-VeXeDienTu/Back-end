@@ -92,7 +92,7 @@ async function indexByUserId(userId, startIndex, limit, params) {
         checkin_time: {
             [Op.between]: [params.checkin_from_date, params.checkin_to_date],
         },
-        checkout_time: {
+        checkout_time: params.is_parking === '1' ? null : {
             [Op.between]: [params.checkout_from_date, params.checkout_to_date],
         },
         user_id: params.role === PARKING_USER_ROLE ? userId : null,
