@@ -101,13 +101,16 @@ async function indexByUserId(userId, startIndex, limit, params) {
         parking_lot_id: params.parking_lot_id !== '' ? params.parking_lot_id : null,
     })
 
-    return models.ParkingHistory.findAndCountAll({
-        include: include,
-        offset: startIndex,
-        limit: limit,
-        order: [['id', 'DESC']],
-        where: selection,
-    })
+
+    return models.ParkingHistory.findAndCountAll(
+        objectCleaner.clean({
+            include: include,
+            offset: Number.isNaN(startIndex) ? null : startIndex,
+            limit: Number.isNaN(limit) ? null : limit,
+            order: [['id', 'DESC']],
+            where: selection,
+        })
+    )
 }
 
 async function showByParams(params) {
