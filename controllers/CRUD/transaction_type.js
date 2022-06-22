@@ -23,11 +23,11 @@ async function destroy(id) {
 }
 
 async function checkTypeNameExisted(typeName) {
-    return models.TransactionType.findOne({
+    return !!(await models.TransactionType.findOne({
         where: {
             type_name: typeName,
         },
-    })
+    }))
 }
 
 module.exports = {

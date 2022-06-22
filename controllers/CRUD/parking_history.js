@@ -109,7 +109,7 @@ async function indexByUserId(userId, startIndex, limit, params) {
             limit: Number.isNaN(limit) ? null : limit,
             order: [['id', 'DESC']],
             where: selection,
-        }),
+        })
     )
 }
 
