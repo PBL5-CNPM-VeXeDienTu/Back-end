@@ -38,7 +38,7 @@ async function create(request, response) {
     try {
         const typeName = request.body.type_name
 
-        if (checkTypeNameExisted(typeName)) {
+        if (await checkTypeNameExisted(typeName)) {
             return response.status(400).json({
                 message: 'Vehicle type already exists!',
             })
@@ -76,7 +76,7 @@ async function updateById(request, response) {
         if (dbVehicleType) {
             const typeName = request.body.type_name
 
-            if (checkTypeNameExisted(typeName)) {
+            if (await checkTypeNameExisted(typeName)) {
                 return response.status(400).json({
                     message: 'Vehicle type already exists!',
                 })

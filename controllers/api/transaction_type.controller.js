@@ -38,7 +38,7 @@ async function create(request, response) {
     try {
         const typeName = request.body.type_name
 
-        if (checkTypeNameExisted(typeName)) {
+        if (await checkTypeNameExisted(typeName)) {
             return response.status(400).json({
                 message: 'Transaction type already exists!',
             })
@@ -79,7 +79,7 @@ async function updateById(request, response) {
         if (dbTransactionType) {
             const typeName = request.body.type_name
 
-            if (checkTypeNameExisted(typeName)) {
+            if (await checkTypeNameExisted(typeName)) {
                 return response.status(400).json({
                     message: 'Feedback type already exists!',
                 })
