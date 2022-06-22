@@ -65,8 +65,11 @@ async function index(startIndex, limit, params) {
             '$ParkingLot.name$': { [Op.like]: `%${params.txt_search}%` },
         }),
         is_parking: params.is_parking !== '' ? params.is_parking : null,
-        createdAt: {
-            [Op.between]: [params.from_date, params.to_date],
+        checkin_time: {
+            [Op.between]: [params.checkin_from_date, params.checkin_to_date],
+        },
+        checkout_time: {
+            [Op.between]: [params.checkout_from_date, params.checkout_to_date],
         },
     })
 
@@ -86,8 +89,11 @@ async function indexByUserId(userId, startIndex, limit, params) {
             '$ParkingLot.name$': { [Op.like]: `%${params.txt_search}%` },
         }),
         is_parking: params.is_parking !== '' ? params.is_parking : null,
-        createdAt: {
-            [Op.between]: [params.from_date, params.to_date],
+        checkin_time: {
+            [Op.between]: [params.checkin_from_date, params.checkin_to_date],
+        },
+        checkout_time: {
+            [Op.between]: [params.checkout_from_date, params.checkout_to_date],
         },
         user_id: params.role === PARKING_USER_ROLE ? userId : null,
         '$ParkingLot.Owner.id$':
@@ -95,13 +101,16 @@ async function indexByUserId(userId, startIndex, limit, params) {
         parking_lot_id: params.parking_lot_id !== '' ? params.parking_lot_id : null,
     })
 
-    return models.ParkingHistory.findAndCountAll({
-        include: include,
-        offset: startIndex,
-        limit: limit,
-        order: [['id', 'DESC']],
-        where: selection,
-    })
+
+    return models.ParkingHistory.findAndCountAll(
+        objectCleaner.clean({
+            include: include,
+            offset: Number.isNaN(startIndex) ? null : startIndex,
+            limit: Number.isNaN(limit) ? null : limit,
+            order: [['id', 'DESC']],
+            where: selection,
+        })
+    )
 }
 
 async function showByParams(params) {
@@ -109,6 +118,7 @@ async function showByParams(params) {
         parking_lot_id: params.parking_lot_id,
         is_parking: params.is_parking,
         checkin_time: params.checkin_time,
+        checkout_time: params.checkout_time,
         qr_key: params.qr_key,
         '$Vehicle.id$': params.vehicle_id,
         '$Vehicle.license_plate$': params.license_plate,
