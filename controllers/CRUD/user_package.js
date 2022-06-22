@@ -54,7 +54,10 @@ async function index(startIndex, limit, params) {
                     : { [Op.gte]: getCurrentDateTime() }
                 : null,
         createdAt: {
-            [Op.between]: [params.from_date, params.to_date],
+            [Op.between]: [params.created_from_date, params.created_to_date],
+        },
+        expireAt: {
+            [Op.between]: [params.expired_from_date, params.expired_to_date],
         },
     })
 
@@ -86,7 +89,10 @@ async function indexByOwnerId(ownerId, startIndex, limit, params) {
                     : { [Op.gte]: getCurrentDateTime() }
                 : null,
         createdAt: {
-            [Op.between]: [params.from_date, params.to_date],
+            [Op.between]: [params.created_to_date, params.created_to_date],
+        },
+        expireAt: {
+            [Op.between]: [params.expired_from_date, params.expired_to_date],
         },
     })
 
