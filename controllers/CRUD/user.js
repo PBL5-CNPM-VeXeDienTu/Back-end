@@ -39,8 +39,6 @@ async function index(startIndex, limit, params) {
         role: params.role !== '' ? params.role : null,
     })
 
-    console.log(selection)
-
     return models.User.findAndCountAll({
         include: include,
         attributes: {

@@ -81,7 +81,7 @@ async function updateById(request, response) {
 
             if (await checkTypeNameExisted(typeName)) {
                 return response.status(400).json({
-                    message: 'Feedback type already exists!',
+                    message: 'Transaction type already exists!',
                 })
             }
 

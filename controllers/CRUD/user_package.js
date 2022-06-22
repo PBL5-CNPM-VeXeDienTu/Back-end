@@ -102,6 +102,20 @@ async function indexByOwnerId(ownerId, startIndex, limit, params) {
     })
 }
 
+async function showByParams(params) {
+    const selection = objectCleaner.clean({
+        user_id: params.user_id,
+        parking_lot_id: params.parking_lot_id,
+        vehicle_type_id: params.vehicle_type_id,
+        expireAt: params.expireAt,
+    })
+
+    return models.ParkingHistory.findOne({
+        include: include,
+        where: selection,
+    })
+}
+
 async function showById(id) {
     return models.UserPackage.findByPk(id, {
         include: include,
@@ -143,6 +157,7 @@ async function checkExisted(userId, packageId) {
 module.exports = {
     getListUserPackages: index,
     getListUserPackagesByOwnerId: indexByOwnerId,
+    getUserPackageByParams: showByParams,
     getUserPackageById: showById,
     addNewUserPackage: create,
     updateUserPackageById: update,
