@@ -39,11 +39,17 @@ async function index(request, response) {
                 : '',
             type_id: request.query.type_id,
             vehicle_type_id: request.query.vehicle_type_id,
-            from_date: request.query.from_date
-                ? request.query.from_date.trim() + ' 00:00:00'
+            created_from_date: request.query.created_from_date
+                ? request.query.created_from_date.trim() + ' 00:00:00'
                 : '0000-00-00 00:00:00',
-            to_date: request.query.to_date
-                ? request.query.to_date.trim() + ' 23:59:59'
+            created_to_date: request.query.created_to_date
+                ? request.query.created_to_date.trim() + ' 23:59:59'
+                : getCurrentDateTime().split(' ')[0] + ' 23:59:59',
+            expired_from_date: request.query.expired_from_date
+                ? request.query.expired_from_date.trim() + ' 00:00:00'
+                : '0000-00-00 00:00:00',
+            expired_to_date: request.query.expired_to_date
+                ? request.query.expired_to_date.trim() + ' 23:59:59'
                 : getCurrentDateTime().split(' ')[0] + ' 23:59:59',
             is_expired: request.query.is_expired,
         }
