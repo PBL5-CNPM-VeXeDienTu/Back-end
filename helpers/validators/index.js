@@ -14,7 +14,7 @@ const validateWallet = (wallet) =>
 const validateTransaction = (transaction) =>
     validator.validate(transaction, schemas.transactionSchema)
 const validateTransactionType = (transactionType) =>
-    validator.validate(transactionType, schemas.userTransactionType)
+    validator.validate(transactionType, schemas.transactionTypeSchema)
 const validateVehicle = (vehicle) =>
     validator.validate(vehicle, schemas.vehicleSchema)
 const validateVehicleType = (vehicleType) =>
