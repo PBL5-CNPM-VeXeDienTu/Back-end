@@ -1,4 +1,5 @@
 const validators = require(process.cwd() + '/helpers/validators')
+const { getCurrentDateTime } = require(process.cwd() + '/helpers/datetime')
 
 const {
     getListVehicleTypes,
@@ -11,7 +12,40 @@ const {
 
 async function index(request, response) {
     try {
-        const queryResult = await getListVehicleTypes()
+        const page = Number.parseInt(request.query.page)
+        const limit = Number.parseInt(request.query.limit)
+
+        if (
+            Number.isNaN(page) ||
+            page < 1 ||
+            Number.isNaN(limit) ||
+            limit < 0
+        ) {
+            return response.status(400).json({
+                message: 'Invalid query parameters!',
+            })
+        }
+        const startIndex = (page - 1) * limit
+
+        const params = {
+            txt_search: request.query.txt_search
+                ? request.query.txt_search.trim()
+                : '',
+            created_from_date: request.query.created_from_date
+                ? request.query.created_from_date.trim() + ' 00:00:00'
+                : '0000-00-00 00:00:00',
+            created_to_date: request.query.created_to_date
+                ? request.query.created_to_date.trim() + ' 23:59:59'
+                : getCurrentDateTime().split(' ')[0] + ' 23:59:59',
+            updated_from_date: request.query.updated_from_date
+                ? request.query.updated_from_date.trim() + ' 00:00:00'
+                : '0000-00-00 00:00:00',
+            updated_to_date: request.query.updated_to_date
+                ? request.query.updated_to_date.trim() + ' 23:59:59'
+                : getCurrentDateTime().split(' ')[0] + ' 23:59:59',
+        }
+
+        const queryResult = await getListVehicleTypes(startIndex, limit, params)
         return response.status(200).json(queryResult)
     } catch (error) {
         return response.status(500).json({
