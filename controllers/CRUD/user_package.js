@@ -118,8 +118,6 @@ async function indexByOwnerId(ownerId, startIndex, limit, params) {
         user_id: ownerId,
     })
 
-    console.log(selection)
-
     return models.UserPackage.findAndCountAll({
         include: include,
         offset: startIndex,
@@ -140,7 +138,7 @@ async function showByParams(params) {
         expireAt: params.expireAt,
     })
 
-    return models.ParkingHistory.findOne({
+    return models.UserPackage.findOne({
         include: include,
         where: selection,
     })

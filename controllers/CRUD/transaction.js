@@ -25,8 +25,6 @@ async function indexByWalletId(walletId, startIndex, limit, params) {
         wallet_id: walletId,
     })
 
-    console.log(selection)
-
     return models.Transaction.findAndCountAll({
         include: include,
         offset: startIndex,

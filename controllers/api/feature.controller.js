@@ -45,11 +45,7 @@ async function index(request, response) {
                 : getCurrentDateTime().split(' ')[0] + ' 23:59:59',
         }
 
-        const queryResult = await getListFeatureTypes(
-            startIndex,
-            limit,
-            params,
-        )
+        const queryResult = await getListFeatureTypes(startIndex, limit, params)
         return response.status(200).json(queryResult)
     } catch (error) {
         return response.status(500).json({

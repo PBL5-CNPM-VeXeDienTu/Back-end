@@ -51,10 +51,12 @@ async function checkout(request, response) {
         }
 
         // Validate checkout request
+        const dbVehicle = await getVehicleById(qrData.vehicle_id)
         await validateCheckoutRequest(
             parkingLotId,
             licensePlate,
             qrData,
+            dbVehicle,
             response,
         )
 
@@ -102,7 +104,7 @@ async function checkout(request, response) {
 
         const dbUserPackage = await getUserPackageByParams(userPackageParams)
 
-        // If user have none valid user package
+        // If user have no valid user package
         if (!dbUserPackage) {
             // Get user's wallet
             const dbWallet = await getWalletByUserId(dbParkingHistory.user_id)
@@ -121,13 +123,13 @@ async function checkout(request, response) {
                     balance: dbWallet.balance - dbParkingPrice.price,
                 }
                 await updateWalletById(updateWallet, dbWallet.id).then(
-                    async (result) => {
+                    async (_) => {
                         // Add new transaction history
                         const newTransaction = {
                             wallet_id: dbWallet.id,
                             old_balance: oldBalance,
                             amount: -dbParkingPrice.price,
-                            new_balance: result.balance,
+                            new_balance: updateWallet.balance,
                             type_id: PAY_PARKING_FEE_TRANSACTION_TYPE_ID,
                             reference_id: dbParkingHistory.id,
                         }
@@ -139,7 +141,9 @@ async function checkout(request, response) {
                 await checkoutSuccess(dbParkingPrice.price, dbParkingHistory.id)
 
                 return response.status(200).json({
-                    message: 'Checkout successfully!',
+                    message:
+                        "Checkout successfully! Parking fee has been paid with user's wallet!",
+                    Vehicle: dbVehicle,
                 })
             } else {
                 return response.status(400).json({
@@ -152,7 +156,9 @@ async function checkout(request, response) {
         await checkoutSuccess(dbParkingPrice.price, dbParkingHistory.id)
 
         return response.status(200).json({
-            message: 'Checkout successfully!',
+            message:
+                'Checkout successfully! Parking fee has been paid with user package!',
+            Vehicle: dbVehicle,
         })
     } catch (error) {
         return response.status(500).json({
@@ -166,6 +172,7 @@ async function validateCheckoutRequest(
     parkingLotId,
     licensePlate,
     qrData,
+    dbVehicle,
     response,
 ) {
     if (parkingLotId !== qrData.parking_lot_id) {
@@ -174,7 +181,6 @@ async function validateCheckoutRequest(
         })
     }
 
-    const dbVehicle = await getVehicleById(qrData.vehicle_id)
     if (dbVehicle) {
         if (licensePlate !== dbVehicle.license_plate) {
             return response.status(400).json({
