@@ -98,7 +98,8 @@ async function indexByUserId(userId, startIndex, limit, params) {
         user_id: params.role === PARKING_USER_ROLE ? userId : null,
         '$ParkingLot.Owner.id$':
             params.role === PARKING_LOT_USER_ROLE ? userId : null,
-        parking_lot_id: params.parking_lot_id !== '' ? params.parking_lot_id : null,
+        parking_lot_id:
+            params.parking_lot_id !== '' ? params.parking_lot_id : null,
     })
 
     return models.ParkingHistory.findAndCountAll({
