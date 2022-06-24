@@ -38,7 +38,7 @@ async function create(request, response) {
     try {
         const name = request.body.name
 
-        if (checkNameExisted(name)) {
+        if (await checkNameExisted(name)) {
             return response.status(400).json({
                 message: 'Feature already exists!',
             })
@@ -72,19 +72,19 @@ async function create(request, response) {
 async function updateById(request, response) {
     try {
         const featureId = request.params.id
-        const dbFeature = await getFeedbackTypeById(featureId)
+        const dbFeature = await getFeatureById(featureId)
 
         if (dbFeature) {
-            const name = request.body.type_name
+            const name = request.body.name
 
-            if (checkNameExisted(name)) {
+            if (await checkNameExisted(name)) {
                 return response.status(400).json({
                     message: 'Feature already exists!',
                 })
             }
 
             const updateFeature = {
-                type_name: name,
+                name: name,
             }
             const validateResponse = validators.validateFeature(updateFeature)
             if (validateResponse !== true) {

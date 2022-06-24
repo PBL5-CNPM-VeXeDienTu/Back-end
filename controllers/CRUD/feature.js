@@ -20,10 +20,10 @@ async function destroy(id) {
     return models.Feature.destroy({ where: { id: id } })
 }
 
-async function checkNameExisted(typeName) {
+async function checkNameExisted(name) {
     return !!(await models.Feature.findOne({
         where: {
-            type_name: typeName,
+            name: name,
         },
     }))
 }

@@ -85,16 +85,40 @@ async function indexByOwnerId(ownerId, startIndex, limit, params) {
         expireAt:
             params.is_expired !== ''
                 ? params.is_expired === '1'
-                    ? { [Op.lt]: getCurrentDateTime() }
-                    : { [Op.gte]: getCurrentDateTime() }
-                : null,
+                    ? {
+                          [Op.between]: [
+                              params.expire_from_date,
+                              params.expire_to_date,
+                          ],
+                          [Op.lt]: getCurrentDateTime(),
+                      }
+                    : params.is_expired === '0'
+                    ? {
+                          [Op.between]: [
+                              params.expire_from_date,
+                              params.expire_to_date,
+                          ],
+                          [Op.gte]: getCurrentDateTime(),
+                      }
+                    : {
+                          [Op.between]: [
+                              params.expire_from_date,
+                              params.expire_to_date,
+                          ],
+                      }
+                : {
+                      [Op.between]: [
+                          params.expire_from_date,
+                          params.expire_to_date,
+                      ],
+                  },
         createdAt: {
-            [Op.between]: [params.created_to_date, params.created_to_date],
+            [Op.between]: [params.created_from_date, params.created_to_date],
         },
-        expireAt: {
-            [Op.between]: [params.expired_from_date, params.expired_to_date],
-        },
+        user_id: ownerId,
     })
+
+    console.log(selection)
 
     return models.UserPackage.findAndCountAll({
         include: include,

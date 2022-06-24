@@ -92,11 +92,11 @@ async function indexByUserId(request, response) {
             checkin_from_date: request.query.checkin_from_date
                 ? request.query.checkin_from_date.trim() + ' 00:00:00'
                 : '0000-00-00 00:00:00',
-            checkin_to_date: request.query.to_date
+            checkin_to_date: request.query.checkin_to_date
                 ? request.query.checkin_to_date.trim() + ' 23:59:59'
                 : getCurrentDateTime().split(' ')[0] + ' 23:59:59',
             checkout_from_date: request.query.checkout_from_date
-                ? request.query.from_date.trim() + ' 00:00:00'
+                ? request.query.checkout_from_date.trim() + ' 00:00:00'
                 : '0000-00-00 00:00:00',
             checkout_to_date: request.query.checkout_to_date
                 ? request.query.checkout_to_date.trim() + ' 23:59:59'
