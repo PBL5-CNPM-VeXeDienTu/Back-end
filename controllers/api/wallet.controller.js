@@ -72,6 +72,9 @@ async function showByOwnerId(request, response) {
         const startIndex = (page - 1) * limit
 
         const params = {
+            txt_search: request.query.txt_search
+                ? request.query.txt_search.trim()
+                : '',
             type_id: request.query.type_id,
             state: request.query.state ? request.query.state.trim() : '',
             from_date: request.query.from_date
