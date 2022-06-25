@@ -93,7 +93,7 @@ async function generatePayParkingFeeTransaction() {
 
 async function generateBuyPackageTransaction() {
     // Duyệt qua bảng user package để thêm vào transaction
-    const dbUserPackageList = (await getListUserPackages(1, 1000))?.rows
+    const dbUserPackageList = (await getListUserPackages(1, 1000, {}))?.rows
 
     dbUserPackageList.forEach(async (userPackage) => {
         const dbWallet = await getWalletByUserId(userPackage.user_id)
