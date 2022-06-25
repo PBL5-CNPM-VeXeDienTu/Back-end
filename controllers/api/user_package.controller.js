@@ -47,7 +47,7 @@ async function index(request, response) {
                 : getCurrentDateTime().split(' ')[0] + ' 23:59:59',
             expire_from_date: request.query.expire_from_date
                 ? request.query.expire_from_date.trim() + ' 00:00:00'
-                : '0000-00-00 00:00:00',
+                : '0000-01-01 00:00:00',
             expire_to_date: request.query.expire_to_date
                 ? request.query.expire_to_date.trim() + ' 23:59:59'
                 : null,
