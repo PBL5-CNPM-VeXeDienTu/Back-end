@@ -30,6 +30,7 @@ async function indexByWalletId(walletId, startIndex, limit, params) {
         include: include,
         offset: startIndex,
         limit: limit,
+        order: [['id', 'DESC']],
         where: selection,
     })
 }

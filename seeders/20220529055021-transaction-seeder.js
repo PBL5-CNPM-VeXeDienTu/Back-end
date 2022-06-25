@@ -81,8 +81,9 @@ async function generatePayParkingFeeTransaction() {
     }
 
     // Duyệt qua bảng lịch sử đổ xe -> thêm transaction
-    const dbParkingHistoryList = (await getListParkingHistories(0, 1000, params))
-        ?.rows
+    const dbParkingHistoryList = (
+        await getListParkingHistories(0, 1000, params)
+    )?.rows
 
     for (const parkingHistory of dbParkingHistoryList) {
         const dbWallet = await getWalletByUserId(parkingHistory.user_id)

@@ -93,20 +93,22 @@ async function indexByUserId(userId, startIndex, limit, params) {
             [Op.between]: [params.checkin_from_date, params.checkin_to_date],
         },
         checkout_time:
-            params.is_parking === '1'
-                ? null
-                : {
+            params.is_parking === '0'
+                ? {
                       [Op.between]: [
                           params.checkout_from_date,
                           params.checkout_to_date,
                       ],
-                  },
+                  }
+                : null,
         user_id: params.role === PARKING_USER_ROLE ? userId : null,
         '$ParkingLot.Owner.id$':
             params.role === PARKING_LOT_USER_ROLE ? userId : null,
         parking_lot_id:
             params.parking_lot_id !== '' ? params.parking_lot_id : null,
     })
+
+    console.log(selection)
 
     return models.ParkingHistory.findAndCountAll(
         objectCleaner.clean({
@@ -136,7 +138,7 @@ async function showByParams(params) {
 }
 
 async function showById(id) {
-    return models.ParkingHistory.findByPk(id, { include: include() })
+    return models.ParkingHistory.findByPk(id, { include: include })
 }
 
 async function create(newParkingHistory) {

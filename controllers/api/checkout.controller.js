@@ -103,7 +103,7 @@ async function checkout(request, response) {
         }
 
         const dbUserPackage = await getUserPackageByParams(userPackageParams)
-
+        
         // If user have no valid user package
         if (!dbUserPackage) {
             // Get user's wallet
@@ -122,20 +122,18 @@ async function checkout(request, response) {
                 const updateWallet = {
                     balance: dbWallet.balance - dbParkingPrice.price,
                 }
-                await updateWalletById(updateWallet, dbWallet.id).then(
-                    async (_) => {
-                        // Add new transaction history
-                        const newTransaction = {
-                            wallet_id: dbWallet.id,
-                            old_balance: oldBalance,
-                            amount: -dbParkingPrice.price,
-                            new_balance: updateWallet.balance,
-                            type_id: PAY_PARKING_FEE_TRANSACTION_TYPE_ID,
-                            reference_id: dbParkingHistory.id,
-                        }
-                        await addNewTransaction(newTransaction)
-                    },
-                )
+                await updateWalletById(updateWallet, dbWallet.id)
+
+                // Add new transaction
+                const newTransaction = {
+                    wallet_id: dbWallet.id,
+                    old_balance: oldBalance,
+                    amount: -dbParkingPrice.price,
+                    new_balance: updateWallet.balance,
+                    type_id: PAY_PARKING_FEE_TRANSACTION_TYPE_ID,
+                    reference_id: dbParkingHistory.id,
+                }
+                await addNewTransaction(newTransaction)
 
                 // Checkout success, update parking history
                 await checkoutSuccess(dbParkingPrice.price, dbParkingHistory.id)
