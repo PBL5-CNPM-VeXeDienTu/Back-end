@@ -14,15 +14,17 @@ async function index(startIndex, limit, params) {
             [Op.between]: [params.updated_from_date, params.updated_to_date],
         },
     })
-    return models.PackageType.findAndCountAll({
-        offset: startIndex,
-        limit: limit,
-        order: [
-            ['id', 'DESC'],
-            ['type_name', 'ASC'],
-        ],
-        where: selection,
-    })
+    return models.PackageType.findAndCountAll(
+        objectCleaner.clean({
+            offset: Number.isNaN(startIndex) ? null : startIndex,
+            limit: Number.isNaN(limit) ? null : limit,
+            order: [
+                ['id', 'DESC'],
+                ['type_name', 'ASC'],
+            ],
+            where: selection,
+        }),
+    )
 }
 
 async function showById(id) {
