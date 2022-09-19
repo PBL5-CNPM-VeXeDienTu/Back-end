@@ -16,7 +16,6 @@ const include = [
     },
     {
         model: models.Wallet,
-        attributes: { exclude: ['id', 'createdAt'] },
     },
     {
         model: models.AuthKey,
@@ -39,8 +38,6 @@ async function index(startIndex, limit, params) {
                 : null,
         role: params.role !== '' ? params.role : null,
     })
-
-    console.log(selection)
 
     return models.User.findAndCountAll({
         include: include,

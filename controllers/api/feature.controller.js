@@ -1,4 +1,5 @@
 const validators = require(process.cwd() + '/helpers/validators')
+const { getCurrentDateTime } = require(process.cwd() + '/helpers/datetime')
 
 const {
     getListFeatureTypes,
@@ -11,7 +12,30 @@ const {
 
 async function index(request, response) {
     try {
-        const queryResult = await getListFeatureTypes()
+        const page = Number.parseInt(request.query.page)
+        const limit = Number.parseInt(request.query.limit)
+
+        const startIndex = (page - 1) * limit
+
+        const params = {
+            txt_search: request.query.txt_search
+                ? request.query.txt_search.trim()
+                : '',
+            created_from_date: request.query.created_from_date
+                ? request.query.created_from_date.trim() + ' 00:00:00'
+                : '0000-00-00 00:00:00',
+            created_to_date: request.query.created_to_date
+                ? request.query.created_to_date.trim() + ' 23:59:59'
+                : getCurrentDateTime().split(' ')[0] + ' 23:59:59',
+            updated_from_date: request.query.updated_from_date
+                ? request.query.updated_from_date.trim() + ' 00:00:00'
+                : '0000-00-00 00:00:00',
+            updated_to_date: request.query.updated_to_date
+                ? request.query.updated_to_date.trim() + ' 23:59:59'
+                : getCurrentDateTime().split(' ')[0] + ' 23:59:59',
+        }
+
+        const queryResult = await getListFeatureTypes(startIndex, limit, params)
         return response.status(200).json(queryResult)
     } catch (error) {
         return response.status(500).json({
@@ -38,7 +62,7 @@ async function create(request, response) {
     try {
         const name = request.body.name
 
-        if (checkNameExisted(name)) {
+        if (await checkNameExisted(name)) {
             return response.status(400).json({
                 message: 'Feature already exists!',
             })
@@ -72,19 +96,19 @@ async function create(request, response) {
 async function updateById(request, response) {
     try {
         const featureId = request.params.id
-        const dbFeature = await getFeedbackTypeById(featureId)
+        const dbFeature = await getFeatureById(featureId)
 
         if (dbFeature) {
-            const name = request.body.type_name
+            const name = request.body.name
 
-            if (checkNameExisted(name)) {
+            if (await checkNameExisted(name)) {
                 return response.status(400).json({
                     message: 'Feature already exists!',
                 })
             }
 
             const updateFeature = {
-                type_name: name,
+                name: name,
             }
             const validateResponse = validators.validateFeature(updateFeature)
             if (validateResponse !== true) {

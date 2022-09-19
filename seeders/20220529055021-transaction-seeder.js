@@ -1,5 +1,7 @@
 'use strict'
 
+const { getCurrentDateTime } = require(process.cwd() + '/helpers/datetime')
+
 const {
     getWalletById,
     getWalletByUserId,
@@ -70,11 +72,20 @@ async function generateRefundTransaction() {
 }
 
 async function generatePayParkingFeeTransaction() {
-    // Duyệt qua bảng lịch sử đổ xe -> thêm transaction
-    const dbParkingHistoryList = (await getListParkingHistories(1, 1000, {}))
-        ?.rows
+    const params = {
+        txt_search: '',
+        checkin_from_date: '0000-00-00 00:00:00',
+        checkin_to_date: getCurrentDateTime().split(' ')[0] + ' 23:59:59',
+        checkout_from_date: '0000-00-00 00:00:00',
+        checkout_to_date: getCurrentDateTime().split(' ')[0] + ' 23:59:59',
+    }
 
-    dbParkingHistoryList.forEach(async (parkingHistory) => {
+    // Duyệt qua bảng lịch sử đổ xe -> thêm transaction
+    const dbParkingHistoryList = (
+        await getListParkingHistories(0, 1000, params)
+    )?.rows
+
+    for (const parkingHistory of dbParkingHistoryList) {
         const dbWallet = await getWalletByUserId(parkingHistory.user_id)
 
         const transaction = {
@@ -87,16 +98,25 @@ async function generatePayParkingFeeTransaction() {
             createdAt: parkingHistory.createdAt,
             updatedAt: parkingHistory.updatedAt,
         }
-        addNewTransaction(transaction)
-    })
+        await addNewTransaction(transaction)
+    }
 }
 
 async function generateBuyPackageTransaction() {
-    // Duyệt qua bảng user package để thêm vào transaction
-    const dbUserPackageList = (await getListUserPackages(1, 1000))?.rows
+    const params = {
+        txt_search: '',
+        created_from_date: '0000-00-00 00:00:00',
+        created_to_date: getCurrentDateTime().split(' ')[0] + ' 23:59:59',
+        expire_from_date: '0000-01-01 00:00:00',
+        expire_to_date: null,
+    }
 
-    dbUserPackageList.forEach(async (userPackage) => {
+    // Duyệt qua bảng user package để thêm vào transaction
+    const dbUserPackageList = (await getListUserPackages(0, 1000, params))?.rows
+
+    for (const userPackage of dbUserPackageList) {
         const dbWallet = await getWalletByUserId(userPackage.user_id)
+
         const transaction = {
             wallet_id: dbWallet.id,
             old_balance: dbWallet.balance,
@@ -107,8 +127,8 @@ async function generateBuyPackageTransaction() {
             createdAt: userPackage.createdAt,
             updatedAt: userPackage.updatedAt,
         }
-        addNewTransaction(transaction)
-    })
+        await addNewTransaction(transaction)
+    }
 }
 
 async function generateTransactionData() {

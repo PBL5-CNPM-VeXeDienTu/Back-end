@@ -8,6 +8,9 @@ const {
     getParkingHistoryByParams,
     addNewParkingHistory,
 } = require('../CRUD/parking_history')
+const {
+    getParkingPriceByParkingLotIdAndVehicleTypeId,
+} = require('../CRUD/parking_price')
 
 async function checkin(request, response) {
     try {
@@ -17,9 +20,7 @@ async function checkin(request, response) {
         // Check parking state of vehicle
         const params = {
             is_parking: true,
-            vehicle: {
-                license_plate: licensePlate,
-            },
+            license_plate: licensePlate,
         }
         const dbParkingHistory = await getParkingHistoryByParams(params)
         if (dbParkingHistory) {
@@ -30,6 +31,19 @@ async function checkin(request, response) {
 
         const dbVehicle = await getVehicleByLicensePlate(licensePlate)
         if (dbVehicle) {
+            // Check if parking lot have parking price for this vehicle type
+            const dbParkingPrice =
+                await getParkingPriceByParkingLotIdAndVehicleTypeId(
+                    parkingLotId,
+                    dbVehicle.type_id,
+                )
+            if (!dbParkingPrice) {
+                return response.status(400).json({
+                    message:
+                        'Parking lot have no parking price for this vehicle type!',
+                })
+            }
+
             const newParkingHistory = {
                 user_id: dbVehicle.owner_id,
                 vehicle_id: dbVehicle.id,

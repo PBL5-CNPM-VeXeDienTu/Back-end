@@ -37,7 +37,9 @@ async function generateUserPackageData() {
                 type_id: dbPackage.type_id,
                 vehicle_type_id: dbPackage.vehicle_type_id,
                 price: dbPackage.price,
-                expireAt: await getExpireDateOfUserPackage(dbPackage.type_id),
+                expireAt: await getExpireDateOfUserPackage(
+                    dbPackage.PackageType.type_name,
+                ),
             }
 
             data.push(userPackage)

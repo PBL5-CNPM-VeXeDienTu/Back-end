@@ -12,6 +12,7 @@ const include = [
 
 async function indexByWalletId(walletId, startIndex, limit, params) {
     const selection = objectCleaner.clean({
+        '$TransactionType.type_name$': { [Op.like]: `%${params.txt_search}%` },
         type_id: params.type_id !== '' ? params.type_id : null,
         amount:
             params.state !== ''
@@ -25,12 +26,11 @@ async function indexByWalletId(walletId, startIndex, limit, params) {
         wallet_id: walletId,
     })
 
-    console.log(selection)
-
     return models.Transaction.findAndCountAll({
         include: include,
         offset: startIndex,
         limit: limit,
+        order: [['id', 'DESC']],
         where: selection,
     })
 }

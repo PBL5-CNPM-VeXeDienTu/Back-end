@@ -50,11 +50,53 @@ async function index(startIndex, limit, params) {
         expireAt:
             params.is_expired !== ''
                 ? params.is_expired === '1'
-                    ? { [Op.lt]: getCurrentDateTime() }
-                    : { [Op.gte]: getCurrentDateTime() }
-                : null,
+                    ? params.expire_to_date
+                        ? {
+                              [Op.between]: [
+                                  params.expire_from_date,
+                                  params.expire_to_date,
+                              ],
+                              [Op.lt]: getCurrentDateTime(),
+                          }
+                        : {
+                              [Op.gte]: params.expire_from_date,
+                              [Op.lt]: getCurrentDateTime(),
+                          }
+                    : params.is_expired === '0'
+                    ? params.expire_to_date
+                        ? {
+                              [Op.between]: [
+                                  params.expire_from_date,
+                                  params.expire_to_date,
+                              ],
+                              [Op.gte]: getCurrentDateTime(),
+                          }
+                        : {
+                              [Op.gte]: params.expire_from_date,
+                              [Op.gte]: getCurrentDateTime(),
+                          }
+                    : params.expire_to_date
+                    ? {
+                          [Op.between]: [
+                              params.expire_from_date,
+                              params.expire_to_date,
+                          ],
+                      }
+                    : {
+                          [Op.gte]: params.expire_from_date,
+                      }
+                : params.expire_to_date
+                ? {
+                      [Op.between]: [
+                          params.expire_from_date,
+                          params.expire_to_date,
+                      ],
+                  }
+                : {
+                      [Op.gte]: params.expire_from_date,
+                  },
         createdAt: {
-            [Op.between]: [params.from_date, params.to_date],
+            [Op.between]: [params.created_from_date, params.created_to_date],
         },
     })
 
@@ -82,12 +124,55 @@ async function indexByOwnerId(ownerId, startIndex, limit, params) {
         expireAt:
             params.is_expired !== ''
                 ? params.is_expired === '1'
-                    ? { [Op.lt]: getCurrentDateTime() }
-                    : { [Op.gte]: getCurrentDateTime() }
-                : null,
+                    ? params.expire_to_date
+                        ? {
+                              [Op.between]: [
+                                  params.expire_from_date,
+                                  params.expire_to_date,
+                              ],
+                              [Op.lt]: getCurrentDateTime(),
+                          }
+                        : {
+                              [Op.gte]: params.expire_from_date,
+                              [Op.lt]: getCurrentDateTime(),
+                          }
+                    : params.is_expired === '0'
+                    ? params.expire_to_date
+                        ? {
+                              [Op.between]: [
+                                  params.expire_from_date,
+                                  params.expire_to_date,
+                              ],
+                              [Op.gte]: getCurrentDateTime(),
+                          }
+                        : {
+                              [Op.gte]: params.expire_from_date,
+                              [Op.gte]: getCurrentDateTime(),
+                          }
+                    : params.expire_to_date
+                    ? {
+                          [Op.between]: [
+                              params.expire_from_date,
+                              params.expire_to_date,
+                          ],
+                      }
+                    : {
+                          [Op.gte]: params.expire_from_date,
+                      }
+                : params.expire_to_date
+                ? {
+                      [Op.between]: [
+                          params.expire_from_date,
+                          params.expire_to_date,
+                      ],
+                  }
+                : {
+                      [Op.gte]: params.expire_from_date,
+                  },
         createdAt: {
-            [Op.between]: [params.from_date, params.to_date],
+            [Op.between]: [params.created_from_date, params.created_to_date],
         },
+        user_id: ownerId,
     })
 
     return models.UserPackage.findAndCountAll({
@@ -98,6 +183,20 @@ async function indexByOwnerId(ownerId, startIndex, limit, params) {
             ['id', 'DESC'],
             ['price', 'DESC'],
         ],
+        where: selection,
+    })
+}
+
+async function showByParams(params) {
+    const selection = objectCleaner.clean({
+        user_id: params.user_id,
+        parking_lot_id: params.parking_lot_id,
+        vehicle_type_id: params.vehicle_type_id,
+        expireAt: params.expireAt,
+    })
+
+    return models.UserPackage.findOne({
+        include: include,
         where: selection,
     })
 }
@@ -143,6 +242,7 @@ async function checkExisted(userId, packageId) {
 module.exports = {
     getListUserPackages: index,
     getListUserPackagesByOwnerId: indexByOwnerId,
+    getUserPackageByParams: showByParams,
     getUserPackageById: showById,
     addNewUserPackage: create,
     updateUserPackageById: update,
