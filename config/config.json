@@ -1,10 +1,10 @@
 {
     "development": {
         "host": "37.59.55.185",
-        "username": "xLDGbPpnjm",
-        "password": "J6lA0PJDAt",
+        "username": "ixdV8cKB37",
+        "password": "53lxJJfuUc",
         "port": 3306,
-        "database": "xLDGbPpnjm",
+        "database": "ixdV8cKB37",
         "dialect": "mysql",
         "timezone": "+07:00"
     },
@@ -17,10 +17,10 @@
     },
     "production": {
         "host": "37.59.55.185",
-        "username": "xLDGbPpnjm",
-        "password": "J6lA0PJDAt",
+        "username": "ixdV8cKB37",
+        "password": "53lxJJfuUc",
         "port": 3306,
-        "database": "xLDGbPpnjm",
+        "database": "ixdV8cKB37",
         "dialect": "mysql",
         "timezone": "+07:00"
     }
