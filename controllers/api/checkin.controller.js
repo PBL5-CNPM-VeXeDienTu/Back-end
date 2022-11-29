@@ -67,7 +67,7 @@ async function checkin(request, response) {
             }
 
             addNewParkingHistory(newParkingHistory).then((_) => {
-                return response.status(201).json({
+                return response.status(200).json({
                     message: 'Checkin successfully! Parking history created!',
                 })
             })

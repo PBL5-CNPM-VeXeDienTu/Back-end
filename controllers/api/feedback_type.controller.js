@@ -86,7 +86,7 @@ async function create(request, response) {
         }
 
         addNewFeedbackType(newFeedbackType).then((_) => {
-            return response.status(201).json({
+            return response.status(200).json({
                 message: 'Create feedback type successfully!',
             })
         })
@@ -127,7 +127,7 @@ async function updateById(request, response) {
             // Update feedback type data
             updateFeedbackTypeById(updateFeedbackType, dbFeedbackType.id).then(
                 (_) => {
-                    return response.status(201).json({
+                    return response.status(200).json({
                         message: 'Update feedback type successfully!',
                     })
                 },

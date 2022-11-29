@@ -125,7 +125,7 @@ async function create(request, response) {
         }
 
         addNewFeedback(newFeedback).then((_) => {
-            return response.status(201).json({
+            return response.status(200).json({
                 message: 'Create feedback successfully!',
             })
         })
@@ -160,7 +160,7 @@ async function updateById(request, response) {
 
             // Update feedback's data
             updateFeedbackById(updateFeedback, dbFeedback.id).then((_) => {
-                return response.status(201).json({
+                return response.status(200).json({
                     message: 'Update feedback successfully!',
                 })
             })

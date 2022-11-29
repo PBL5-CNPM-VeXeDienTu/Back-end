@@ -79,7 +79,7 @@ async function create(request, response) {
         }
 
         addNewPackageType(newPackageType).then((_) => {
-            return response.status(201).json({
+            return response.status(200).json({
                 message: 'Create package type successfully!',
             })
         })
@@ -120,7 +120,7 @@ async function updateById(request, response) {
             // Update package type data
             updatePackageTypeById(updatePackageType, dbPackageType.id).then(
                 (_) => {
-                    return response.status(201).json({
+                    return response.status(200).json({
                         message: 'Update package type successfully!',
                     })
                 },

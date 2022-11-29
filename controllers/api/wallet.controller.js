@@ -151,7 +151,7 @@ async function rechargeById(request, response) {
             }
             await addNewTransaction(newTransaction)
 
-            return response.status(201).json({
+            return response.status(200).json({
                 message: 'Recharge wallet successfully!',
             })
         } else {
@@ -200,7 +200,7 @@ async function withDrawById(request, response) {
                 }
                 addNewTransaction(newTransaction)
 
-                return response.status(201).json({
+                return response.status(200).json({
                     message: 'With draw wallet successfully!',
                 })
             })

@@ -145,7 +145,7 @@ async function create(request, response) {
 
         // Create new parking lot
         addNewParkingLot(newParkingLot).then((result) => {
-            return response.status(201).json({
+            return response.status(200).json({
                 parkingLotId: result.id,
                 message: 'Create parking lot successfully!',
             })
@@ -187,7 +187,7 @@ async function updateById(request, response) {
             // Update parking lot's data
             updateParkingLotById(updateParkingLot, dbParkingLot.id).then(
                 (_) => {
-                    return response.status(201).json({
+                    return response.status(200).json({
                         message: 'Update parking lot successfully!',
                     })
                 },
@@ -232,7 +232,7 @@ async function verifyById(request, response) {
                 updateVerifyState,
                 dbParkingLot.verify_state_id,
             ).then((_) => {
-                return response.status(201).json({
+                return response.status(200).json({
                     message: 'Update verify state successfully!',
                 })
             })

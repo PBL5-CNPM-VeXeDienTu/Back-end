@@ -84,7 +84,7 @@ async function updateById(request, response) {
             // Update vehicle's data
             updateParkingPriceById(updateParkingPrice, dbParkingPrice.id).then(
                 (_) => {
-                    return response.status(201).json({
+                    return response.status(200).json({
                         message: 'Update parking price successfully!',
                     })
                 },

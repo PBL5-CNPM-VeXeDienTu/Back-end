@@ -166,7 +166,7 @@ async function updateById(request, response) {
                 updateParkingHistory,
                 dbParkingHistory.id,
             ).then((_) => {
-                return response.status(201).json({
+                return response.status(200).json({
                     message: 'Update parking history successfully!',
                 })
             })

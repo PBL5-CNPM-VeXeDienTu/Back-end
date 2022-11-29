@@ -81,7 +81,7 @@ async function create(request, response) {
         }
 
         addNewFeature(newFeature).then((_) => {
-            return response.status(201).json({
+            return response.status(200).json({
                 message: 'Create feature successfully!',
             })
         })
@@ -120,7 +120,7 @@ async function updateById(request, response) {
 
             // Update featured data
             updateFeatureById(updateFeature, dbFeature.id).then((_) => {
-                return response.status(201).json({
+                return response.status(200).json({
                     message: 'Update feature successfully!',
                 })
             })

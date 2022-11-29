@@ -133,7 +133,7 @@ async function create(request, response) {
             }
             await addNewWallet(newWallet)
 
-            return response.status(201).json({
+            return response.status(200).json({
                 message: 'Create user successfully!',
             })
         })

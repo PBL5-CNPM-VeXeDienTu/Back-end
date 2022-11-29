@@ -80,7 +80,7 @@ async function create(request, response) {
         }
 
         addNewVehicleType(newVehicleType).then((_) => {
-            return response.status(201).json({
+            return response.status(200).json({
                 message: 'Create vehicle type successfully!',
             })
         })
@@ -121,7 +121,7 @@ async function updateById(request, response) {
             // Update vehicle type data
             updateVehicleTypeById(updateVehicleType, dbVehicleType.id).then(
                 (_) => {
-                    return response.status(201).json({
+                    return response.status(200).json({
                         message: 'Update vehicle type successfully!',
                     })
                 },

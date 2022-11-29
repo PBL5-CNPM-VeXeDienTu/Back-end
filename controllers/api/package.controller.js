@@ -171,7 +171,7 @@ async function create(request, response) {
             }
 
             addNewPackage(newPackage).then((_) => {
-                return response.status(201).json({
+                return response.status(200).json({
                     message: 'Create Package successfully!',
                 })
             })
@@ -211,7 +211,7 @@ async function updateById(request, response) {
 
             // Update Package data
             updatePackageById(updatePackage, dbPackage.id).then((_) => {
-                return response.status(201).json({
+                return response.status(200).json({
                     message: 'Update package successfully!',
                 })
             })

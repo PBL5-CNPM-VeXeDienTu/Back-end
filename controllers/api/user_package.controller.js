@@ -199,7 +199,7 @@ async function create(request, response) {
                     },
                 )
 
-                return response.status(201).json({
+                return response.status(200).json({
                     message: 'Create user package successfully!',
                 })
             } else {
@@ -247,7 +247,7 @@ async function updateById(request, response) {
             // Update Package data
             updateUserPackageById(updateUserPackage, dbUserPackage.id).then(
                 (_) => {
-                    return response.status(201).json({
+                    return response.status(200).json({
                         message: 'Update user package successfully!',
                     })
                 },

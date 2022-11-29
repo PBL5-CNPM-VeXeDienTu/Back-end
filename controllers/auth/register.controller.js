@@ -85,7 +85,7 @@ async function register(request, response) {
             }
             addNewAuthKey(newAuthKey)
 
-            return response.status(201).json({
+            return response.status(200).json({
                 message: 'Create user successfully!',
             })
         })

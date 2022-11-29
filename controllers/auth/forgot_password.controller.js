@@ -37,7 +37,7 @@ async function forgotPassword(request, response) {
                 await updateAuthKeyById({ key: authKey }, oldAuthKey.id)
             else await addNewAuthKey({ user_id: dbUser.id, key: authKey })
 
-            return response.status(201).json({
+            return response.status(200).json({
                 message: 'Reset password email sended!',
             })
         } else {

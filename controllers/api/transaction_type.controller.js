@@ -86,7 +86,7 @@ async function create(request, response) {
         }
 
         addNewTransactionType(newTransactionType).then((_) => {
-            return response.status(201).json({
+            return response.status(200).json({
                 message: 'Create transaction type successfully!',
             })
         })
@@ -132,7 +132,7 @@ async function updateById(request, response) {
                 updateTransactionType,
                 dbTransactionType.id,
             ).then((_) => {
-                return response.status(201).json({
+                return response.status(200).json({
                     message: 'Update transaction type successfully!',
                 })
             })

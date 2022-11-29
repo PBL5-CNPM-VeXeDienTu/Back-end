@@ -160,7 +160,7 @@ async function create(request, response) {
 
         // Create new vehicle
         addNewVehicle(newVehicle).then((result) => {
-            return response.status(201).json({
+            return response.status(200).json({
                 vehicleId: result.id,
                 message: 'Create vehicle successfully!',
             })
@@ -198,7 +198,7 @@ async function updateById(request, response) {
 
             // Update vehicle's data
             updateVehicleById(updateVehicle, dbVehicle.id).then((_) => {
-                return response.status(201).json({
+                return response.status(200).json({
                     message: 'Update vehicle successfully!',
                 })
             })
@@ -242,7 +242,7 @@ async function verifyById(request, response) {
                 updateVerifyState,
                 dbVehicle.verify_state_id,
             ).then((_) => {
-                return response.status(201).json({
+                return response.status(200).json({
                     message: 'Update verify state successfully!',
                 })
             })
