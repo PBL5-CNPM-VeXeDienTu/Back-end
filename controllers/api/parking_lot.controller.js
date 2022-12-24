@@ -95,7 +95,7 @@ async function showById(request, response) {
         const dbParkingLot = await getParkingLotById(parkingLotId)
 
         const userRole = request.userData.role
-        if (userRole !== ADMIN_ROLE && dbParkingLot?.deletedAt !== null) {
+        if (userRole !== ADMIN_ROLE && dbParkingLot.deletedAt !== null) {
             return response.status(401).json({
                 message: 'This parking lot has been deleted!',
             })

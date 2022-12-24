@@ -49,13 +49,13 @@ async function generateParkingHistoryData() {
         )
         let checkinTime = await randomDate()
         let checkoutTime = new Date(checkinTime.getTime() + 5 * 60 * 60 * 1000) // Add 5 more hours
-        let vehicleTypeId = (await getVehicleById(vehicleId))?.type_id
+        let vehicleTypeId = (await getVehicleById(vehicleId)).type_id
         let parkingPrice = (
             await getParkingPriceByParkingLotIdAndVehicleTypeId(
                 parkingLotId,
                 vehicleTypeId,
             )
-        )?.price
+        ).price
 
         let parkingHistory = {
             user_id: userId,

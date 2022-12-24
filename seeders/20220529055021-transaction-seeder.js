@@ -83,7 +83,7 @@ async function generatePayParkingFeeTransaction() {
     // Duyệt qua bảng lịch sử đổ xe -> thêm transaction
     const dbParkingHistoryList = (
         await getListParkingHistories(0, 1000, params)
-    )?.rows
+    ).rows
 
     for (const parkingHistory of dbParkingHistoryList) {
         const dbWallet = await getWalletByUserId(parkingHistory.user_id)
@@ -112,7 +112,7 @@ async function generateBuyPackageTransaction() {
     }
 
     // Duyệt qua bảng user package để thêm vào transaction
-    const dbUserPackageList = (await getListUserPackages(0, 1000, params))?.rows
+    const dbUserPackageList = (await getListUserPackages(0, 1000, params)).rows
 
     for (const userPackage of dbUserPackageList) {
         const dbWallet = await getWalletByUserId(userPackage.user_id)

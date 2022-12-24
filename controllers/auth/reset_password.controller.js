@@ -11,7 +11,7 @@ async function resetPassword(request, response) {
         if (dbUser) {
             // Check if authentication key is valid
             const dbAuthKey = await getAuthKeyByUserId(dbUser.id)
-            if (request.params.authKey != dbAuthKey?.key) {
+            if (request.params.authKey != dbAuthKey.key) {
                 return response.status(409).json({
                     message: 'Invalid authentication key!',
                 })

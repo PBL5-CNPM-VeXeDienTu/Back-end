@@ -96,7 +96,7 @@ async function showById(request, response) {
         const dbVehicle = await getVehicleById(vehicleId)
 
         const userRole = request.userData.role
-        if (userRole !== ADMIN_ROLE && dbVehicle?.deletedAt !== null) {
+        if (userRole !== ADMIN_ROLE && dbVehicle.deletedAt !== null) {
             return response.status(401).json({
                 message: 'This vehicle has been deleted!',
             })
