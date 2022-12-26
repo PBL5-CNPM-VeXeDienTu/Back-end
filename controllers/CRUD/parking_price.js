@@ -74,7 +74,7 @@ async function checkOwner(parkingPriceId, userId) {
         include: include,
         where: {
             id: parkingPriceId,
-            user_id: userId,
+            "$ParkingLot.owner_id$": userId,
         },
     }))
 }

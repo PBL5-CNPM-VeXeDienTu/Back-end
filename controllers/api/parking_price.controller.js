@@ -104,10 +104,10 @@ async function updateById(request, response) {
 
 async function deleteById(request, response) {
     try {
-        const parkingLotId = request.params.id
+        const parkingPriceId = request.params.id
 
         // Check if vehicle exists
-        const dbParkingPrice = await getParkingPriceById(parkingLotId)
+        const dbParkingPrice = await getParkingPriceById(parkingPriceId)
         if (dbParkingPrice) {
             // Delete parking price
             deleteParkingPriceById(dbParkingPrice.id)
