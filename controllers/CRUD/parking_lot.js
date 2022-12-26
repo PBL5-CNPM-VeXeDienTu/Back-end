@@ -21,6 +21,14 @@ const include = [
         model: models.VerifyState,
         required: true,
     },
+    {
+        model: models.ParkingPrice,
+        include: {
+            model: models.VehicleType,
+            attributes: ['id', 'type_name'],
+            required: true,
+        },
+    },
 ]
 
 async function index(startIndex, limit, isAdmin, params) {
@@ -71,17 +79,7 @@ async function indexByOwnerId(ownerId, isAdmin) {
 
 async function showById(id) {
     return models.ParkingLot.findByPk(id, {
-        include: [
-            ...include,
-            {
-                model: models.ParkingPrice,
-                include: {
-                    model: models.VehicleType,
-                    attributes: ['id', 'type_name'],
-                    required: true,
-                },
-            },
-        ],
+        include: include,
     })
 }
 

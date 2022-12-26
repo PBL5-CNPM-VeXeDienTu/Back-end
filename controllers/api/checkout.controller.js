@@ -103,7 +103,7 @@ async function checkout(request, response) {
         }
 
         const dbUserPackage = await getUserPackageByParams(userPackageParams)
-        
+
         // If user have no valid user package
         if (!dbUserPackage) {
             // Get user's wallet
